@@ -76,6 +76,15 @@ class DebouncedButton {
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 
+void runMotor(Adafruit_DCMotor *motor, uint8_t direction, uint8_t speed) {
+  motor->run(direction);
+  motor->setSpeed(speed);
+}
+
+void brakeMotor(Adafruit_DCMotor *motor) {
+  motor->setSpeed(0);
+}
+
 // Globals
 
 DebouncedButton left(12, &interruptCounter12, 50);
@@ -88,7 +97,7 @@ void setup() {
   right.setup();
   AFMS.begin();
   delay(2000);
-  motor->setSpeed(64);
+  motor->setSpeed(255);
   motor->run(FORWARD);
   pinMode(LED_BUILTIN, OUTPUT);
 }
@@ -97,15 +106,15 @@ void loop() {
   left.update();
   right.update();
   if (left.eventStatePressed) {
-    motor->run(RELEASE);
+    brakeMotor(motor);
     delay(1000);
-    motor->run(FORWARD);
+    runMotor(motor, FORWARD, 255);
     left.eventStatePressed = false;
   }
   if (right.eventStatePressed) {
-    motor->run(RELEASE);
+    brakeMotor(motor);
     delay(1000);
-    motor->run(BACKWARD);
+    runMotor(motor, BACKWARD, 255);
     right.eventStatePressed = false;
   }
 }
