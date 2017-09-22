@@ -9,7 +9,7 @@ DebouncedButton::DebouncedButton(uint8_t buttonPin, volatile uint8_t *interruptC
 void DebouncedButton::setup() {
   if (setupCompleted) return;
   pinMode(buttonPin, INPUT_PULLUP);
-  enableInterruptFast(buttonPin, FALLING);
+  enableInterruptFast(buttonPin, CHANGE);
   buttonState = digitalRead(buttonPin);
   eventStatePressed = buttonState;
   eventStateReleased = !buttonState;
