@@ -23,13 +23,13 @@ void DebouncedButton::update() {
   if (buttonChanged && debounceTimer > debounceDelay) {
     buttonState = digitalRead(buttonPin);
     eventStateChanged = true;
-    eventStatePressed = eventStateChanged && buttonState;
-    eventStateReleased = eventStateChanged && !buttonState;
+    eventStatePressed = eventStateChanged && !buttonState;
+    eventStateReleased = eventStateChanged && buttonState;
     buttonChanged = false;
   }
 }
 
-bool DebouncedButton::state() {
-  return buttonState;
+bool DebouncedButton::isPressed() {
+  return !buttonState;
 }
 

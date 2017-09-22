@@ -6,7 +6,7 @@ class DebouncedButton {
 
     void setup();
     void update();
-    bool state();
+    bool isPressed();
 
     // Event flags
     bool eventStateChanged = false; // set to true when state changes, must be reset by client
