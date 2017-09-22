@@ -5,10 +5,6 @@
 #include <DebouncedButton.h>
 #include <Motors.h>
 
-// Linear Actuators
-
-#include <Fsm.h>
-
 // Globals
 
 DebouncedButton left(12, &interruptCounter12, 50);
