@@ -1,9 +1,10 @@
 #include "Motors.h"
 
 Motors::Motors() :
-    shield(Adafruit_MotorShield()) {}
+  shield(Adafruit_MotorShield()) {}
 
 void Motors::setup() {
+  if (setupCompleted) return;
   shield.begin();
   for (uint8_t motor_port = 1; motor_port <= 4; ++motor_port) {
     motors[motor_port - 1] = shield.getMotor(motor_port);

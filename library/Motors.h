@@ -1,3 +1,6 @@
+#ifndef Motors_h
+#define Motors_h
+
 #include <Wire.h>
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_MS_PWMServoDriver.h"
@@ -19,7 +22,14 @@ class Motors {
     void run(MotorPort motor_port, MotorDirection direction, MotorSpeed speed);
     void brake(MotorPort motor_port);
 
-    Adafruit_MotorShield shield;
     Adafruit_DCMotor *motors[4];
+
+  private:
+    bool setupCompleted = false;
+
+    // Hardware interfaces
+    Adafruit_MotorShield shield;
 };
+
+#endif
 
