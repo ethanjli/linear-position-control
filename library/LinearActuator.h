@@ -24,7 +24,7 @@ namespace States {
 template <bool debug_serial>
 class AbsoluteLinearActuator {
   public:
-    AbsoluteLinearActuator(Motor *motor, AbsoluteLimits *limits);
+    AbsoluteLinearActuator(Motor &motor, AbsoluteLimits &limits);
 
     void setup();
     void update();
@@ -32,8 +32,8 @@ class AbsoluteLinearActuator {
   private:
     bool setupCompleted = false;
 
-    Motor *motor;
-    AbsoluteLimits *limits;
+    Motor &motor;
+    AbsoluteLimits &limits;
 
     // States
     States::DirectionCalibration directionCalibrationState;

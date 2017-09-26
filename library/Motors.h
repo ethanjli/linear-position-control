@@ -41,7 +41,7 @@ class Motors {
 
 class Motor {
   public:
-    Motor(Motors *motors, MotorPort motorPort);
+    Motor(Motors &motors, MotorPort motorPort);
 
     void setup();
     void update();
@@ -62,7 +62,7 @@ class Motor {
   private:
     bool setupCompleted = false;
 
-    Motors *motors;
+    Motors &motors;
     const MotorPort motorPort;
 
     MotorDirection forwardDirection = FORWARD;

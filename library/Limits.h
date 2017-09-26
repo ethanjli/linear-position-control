@@ -19,7 +19,7 @@ namespace States {
 // Limit switches with an absolute sense of direction - the left and right switches are distinguishable and known
 class AbsoluteLimits {
   public:
-    AbsoluteLimits(DebouncedButton *leftLimit, DebouncedButton *rightLimit);
+    AbsoluteLimits(DebouncedButton &leftLimit, DebouncedButton &rightLimit);
 
     void setup();
     void update();
@@ -30,8 +30,8 @@ class AbsoluteLimits {
   private:
     bool setupCompleted = false;
 
-    DebouncedButton *leftLimit;
-    DebouncedButton *rightLimit;
+    DebouncedButton &leftLimit;
+    DebouncedButton &rightLimit;
 };
 
 class MultiplexedLimits {

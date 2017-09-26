@@ -1,14 +1,14 @@
 #include "Limits.h"
 
 // AbsoluteLimits
-AbsoluteLimits::AbsoluteLimits(DebouncedButton *leftLimit, DebouncedButton *rightLimit) :
+AbsoluteLimits::AbsoluteLimits(DebouncedButton &leftLimit, DebouncedButton &rightLimit) :
   leftLimit(leftLimit), rightLimit(rightLimit) {}
 
 void AbsoluteLimits::setup() {
   if (setupCompleted) return;
 
-  leftLimit->setup();
-  rightLimit->setup();
+  leftLimit.setup();
+  rightLimit.setup();
 
   update();
   previousState = state;
@@ -21,14 +21,14 @@ void AbsoluteLimits::update() {
 
   previousState = state;
 
-  leftLimit->update();
-  rightLimit->update();
+  leftLimit.update();
+  rightLimit.update();
 
-  if (leftLimit->isPressed() && rightLimit->isPressed()) {
+  if (leftLimit.isPressed() && rightLimit.isPressed()) {
     state = Limits::both;
-  } else if (leftLimit->isPressed()) {
+  } else if (leftLimit.isPressed()) {
     state = Limits::left;
-  } else if (rightLimit->isPressed()) {
+  } else if (rightLimit.isPressed()) {
     state = Limits::right;
   } else {
     state = Limits::none;

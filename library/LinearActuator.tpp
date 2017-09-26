@@ -4,15 +4,15 @@
 // AbsoluteLinearActuator
 
 template <bool debug_serial>
-AbsoluteLinearActuator<debug_serial>::AbsoluteLinearActuator(Motor *motor, AbsoluteLimits *limits) :
+AbsoluteLinearActuator<debug_serial>::AbsoluteLinearActuator(Motor &motor, AbsoluteLimits &limits) :
   motor(motor), limits(limits) {}
 
 template <bool debug_serial>
 void AbsoluteLinearActuator<debug_serial>::setup() {
   if (setupCompleted) return;
 
-  motor->setup();
-  limits->setup();
+  motor.setup();
+  limits.setup();
 
   directionCalibrationState = States::DirectionCalibration::uncalibrated;
 
@@ -23,7 +23,7 @@ template <bool debug_serial>
 void AbsoluteLinearActuator<debug_serial>::update() {
   using States::DirectionCalibration;
 
-  limits->update();
+  limits.update();
   switch (directionCalibrationState) {
     case DirectionCalibration::calibrated:
       updateDirectionCalibrated();
@@ -42,13 +42,13 @@ void AbsoluteLinearActuator<debug_serial>::updateDirectionUncalibrated() {
   using States::Limits;
   using States::DirectionCalibration;
 
-  if (limits->state == Limits::both) return; // delay calibration as long as both limit switches are pressed
+  if (limits.state == Limits::both) return; // delay calibration as long as both limit switches are pressed
 
   // Start calibration
   directionCalibrationState = DirectionCalibration::calibrating;
   if (debug_serial) Serial.println("Calibrating...");
   motorStallTimer = 0;
-  motor->forwards();
+  motor.forwards();
 }
 
 template <bool debug_serial>
@@ -57,26 +57,26 @@ void AbsoluteLinearActuator<debug_serial>::updateDirectionCalibrating() {
   using States::Limits;
   using States::DirectionCalibration;
 
-  if (limits->state == Limits::both) { // cancel calibration if both limit switches are pressed
+  if (limits.state == Limits::both) { // cancel calibration if both limit switches are pressed
     directionCalibrationState = DirectionCalibration::uncalibrated;
     if (debug_serial) Serial.println("Restarting calibration...");
     return;
   }
-  if (limits->state == Limits::none) { // let the motor continue to run until it hits a limit
+  if (limits.state == Limits::none) { // let the motor continue to run until it hits a limit
     return;
   }
-  if (limits->previousState == Limits::none) { // the motor just hit a limit switch
+  if (limits.previousState == Limits::none) { // the motor just hit a limit switch
     if (debug_serial) Serial.println("Just hit a limit switch!");
-    if ((motor->state == Motor::forwards && limits->state == Limits::left) ||
-        (motor->state == Motor::backwards && limits->state == Limits::right)) {
+    if ((motor.state == Motor::forwards && limits.state == Limits::left) ||
+        (motor.state == Motor::backwards && limits.state == Limits::right)) {
       if (debug_serial) Serial.println("Flipping directions!");
-      motor->swapDirections();
+      motor.swapDirections();
     }
-    motor->forwards();
+    motor.forwards();
     directionCalibrationState = DirectionCalibration::calibrated;
     if (debug_serial) {
       Serial.println("Calibrated!");
-      if (motor->directionsSwapped()) Serial.print("We flipped the motor's pins in software.");
+      if (motor.directionsSwapped()) Serial.print("We flipped the motor's pins in software.");
       else Serial.print("We don't need to flip the motor's pins.");
     }
     digitalWrite(LED_BUILTIN, HIGH);
@@ -84,12 +84,12 @@ void AbsoluteLinearActuator<debug_serial>::updateDirectionCalibrating() {
   }
   if (motorStallTimer > motorStallTimeout) {
     if (debug_serial) Serial.println("Stall detected!");
-    if (motor->state == Motor::forwards) {
+    if (motor.state == Motor::forwards) {
       if (debug_serial) Serial.println("Running the motor backwards to break the stall!");
-      motor->backwards();
-    } else { // motor->state == Motor::backwards
+      motor.backwards();
+    } else { // motor.state == Motor::backwards
       if (debug_serial) Serial.println("Running the motor forwards to break the stall!");
-      motor->forwards();
+      motor.forwards();
     }
     motorStallTimer = 0;
   }

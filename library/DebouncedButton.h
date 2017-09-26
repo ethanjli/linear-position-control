@@ -5,7 +5,7 @@
 
 class DebouncedButton {
   public:
-    DebouncedButton(uint8_t buttonPin, volatile uint8_t *interruptCounter, unsigned int debounceDelay);
+    DebouncedButton(uint8_t buttonPin, volatile uint8_t &interruptCounter, unsigned int debounceDelay);
 
     void setup();
     void update();
@@ -25,7 +25,7 @@ class DebouncedButton {
     uint8_t buttonPin;
 
     // Button debouncing
-    volatile uint8_t *interruptCounter;
+    volatile uint8_t &interruptCounter;
     unsigned int debounceDelay;
     elapsedMillis debounceTimer;
 
