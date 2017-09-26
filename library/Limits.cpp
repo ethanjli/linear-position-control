@@ -1,22 +1,22 @@
-#ifndef Limits_tpp
-#define Limits_tpp
+#include "Limits.h"
 
 // AbsoluteLimits
-template <bool debug_serial>
-AbsoluteLimits<debug_serial>::AbsoluteLimits(DebouncedButton *leftLimit, DebouncedButton *rightLimit) :
+AbsoluteLimits::AbsoluteLimits(DebouncedButton *leftLimit, DebouncedButton *rightLimit) :
   leftLimit(leftLimit), rightLimit(rightLimit) {}
 
-template <bool debug_serial>
-void AbsoluteLimits<debug_serial>::setup() {
+void AbsoluteLimits::setup() {
+  if (setupCompleted) return;
+
   leftLimit->setup();
   rightLimit->setup();
 
   update();
   previousState = state;
+
+  setupCompleted = true;
 }
 
-template <bool debug_serial>
-void AbsoluteLimits<debug_serial>::update() {
+void AbsoluteLimits::update() {
   using States::Limits;
 
   previousState = state;
@@ -34,6 +34,4 @@ void AbsoluteLimits<debug_serial>::update() {
     state = Limits::none;
   }
 }
-
-#endif
 

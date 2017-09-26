@@ -7,12 +7,6 @@
 #include "Limits.h"
 
 namespace States {
-  enum class Motor : uint8_t {
-    braking,
-    forwards,
-    backwards
-  };
-
   enum class DirectionCalibration : uint8_t {
     uncalibrated,
     calibrated,
@@ -30,29 +24,18 @@ namespace States {
 template <bool debug_serial>
 class AbsoluteLinearActuator {
   public:
-    AbsoluteLinearActuator(Motors *motors, MotorPort motorPort, AbsoluteLimits<debug_serial> *limits);
+    AbsoluteLinearActuator(Motor *motor, AbsoluteLimits *limits);
 
     void setup();
     void update();
 
-    // Actuation
-    MotorSpeed speed = 255;
-    void runForwards();
-    void runBackwards();
-    void brake();
-
   private:
-    // Actuation
-    Motors *motors;
-    const MotorPort motorPort;
-    MotorDirection forwards = FORWARD;
-    MotorDirection backwards = BACKWARD;
+    bool setupCompleted = false;
 
-    // Sensing
-    AbsoluteLimits<debug_serial> *limits;
+    Motor *motor;
+    AbsoluteLimits *limits;
 
     // States
-    States::Motor motorState;
     States::DirectionCalibration directionCalibrationState;
     States::PositionCalibration positionCalibrationState;
 

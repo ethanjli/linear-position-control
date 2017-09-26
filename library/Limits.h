@@ -17,7 +17,6 @@ namespace States {
 }
 
 // Limit switches with an absolute sense of direction - the left and right switches are distinguishable and known
-template <bool debug_serial>
 class AbsoluteLimits {
   public:
     AbsoluteLimits(DebouncedButton *leftLimit, DebouncedButton *rightLimit);
@@ -29,15 +28,14 @@ class AbsoluteLimits {
     States::Limits previousState;
 
   private:
+    bool setupCompleted = false;
+
     DebouncedButton *leftLimit;
     DebouncedButton *rightLimit;
 };
 
-template <bool debug_serial>
 class MultiplexedLimits {
 };
-
-#include "Limits.tpp"
 
 #endif
 

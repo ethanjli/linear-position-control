@@ -14,6 +14,14 @@ const MotorPort M4 = 3;
 typedef uint8_t MotorSpeed;
 typedef uint8_t MotorDirection;
 
+namespace States {
+  enum class Motor : uint8_t {
+    braking,
+    forwards,
+    backwards
+  };
+}
+
 class Motors {
   public:
     Motors();
@@ -29,6 +37,36 @@ class Motors {
 
     // Hardware interfaces
     Adafruit_MotorShield shield;
+};
+
+class Motor {
+  public:
+    Motor(Motors *motors, MotorPort motorPort);
+
+    void setup();
+    void update();
+
+    MotorSpeed speed = 255;
+    States::Motor state;
+
+    void forwards();
+    void run(int speed);
+    void forwards(MotorSpeed speed);
+    void backwards();
+    void backwards(MotorSpeed speed);
+    void brake();
+
+    void swapDirections();
+    bool directionsSwapped();
+
+  private:
+    bool setupCompleted = false;
+
+    Motors *motors;
+    const MotorPort motorPort;
+
+    MotorDirection forwardDirection = FORWARD;
+    MotorDirection backwardDirection = BACKWARD;
 };
 
 #endif

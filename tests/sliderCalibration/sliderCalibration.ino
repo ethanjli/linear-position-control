@@ -7,15 +7,21 @@
 #include <Limits.h>
 #include <LinearActuator.h>
 
+// Compile-time flags
+
 const bool DEBUG_SERIAL = false;
+
+// Singletons
+
+Motors motors = Motors();
 
 // Globals
 
-Motors motors = Motors();
+Motor motor = Motor(&motors, M2);
 DebouncedButton left(12, &interruptCounter12, 50);
 DebouncedButton right(8, &interruptCounter8, 50);
-AbsoluteLimits<DEBUG_SERIAL> limits = AbsoluteLimits<DEBUG_SERIAL>(&left, &right);
-AbsoluteLinearActuator<DEBUG_SERIAL> actuator = AbsoluteLinearActuator<DEBUG_SERIAL>(&motors, M2, &limits);
+AbsoluteLimits limits = AbsoluteLimits(&left, &right);
+AbsoluteLinearActuator<DEBUG_SERIAL> actuator = AbsoluteLinearActuator<DEBUG_SERIAL>(&motor, &limits);
 
 void setup() {
   if (DEBUG_SERIAL) Serial.begin(115200);
