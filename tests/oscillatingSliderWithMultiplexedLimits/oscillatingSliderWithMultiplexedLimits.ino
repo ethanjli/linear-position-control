@@ -6,17 +6,14 @@
 #include <Motors.h>
 #include <LinearActuator.h>
 
-const bool DEBUG_SERIAL = false;
-
 // Globals
 
-DebouncedButton left(12, &interruptCounter12, 50);
-DebouncedButton right(8, &interruptCounter8, 50);
+DebouncedButton limits(12, &interruptCounter12, 50);
 Motors motors = Motors();
-AbsoluteLinearActuator<DEBUG_SERIAL> actuator = AbsoluteLinearActuator<DEBUG_SERIAL>(&motors, M2, &left, &right);
+AbsoluteLinearActuator actuator = MultiplexedLinearActuator(&motors, M2, &limits);
 
 void setup() {
-  if (DEBUG_SERIAL) Serial.begin(115200);
+  Serial.begin(115200);
   actuator.setup();
   pinMode(LED_BUILTIN, OUTPUT);
 }
