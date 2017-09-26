@@ -4,6 +4,7 @@
 #include <EnableInterrupt.h>
 #include <DebouncedButton.h>
 #include <Motors.h>
+#include <Limits.h>
 #include <LinearActuator.h>
 
 const bool DEBUG_SERIAL = false;

@@ -3,22 +3,14 @@
 
 #include <elapsedMillis.h>
 
-#include "DebouncedButton.h"
 #include "Motors.h"
+#include "Limits.h"
 
 namespace States {
   enum class Motor : uint8_t {
     braking,
     forwards,
     backwards
-  };
-
-  enum class Limits : uint8_t {
-    none,
-    left,
-    right,
-    either,
-    both
   };
 
   enum class DirectionCalibration : uint8_t {
@@ -33,27 +25,6 @@ namespace States {
     calibrating
   };
 }
-
-// Limit switches with an absolute sense of direction - the left and right switches are distinguishable and known
-template <bool debug_serial>
-class AbsoluteLimits {
-  public:
-    AbsoluteLimits(DebouncedButton *leftLimit, DebouncedButton *rightLimit);
-
-    void setup();
-    void update();
-
-    States::Limits state;
-    States::Limits previousState;
-
-  private:
-    DebouncedButton *leftLimit;
-    DebouncedButton *rightLimit;
-};
-
-template <bool debug_serial>
-class MultiplexedLimits {
-};
 
 // A linear actuator with an absolute sense of direction - it knows which end is left and which end is right
 template <bool debug_serial>
