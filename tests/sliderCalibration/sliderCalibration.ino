@@ -10,10 +10,11 @@ const bool DEBUG_SERIAL = false;
 
 // Globals
 
+Motors motors = Motors();
 DebouncedButton left(12, &interruptCounter12, 50);
 DebouncedButton right(8, &interruptCounter8, 50);
-Motors motors = Motors();
-AbsoluteLinearActuator<DEBUG_SERIAL> actuator = AbsoluteLinearActuator<DEBUG_SERIAL>(&motors, M2, &left, &right);
+AbsoluteLimits<DEBUG_SERIAL> limits = AbsoluteLimits<DEBUG_SERIAL>(&left, &right);
+AbsoluteLinearActuator<DEBUG_SERIAL> actuator = AbsoluteLinearActuator<DEBUG_SERIAL>(&motors, M2, &limits);
 
 void setup() {
   if (DEBUG_SERIAL) Serial.begin(115200);
