@@ -7,32 +7,31 @@
 #include "Motors.h"
 
 namespace States {
-  typedef int State;
-  namespace Motor {
-    const int BRAKING = 0x00;
-    const int FORWARDS = 0x01;
-    const int BACKWARDS = 0x02;
-  }
+  enum class Motor : uint8_t {
+    braking,
+    forwards,
+    backwards
+  };
 
-  namespace Limits {
-    const int NONE = 0x00;
-    const int LEFT = 0x01;
-    const int RIGHT = 0x02;
-    const int EITHER = 0x10;
-    const int BOTH = 0x11;
-  }
+  enum class Limits : uint8_t {
+    none,
+    left,
+    right,
+    either,
+    both
+  };
 
-  namespace DirectionCalibration {
-    const int UNCALIBRATED = 0x00;
-    const int CALIBRATED = 0x01;
-    const int CALIBRATING = 0x02;
-  }
+  enum class DirectionCalibration : uint8_t {
+    uncalibrated,
+    calibrated,
+    calibrating
+  };
 
-  namespace PositionCalibration {
-    const int UNCALIBRATED = 0x00;
-    const int CALIBRATED = 0x01;
-    const int CALIBRATING = 0x02;
-  }
+  enum class PositionCalibration : uint8_t {
+    uncalibrated,
+    calibrated,
+    calibrating
+  };
 }
 
 // Limit switches with an absolute sense of direction - the left and right switches are distinguishable and known
@@ -44,8 +43,8 @@ class AbsoluteLimits {
     void setup();
     void update();
 
-    States::State state;
-    States::State previousState;
+    States::Limits state;
+    States::Limits previousState;
 
   private:
     DebouncedButton *leftLimit;
@@ -82,11 +81,9 @@ class AbsoluteLinearActuator {
     AbsoluteLimits<debug_serial> *limits;
 
     // States
-    int motorState;
-    int limitsState;
-    int previousLimitsState;
-    int directionCalibrationState;
-    int positionCalibrationState;
+    States::Motor motorState;
+    States::DirectionCalibration directionCalibrationState;
+    States::PositionCalibration positionCalibrationState;
 
     // Calibration
     elapsedMillis motorStallTimer;

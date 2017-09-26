@@ -17,7 +17,7 @@ void AbsoluteLimits<debug_serial>::setup() {
 
 template <bool debug_serial>
 void AbsoluteLimits<debug_serial>::update() {
-  using namespace States::Limits;
+  using States::Limits;
 
   previousState = state;
 
@@ -25,13 +25,13 @@ void AbsoluteLimits<debug_serial>::update() {
   rightLimit->update();
 
   if (leftLimit->isPressed() && rightLimit->isPressed()) {
-    state = BOTH;
+    state = Limits::both;
   } else if (leftLimit->isPressed()) {
-    state = LEFT;
+    state = Limits::left;
   } else if (rightLimit->isPressed()) {
-    state = RIGHT;
+    state = Limits::right;
   } else {
-    state = NONE;
+    state = Limits::none;
   }
 }
 
@@ -49,22 +49,22 @@ void AbsoluteLinearActuator<debug_serial>::setup() {
 
   limits->setup();
 
-  directionCalibrationState = States::DirectionCalibration::UNCALIBRATED;
+  directionCalibrationState = States::DirectionCalibration::uncalibrated;
 }
 
 template <bool debug_serial>
 void AbsoluteLinearActuator<debug_serial>::update() {
-  using namespace States::DirectionCalibration;
+  using States::DirectionCalibration;
 
   limits->update();
   switch (directionCalibrationState) {
-    case CALIBRATED:
+    case DirectionCalibration::calibrated:
       updateDirectionCalibrated();
       break;
-    case UNCALIBRATED:
+    case DirectionCalibration::uncalibrated:
       updateDirectionUncalibrated();
       break;
-    case CALIBRATING:
+    case DirectionCalibration::calibrating:
       updateDirectionCalibrating();
       break;
   }
@@ -73,29 +73,30 @@ void AbsoluteLinearActuator<debug_serial>::update() {
 template <bool debug_serial>
 void AbsoluteLinearActuator<debug_serial>::runForwards() {
   motors->run(motorPort, forwards, speed);
-  motorState = States::Motor::FORWARDS;
+  motorState = States::Motor::forwards;
 }
 
 template <bool debug_serial>
 void AbsoluteLinearActuator<debug_serial>::runBackwards() {
   motors->run(motorPort, backwards, speed);
-  motorState = States::Motor::BACKWARDS;
+  motorState = States::Motor::backwards;
 }
 
 template <bool debug_serial>
 void AbsoluteLinearActuator<debug_serial>::brake() {
   motors->brake(motorPort);
-  motorState = States::Motor::BRAKING;
+  motorState = States::Motor::braking;
 }
 
 template <bool debug_serial>
 void AbsoluteLinearActuator<debug_serial>::updateDirectionUncalibrated() {
-  using namespace States;
+  using States::Limits;
+  using States::DirectionCalibration;
 
-  if (limits->state == Limits::BOTH) return; // delay calibration as long as both limit switches are pressed
+  if (limits->state == Limits::both) return; // delay calibration as long as both limit switches are pressed
 
   // Start calibration
-  directionCalibrationState = DirectionCalibration::CALIBRATING;
+  directionCalibrationState = DirectionCalibration::calibrating;
   if (debug_serial) Serial.println("Calibrating...");
   motorStallTimer = 0;
   runForwards();
@@ -103,29 +104,31 @@ void AbsoluteLinearActuator<debug_serial>::updateDirectionUncalibrated() {
 
 template <bool debug_serial>
 void AbsoluteLinearActuator<debug_serial>::updateDirectionCalibrating() {
-  using namespace States;
+  using States::Motor;
+  using States::Limits;
+  using States::DirectionCalibration;
 
-  if (limits->state == Limits::BOTH) { // cancel calibration if both limit switches are pressed
-    motorState = DirectionCalibration::UNCALIBRATED;
+  if (limits->state == Limits::both) { // cancel calibration if both limit switches are pressed
+    directionCalibrationState = DirectionCalibration::uncalibrated;
     if (debug_serial) Serial.println("Restarting calibration...");
     return;
   }
-  if (limits->state == Limits::NONE) { // let the motor continue to run until it hits a limit
+  if (limits->state == Limits::none) { // let the motor continue to run until it hits a limit
     return;
   }
-  if (limits->previousState == Limits::NONE) { // the motor just hit a limit switch
+  if (limits->previousState == Limits::none) { // the motor just hit a limit switch
     if (debug_serial) Serial.println("Just hit a limit switch!");
-    if ((motorState == Motor::FORWARDS && limits->state == Limits::LEFT) ||
-        (motorState == Motor::BACKWARDS && limits->state == Limits::RIGHT)) {
+    if ((motorState == Motor::forwards && limits->state == Limits::left) ||
+        (motorState == Motor::backwards && limits->state == Limits::right)) {
       if (debug_serial) Serial.println("Flipping directions!");
       forwards = BACKWARD;
       backwards = FORWARD;
     }
     runForwards();
-    directionCalibrationState = DirectionCalibration::CALIBRATED;
+    directionCalibrationState = DirectionCalibration::calibrated;
     if (debug_serial) {
       Serial.println("Calibrated!");
-      if (forwards == Motor::BACKWARDS) Serial.print("We flipped the motor's pins in software.");
+      if (forwards == BACKWARD) Serial.print("We flipped the motor's pins in software.");
       else Serial.print("We don't need to flip the motor's pins.");
     }
     digitalWrite(LED_BUILTIN, HIGH);
@@ -133,10 +136,10 @@ void AbsoluteLinearActuator<debug_serial>::updateDirectionCalibrating() {
   }
   if (motorStallTimer > motorStallTimeout) {
     if (debug_serial) Serial.println("Stall detected!");
-    if (motorState == Motor::FORWARDS) {
+    if (motorState == Motor::forwards) {
       if (debug_serial) Serial.println("Running the motor backwards to break the stall!");
       runBackwards();
-    } else { // motorState == Motor::BACKWARDS
+    } else { // motorState == Motor::backwards
       if (debug_serial) Serial.println("Running the motor forwards to break the stall!");
       runForwards();
     }
@@ -146,16 +149,16 @@ void AbsoluteLinearActuator<debug_serial>::updateDirectionCalibrating() {
 
 template <bool debug_serial>
 void AbsoluteLinearActuator<debug_serial>::updateDirectionCalibrated() {
-  using namespace States::PositionCalibration;
+  using States::PositionCalibration;
 
   switch (positionCalibrationState) {
-    case CALIBRATED:
+    case PositionCalibration::calibrated:
       updatePositionCalibrated();
       break;
-    case UNCALIBRATED:
+    case PositionCalibration::uncalibrated:
       updatePositionUncalibrated();
       break;
-    case CALIBRATING:
+    case PositionCalibration::calibrating:
       updatePositionCalibrating();
       break;
   }
