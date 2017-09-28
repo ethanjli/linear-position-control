@@ -5,26 +5,29 @@
 
 #include "Motors.h"
 #include "Limits.h"
+#include "DirectionCalibration.h"
 
 namespace States {
-  enum class DirectionCalibration : uint8_t {
-    uncalibrated,
-    calibrated,
-    calibrating
-  };
-
   enum class PositionCalibration : uint8_t {
     uncalibrated,
     calibrated,
     calibrating
   };
+
+  enum class LinearActuator : uint8_t {
+    calibratingDirection,
+    calibratingPosition,
+    operating
+  };
 }
 
 // A linear actuator with an absolute sense of direction - it knows which end is left and which end is right
-template <bool debug_serial>
+template <class DirectionCalibrator>
 class AbsoluteLinearActuator {
   public:
-    AbsoluteLinearActuator(Motor &motor, AbsoluteLimits &limits);
+    AbsoluteLinearActuator(
+        DirectionCalibrator &directionCalibrator
+    );
 
     void setup();
     void update();
@@ -32,24 +35,9 @@ class AbsoluteLinearActuator {
   private:
     bool setupCompleted = false;
 
-    Motor &motor;
-    AbsoluteLimits &limits;
+    DirectionCalibrator &directionCalibrator;
 
-    // States
-    States::DirectionCalibration directionCalibrationState;
-    States::PositionCalibration positionCalibrationState;
-
-    // Calibration
-    elapsedMillis motorStallTimer;
-    unsigned int motorStallTimeout = 250;
-    // Direction Calibration
-    void updateDirectionUncalibrated();
-    void updateDirectionCalibrated();
-    void updateDirectionCalibrating();
-    // Position Calibration
-    void updatePositionUncalibrated();
-    void updatePositionCalibrating();
-    void updatePositionCalibrated();
+    States::LinearActuator state;
 };
 
 #include "LinearActuator.tpp"
