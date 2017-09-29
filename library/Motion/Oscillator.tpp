@@ -1,5 +1,5 @@
-#ifndef Oscillator_tpp
-#define Oscillator_tpp
+#ifndef Motion_Oscillator_tpp
+#define Motion_Oscillator_tpp
 
 #include <ArduinoLog.h>
 

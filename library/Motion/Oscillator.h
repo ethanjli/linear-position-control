@@ -1,5 +1,5 @@
-#ifndef Oscillator_h
-#define Oscillator_h
+#ifndef Motion_Oscillator_h
+#define Motion_Oscillator_h
 
 #include "Motors.h"
 #include "Limits.h"

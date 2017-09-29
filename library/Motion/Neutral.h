@@ -1,5 +1,5 @@
-#ifndef Neutral_h
-#define Neutral_h
+#ifndef Motion_Neutral_h
+#define Motion_Neutral_h
 
 #include "Motors.h"
 

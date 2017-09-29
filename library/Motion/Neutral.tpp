@@ -1,5 +1,5 @@
-#ifndef Neutral_tpp
-#define Neutral_tpp
+#ifndef Motion_Neutral_tpp
+#define Motion_Neutral_tpp
 
 #include <ArduinoLog.h>
 
