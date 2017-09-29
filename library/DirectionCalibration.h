@@ -37,7 +37,6 @@ class AbsoluteDirectionCalibrator {
     void updateUncalibrated();
     void updateCalibrating();
     void updateMotorDirection();
-    void breakStall();
     void onDirectionCalibrated();
 };
 
@@ -56,10 +55,14 @@ class MultiplexedDirectionCalibrator {
     bool setupCompleted = false;
 
     Motor &motor;
-    AbsoluteLimits &limits;
+    MultiplexedLimits &limits;
 
     elapsedMillis motorStallTimer;
     unsigned int motorStallTimeout = 250;
+
+    void updateUncalibrated();
+    void updateCalibrating();
+    void onDirectionCalibrated();
 };
 
 #include "DirectionCalibration.tpp"

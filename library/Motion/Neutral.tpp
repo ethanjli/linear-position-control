@@ -20,7 +20,7 @@ void Neutral<debug_serial>::setup() {
 template <bool debug_serial>
 void Neutral<debug_serial>::update() {
   if (motor.state != States::Motor::neutral) {
-    if (debug_serial) Serial.println("Setting motor to neutral!");
+    if (debug_serial) Serial.println(F("Setting motor to neutral!"));
     motor.neutral();
   }
 }

@@ -5,7 +5,8 @@
 
 template <bool debug_serial>
 AbsoluteDirectionCalibrator<debug_serial>::AbsoluteDirectionCalibrator(Motor &motor, AbsoluteLimits &limits) :
-  motor(motor), limits(limits) {}
+  motor(motor), limits(limits) {
+}
 
 template <bool debug_serial>
 void AbsoluteDirectionCalibrator<debug_serial>::setup() {
@@ -45,7 +46,7 @@ void AbsoluteDirectionCalibrator<debug_serial>::updateUncalibrated() {
 
   // Start calibration
   state = DirectionCalibration::calibrating;
-  if (debug_serial) Serial.println("Calibrating motor direction...");
+  if (debug_serial) Serial.println(F("Calibrating motor direction..."));
   motorStallTimer = 0;
   motor.forwards();
 }
@@ -57,22 +58,22 @@ void AbsoluteDirectionCalibrator<debug_serial>::updateCalibrating() {
 
   if (limits.state == Limits::both) { // cancel calibration if both limit switches are pressed
     state = DirectionCalibration::uncalibrated;
-    if (debug_serial) Serial.println("Restarting motor direction calibration...");
+    if (debug_serial) Serial.println(F("Restarting motor direction calibration..."));
     return;
   }
   if (limits.state == Limits::none) return; // let the motor continue to run until it hits a limit
   if (limits.previousState == Limits::none) { // the motor just hit a limit switch
     if (debug_serial) {
-      if (limits.state == Limits::left) Serial.println("Just hit the left limit switch!");
-      else Serial.println("Just hit the right limit switch!"); // limits.state == Limits::right
+      if (limits.state == Limits::left) Serial.println(F("Just hit the left limit switch!"));
+      else Serial.println(F("Just hit the right limit switch!")); // limits.state == Limits::right
     }
     updateMotorDirection();
     onDirectionCalibrated();
     return;
   }
   if (motorStallTimer > motorStallTimeout) {
-    if (debug_serial) Serial.println("Stall detected!");
-    breakStall();
+    if (debug_serial) Serial.println(F("Motor stall detected! Running the motor in the opposite direction..."));
+    motor.opposite();
     motorStallTimer = 0;
   }
 }
@@ -81,13 +82,13 @@ template <bool debug_serial>
 void AbsoluteDirectionCalibrator<debug_serial>::onDirectionCalibrated() {
   using States::DirectionCalibration;
 
-  motor.backwards();
   state = DirectionCalibration::calibrated;
+  motor.neutral();
 
   if (debug_serial) {
-    Serial.println("Calibrated!");
-    if (motor.directionsSwapped()) Serial.println("We flipped the motor's pins in software.");
-    else Serial.println("We don't need to flip the motor's pins.");
+    Serial.println(F("Calibrated!"));
+    if (motor.directionsSwapped()) Serial.println(F("We flipped the motor's pins in software."));
+    else Serial.println(F("We don't need to flip the motor's pins."));
   }
 
   digitalWrite(LED_BUILTIN, HIGH);
@@ -100,22 +101,85 @@ void AbsoluteDirectionCalibrator<debug_serial>::updateMotorDirection() {
 
   if ((motor.state == Motor::forwards && limits.state == Limits::left) ||
       (motor.state == Motor::backwards && limits.state == Limits::right)) {
-    if (debug_serial) Serial.println("Flipping motor directions!");
+    if (debug_serial) Serial.println(F("Flipping motor directions!"));
     motor.swapDirections();
   }
 }
 
-template <bool debug_serial>
-void AbsoluteDirectionCalibrator<debug_serial>::breakStall() {
-  using States::Motor;
+// MultiplexedDirectionCalibrator
 
-  if (motor.state == Motor::forwards) {
-    if (debug_serial) Serial.println("Running the motor backwards to break the stall!");
-    motor.backwards();
-  } else { // motor.state == Motor::backwards
-    if (debug_serial) Serial.println("Running the motor forwards to break the stall!");
-    motor.forwards();
+template <bool debug_serial>
+MultiplexedDirectionCalibrator<debug_serial>::MultiplexedDirectionCalibrator(Motor &motor, MultiplexedLimits &limits) :
+  motor(motor), limits(limits) {
+}
+
+template <bool debug_serial>
+void MultiplexedDirectionCalibrator<debug_serial>::setup() {
+  if (setupCompleted) return;
+
+  motor.setup();
+  limits.setup();
+
+  state = States::DirectionCalibration::uncalibrated;
+
+  setupCompleted = true;
+}
+
+template <bool debug_serial>
+void MultiplexedDirectionCalibrator<debug_serial>::update() {
+  using States::DirectionCalibration;
+
+  limits.update();
+  switch (state) {
+    case DirectionCalibration::uncalibrated:
+      updateUncalibrated();
+      break;
+    case DirectionCalibration::calibrating:
+      updateCalibrating();
+      break;
+    case DirectionCalibration::calibrated: // Nothing to do!
+      break;
   }
+}
+
+template <bool debug_serial>
+void MultiplexedDirectionCalibrator<debug_serial>::updateUncalibrated() {
+  using States::DirectionCalibration;
+
+  // Start calibration
+  state = DirectionCalibration::calibrating;
+  if (debug_serial) Serial.println(F("Calibrating motor direction..."));
+  motorStallTimer = 0;
+  motor.forwards();
+}
+
+template <bool debug_serial>
+void MultiplexedDirectionCalibrator<debug_serial>::updateCalibrating() {
+  using States::Limits;
+  using States::DirectionCalibration;
+
+  if (limits.state == Limits::none) { // the motor is now free to move in either direction, which means its direction is "calibrated"
+    onDirectionCalibrated();
+    return;
+  }
+
+  if (motorStallTimer > motorStallTimeout) {
+    if (debug_serial) Serial.println(F("Motor stall detected! Running the motor in the opposite direction..."));
+    motor.opposite();
+    motorStallTimer = 0;
+  }
+}
+
+template <bool debug_serial>
+void MultiplexedDirectionCalibrator<debug_serial>::onDirectionCalibrated() {
+  using States::DirectionCalibration;
+
+  state = DirectionCalibration::calibrated;
+  motor.neutral();
+
+  if (debug_serial) Serial.println(F("Calibrated!"));
+
+  digitalWrite(LED_BUILTIN, HIGH);
 }
 
 #endif

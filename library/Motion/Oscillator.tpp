@@ -3,43 +3,62 @@
 
 // Oscillator
 
-template <bool debug_serial>
-Oscillator<debug_serial>::Oscillator(Motor &motor, AbsoluteLimits &limits) :
+template <class Limits, bool debug_serial>
+Oscillator<Limits, debug_serial>::Oscillator(Motor &motor, Limits &limits) :
   motor(motor), limits(limits) {
 }
 
-template <bool debug_serial>
-void Oscillator<debug_serial>::setup() {
+template <class Limits, bool debug_serial>
+void Oscillator<Limits, debug_serial>::setup() {
   if (setupCompleted) return;
 
   motor.setup();
   limits.setup();
 
+  state = States::Motion::Oscillator::initializing;
+
   setupCompleted = true;
 }
 
-template <bool debug_serial>
-void Oscillator<debug_serial>::update() {
-  using States::Limits;
-
+template <class Limits, bool debug_serial>
+void Oscillator<Limits, debug_serial>::update() {
   limits.update();
-  if (limits.state == limits.previousState) return; // nothing to do
+  switch (state) {
+    case States::Motion::Oscillator::operating:
+      updateOperating();
+      break;
+    case States::Motion::Oscillator::initializing:
+      updateInitializing();
+      break;
+  }
+}
+
+template <class Limits, bool debug_serial>
+void Oscillator<Limits, debug_serial>::updateInitializing() {
+  motor.forwards(); // we assume that the actuator is either floating or at the left limit, which is true after direction calibration
+  if (limits.state == States::Limits::none) state = States::Motion::Oscillator::operating;
+}
+
+template <class Limits, bool debug_serial>
+void Oscillator<Limits, debug_serial>::updateOperating() {
+  if (limits.state == States::Limits::none || limits.state == limits.previousState) return; // nothing to do
+  // TODO: we should just use a position tracker to repeatedly go to positions 0 and 1...
   switch (limits.state) {
-    case Limits::left:
-      if (debug_serial) Serial.println("Hit left limit switch. Moving forwards!");
+    case States::Limits::left:
+      if (debug_serial) Serial.println(F("Hit left limit switch. Moving forwards!"));
       motor.forwards();
       break;
-    case Limits::right:
-      if (debug_serial) Serial.println("Hit right limit switch. Moving backwards!");
+    case States::Limits::right:
+      if (debug_serial) Serial.println(F("Hit right limit switch. Moving backwards!"));
       motor.backwards();
       break;
-    case Limits::both:
-      if (debug_serial) Serial.println("Both limit switches are pressed. Braking!");
-      motor.brake(); // FIXME: we actually need to go back to floating
-      break;
-    case Limits::either:
-      if (debug_serial) Serial.println("Hit one of the limit switches. Moving in the opposite direction!");
+    case States::Limits::either:
+      if (debug_serial) Serial.println(F("Hit one of the limit switches. Moving in the opposite direction!"));
       motor.opposite(); // FIXME: this behavior is not robust! We need position tracking to tell us which limit we're at.
+      break;
+    case States::Limits::both:
+      if (debug_serial) Serial.println(F("Both limit switches are pressed. Braking!"));
+      motor.brake(); // FIXME: we actually need to go back to floating
       break;
   }
 }

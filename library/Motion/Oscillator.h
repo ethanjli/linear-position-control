@@ -4,10 +4,19 @@
 #include "Motors.h"
 #include "Limits.h"
 
-template <bool debug_serial>
+namespace States {
+  namespace Motion {
+    enum class Oscillator : uint8_t {
+      initializing,
+      operating
+    };
+  }
+}
+
+template <class Limits, bool debug_serial>
 class Oscillator {
   public:
-    Oscillator(Motor &motor, AbsoluteLimits &limits); // FIXME: we shouldn't assume AbsoluteLimits
+    Oscillator(Motor &motor, Limits &limits);
 
     void setup();
     void update();
@@ -15,8 +24,13 @@ class Oscillator {
   private:
     bool setupCompleted = false;
 
+    States::Motion::Oscillator state;
+
     Motor &motor;
-    AbsoluteLimits &limits;
+    Limits &limits;
+
+    void updateInitializing();
+    void updateOperating();
 };
 
 #include "Oscillator.tpp"

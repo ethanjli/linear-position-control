@@ -4,16 +4,33 @@
 #include <EnableInterrupt.h>
 #include <DebouncedButton.h>
 #include <Motors.h>
+#include <Limits.h>
+#include <DirectionCalibration.h>
+#include <Motion/Oscillator.h>
 #include <LinearActuator.h>
+
+// Compile-time flags
+
+const bool DEBUG_SERIAL = true;
+using DirectionCalibrator = MultiplexedDirectionCalibrator<DEBUG_SERIAL>;
+using MotionController = Oscillator<MultiplexedLimits, DEBUG_SERIAL>;
+using Actuator = LinearActuator<DirectionCalibrator, MotionController>;
+
+// Singletons
+
+Motors motors = Motors();
 
 // Globals
 
-DebouncedButton limits(12, &interruptCounter12, 50);
-Motors motors = Motors();
-AbsoluteLinearActuator actuator = MultiplexedLinearActuator(&motors, M2, &limits);
+Motor motor(motors, M2);
+DebouncedButton leftAndRight(12, interruptCounter12, 50);
+MultiplexedLimits limits(leftAndRight);
+DirectionCalibrator directionCalibrator(motor, limits);
+MotionController motionController(motor, limits);
+Actuator actuator(directionCalibrator, motionController);
 
 void setup() {
-  Serial.begin(115200);
+  if (DEBUG_SERIAL) Serial.begin(115200);
   actuator.setup();
   pinMode(LED_BUILTIN, OUTPUT);
 }

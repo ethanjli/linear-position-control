@@ -35,6 +35,19 @@ class AbsoluteLimits {
 };
 
 class MultiplexedLimits {
+  public:
+    MultiplexedLimits(DebouncedButton &leftAndRightLimits);
+
+    void setup();
+    void update();
+
+    States::Limits state;
+    States::Limits previousState;
+
+  private:
+    bool setupCompleted = false;
+
+    DebouncedButton &leftAndRightLimits;
 };
 
 #endif

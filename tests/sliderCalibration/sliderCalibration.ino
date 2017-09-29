@@ -11,7 +11,7 @@
 
 // Compile-time flags
 
-const bool DEBUG_SERIAL = false;
+const bool DEBUG_SERIAL = true;
 using DirectionCalibrator = AbsoluteDirectionCalibrator<DEBUG_SERIAL>;
 using MotionController = Neutral<DEBUG_SERIAL>;
 using Actuator = LinearActuator<DirectionCalibrator, MotionController>;
