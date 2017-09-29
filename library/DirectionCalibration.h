@@ -14,11 +14,10 @@ namespace States {
   };
 }
 
-// A motor direction calibrator with an absolute sense of direction - it already knows which end is left and which end is right
-template <bool debug_serial>
-class AbsoluteDirectionCalibrator {
+template<class Limits>
+class DirectionCalibrator {
   public:
-    AbsoluteDirectionCalibrator(Motor &motor, AbsoluteLimits &limits);
+    DirectionCalibrator(Motor &motor, Limits &limits);
 
     void setup();
     void update();
@@ -28,8 +27,9 @@ class AbsoluteDirectionCalibrator {
   private:
     bool setupCompleted = false;
 
+  protected:
     Motor &motor;
-    AbsoluteLimits &limits;
+    Limits &limits;
 
     elapsedMillis motorStallTimer;
     unsigned int motorStallTimeout = 250;
@@ -37,31 +37,6 @@ class AbsoluteDirectionCalibrator {
     void updateUncalibrated();
     void updateCalibrating();
     void updateMotorDirection();
-    void onDirectionCalibrated();
-};
-
-// A calibrator which ensures that the motor can freely move in known directions with multiplexed limit switches - it already knows which direction is forwards and which direction is backwards
-template <bool debug_serial>
-class MultiplexedDirectionCalibrator {
-  public:
-    MultiplexedDirectionCalibrator(Motor &motor, MultiplexedLimits &limits);
-
-    void setup();
-    void update();
-
-    States::DirectionCalibration state;
-
-  private:
-    bool setupCompleted = false;
-
-    Motor &motor;
-    MultiplexedLimits &limits;
-
-    elapsedMillis motorStallTimer;
-    unsigned int motorStallTimeout = 250;
-
-    void updateUncalibrated();
-    void updateCalibrating();
     void onDirectionCalibrated();
 };
 

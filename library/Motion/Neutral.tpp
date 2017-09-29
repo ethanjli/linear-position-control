@@ -1,15 +1,17 @@
 #ifndef Neutral_tpp
 #define Neutral_tpp
 
+#include <ArduinoLog.h>
+
 // Neutral
 
-template <bool debug_serial>
-Neutral<debug_serial>::Neutral(Motor &motor) :
+template <class Limits>
+Neutral<Limits>::Neutral(Motor &motor) :
   motor(motor) {
 }
 
-template <bool debug_serial>
-void Neutral<debug_serial>::setup() {
+template <class Limits>
+void Neutral<Limits>::setup() {
   if (setupCompleted) return;
 
   motor.setup();
@@ -17,10 +19,10 @@ void Neutral<debug_serial>::setup() {
   setupCompleted = true;
 }
 
-template <bool debug_serial>
-void Neutral<debug_serial>::update() {
+template <class Limits>
+void Neutral<Limits>::update() {
   if (motor.state != States::Motor::neutral) {
-    if (debug_serial) Serial.println(F("Setting motor to neutral!"));
+    Log.notice(F("Setting motor to neutral!" CR));
     motor.neutral();
   }
 }

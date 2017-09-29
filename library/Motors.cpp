@@ -55,43 +55,79 @@ void Motor::run(int speed) {
   } else {
     motors.brake(motorPort);
     state = States::Motor::braking;
+    return;
   }
+  updateLastDirection();
+}
+
+void Motor::run(MotorDirection direction, MotorSpeed speed) {
+  motors.run(motorPort, direction, speed);
+  if (speed == 0) {
+    motors.brake(motorPort);
+    state = States::Motor::braking;
+    return;
+  }
+  switch (direction) {
+    case RELEASE:
+      motors.neutral(motorPort);
+      state = States::Motor::neutral;
+      return;
+    case FORWARD:
+      motors.run(motorPort, direction, speed);
+      state = States::Motor::forwards;
+      break;
+    case BACKWARD:
+      motors.run(motorPort, direction, speed);
+      state = States::Motor::backwards;
+      break;
+  }
+  updateLastDirection();
 }
 
 void Motor::forwards() {
   motors.run(motorPort, forwardDirection, speed);
   state = States::Motor::forwards;
+  updateLastDirection();
 }
 
 void Motor::forwards(MotorSpeed speed) {
   motors.run(motorPort, forwardDirection, speed);
   state = States::Motor::forwards;
+  updateLastDirection();
 }
 
 void Motor::backwards() {
   motors.run(motorPort, backwardDirection, speed);
   state = States::Motor::backwards;
+  updateLastDirection();
 }
 
 void Motor::backwards(MotorSpeed speed) {
   motors.run(motorPort, backwardDirection, speed);
   state = States::Motor::backwards;
+  updateLastDirection();
 }
 
 void Motor::opposite() {
-  if (state == States::Motor::forwards) {
-    backwards();
-  } else if (state == States::Motor::backwards) {
-    forwards();
-  }
+  if (lastDirection == FORWARD) backwards();
+  else if (lastDirection == BACKWARD) forwards();
+  updateLastDirection();
 }
 
 void Motor::opposite(MotorSpeed speed) {
-  if (state == States::Motor::forwards) {
-    backwards(speed);
-  } else if (state == States::Motor::backwards) {
-    forwards(speed);
-  }
+  if (lastDirection == FORWARD) backwards(speed);
+  else if (lastDirection == BACKWARD) forwards(speed);
+  updateLastDirection();
+}
+
+void Motor::resume() {
+  if (lastDirection == FORWARD) forwards();
+  else if (lastDirection == BACKWARD) backwards();
+}
+
+void Motor::resume(MotorSpeed speed) {
+  if (lastDirection == FORWARD) forwards(speed);
+  else if (lastDirection == BACKWARD) backwards(speed);
 }
 
 void Motor::brake() {
@@ -108,9 +144,16 @@ void Motor::swapDirections() {
   MotorDirection temp = forwardDirection;
   forwardDirection = backwardDirection;
   backwardDirection = temp;
+  if (lastDirection == FORWARD) lastDirection = BACKWARD;
+  else lastDirection = FORWARD; // lastDirection == BACKWARD
 }
 
 bool Motor::directionsSwapped() {
   return forwardDirection == BACKWARD;
+}
+
+void Motor::updateLastDirection() {
+  if (state == States::Motor::forwards) lastDirection = FORWARD;
+  else if (state == States::Motor::backwards) lastDirection = BACKWARD;
 }
 

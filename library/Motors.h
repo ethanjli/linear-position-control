@@ -51,13 +51,18 @@ class Motor {
     MotorSpeed speed = 255;
     States::Motor state;
 
-    void forwards();
     void run(int speed);
+    void run(MotorDirection direction, MotorSpeed speed);
+    void forwards();
     void forwards(MotorSpeed speed);
     void backwards();
     void backwards(MotorSpeed speed);
+
     void opposite();
     void opposite(MotorSpeed speed);
+    void resume();
+    void resume(MotorSpeed speed);
+
     void brake();
     void neutral();
 
@@ -72,6 +77,9 @@ class Motor {
 
     MotorDirection forwardDirection = FORWARD;
     MotorDirection backwardDirection = BACKWARD;
+    MotorDirection lastDirection = FORWARD;
+
+    void updateLastDirection();
 };
 
 #endif

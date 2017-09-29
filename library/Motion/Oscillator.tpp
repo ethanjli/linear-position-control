@@ -1,15 +1,17 @@
 #ifndef Oscillator_tpp
 #define Oscillator_tpp
 
+#include <ArduinoLog.h>
+
 // Oscillator
 
-template <class Limits, bool debug_serial>
-Oscillator<Limits, debug_serial>::Oscillator(Motor &motor, Limits &limits) :
+template <class Limits>
+Oscillator<Limits>::Oscillator(Motor &motor, Limits &limits) :
   motor(motor), limits(limits) {
 }
 
-template <class Limits, bool debug_serial>
-void Oscillator<Limits, debug_serial>::setup() {
+template <class Limits>
+void Oscillator<Limits>::setup() {
   if (setupCompleted) return;
 
   motor.setup();
@@ -20,8 +22,8 @@ void Oscillator<Limits, debug_serial>::setup() {
   setupCompleted = true;
 }
 
-template <class Limits, bool debug_serial>
-void Oscillator<Limits, debug_serial>::update() {
+template <class Limits>
+void Oscillator<Limits>::update() {
   limits.update();
   switch (state) {
     case States::Motion::Oscillator::operating:
@@ -33,31 +35,32 @@ void Oscillator<Limits, debug_serial>::update() {
   }
 }
 
-template <class Limits, bool debug_serial>
-void Oscillator<Limits, debug_serial>::updateInitializing() {
-  motor.forwards(); // we assume that the actuator is either floating or at the left limit, which is true after direction calibration
-  if (limits.state == States::Limits::none) state = States::Motion::Oscillator::operating;
+template <class Limits>
+void Oscillator<Limits>::updateInitializing() {
+  Log.notice(F("Oscillating the motor between the limits!" CR));
+  motor.opposite(); // we assume that the actuator is either floating or at the left limit, which is true after direction calibration
+  state = States::Motion::Oscillator::operating;
 }
 
-template <class Limits, bool debug_serial>
-void Oscillator<Limits, debug_serial>::updateOperating() {
+template <class Limits>
+void Oscillator<Limits>::updateOperating() {
   if (limits.state == States::Limits::none || limits.state == limits.previousState) return; // nothing to do
   // TODO: we should just use a position tracker to repeatedly go to positions 0 and 1...
   switch (limits.state) {
     case States::Limits::left:
-      if (debug_serial) Serial.println(F("Hit left limit switch. Moving forwards!"));
+      Log.trace(F("Hit left limit switch. Moving forwards!" CR));
       motor.forwards();
       break;
     case States::Limits::right:
-      if (debug_serial) Serial.println(F("Hit right limit switch. Moving backwards!"));
+      Log.trace(F("Hit right limit switch. Moving backwards!" CR));
       motor.backwards();
       break;
     case States::Limits::either:
-      if (debug_serial) Serial.println(F("Hit one of the limit switches. Moving in the opposite direction!"));
+      Log.trace(F("Hit one of the limit switches. Moving in the opposite direction!" CR));
       motor.opposite(); // FIXME: this behavior is not robust! We need position tracking to tell us which limit we're at.
       break;
     case States::Limits::both:
-      if (debug_serial) Serial.println(F("Both limit switches are pressed. Braking!"));
+      Log.trace(F("Both limit switches are pressed. Braking!" CR));
       motor.brake(); // FIXME: we actually need to go back to floating
       break;
   }

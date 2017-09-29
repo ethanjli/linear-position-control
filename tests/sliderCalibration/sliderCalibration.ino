@@ -2,6 +2,10 @@
 #define INTERRUPT_FLAG_PIN12 interruptCounter12
 #define INTERRUPT_FLAG_PIN8 interruptCounter8
 #include <EnableInterrupt.h>
+
+//#define DISABLE_LOGGING
+#include <ArduinoLog.h>
+
 #include <DebouncedButton.h>
 #include <Motors.h>
 #include <Limits.h>
@@ -11,10 +15,9 @@
 
 // Compile-time flags
 
-const bool DEBUG_SERIAL = true;
-using DirectionCalibrator = AbsoluteDirectionCalibrator<DEBUG_SERIAL>;
-using MotionController = Neutral<DEBUG_SERIAL>;
-using Actuator = LinearActuator<DirectionCalibrator, MotionController>;
+using AbsoluteDirectionCalibrator = DirectionCalibrator<AbsoluteLimits>;
+using MotionController = Neutral<AbsoluteLimits>;
+using Actuator = LinearActuator<AbsoluteDirectionCalibrator, MotionController>;
 
 // Singletons
 
@@ -26,12 +29,15 @@ Motor motor(motors, M2);
 DebouncedButton right(12, interruptCounter12, 50);
 DebouncedButton left(8, interruptCounter8, 50);
 AbsoluteLimits limits(left, right);
-DirectionCalibrator directionCalibrator(motor, limits);
+AbsoluteDirectionCalibrator directionCalibrator(motor, limits);
 MotionController motionController(motor);
 Actuator actuator(directionCalibrator, motionController);
 
 void setup() {
-  if (DEBUG_SERIAL) Serial.begin(115200);
+#ifndef DISABLE_LOGGING
+  Serial.begin(115200);
+  Log.begin(LOG_LEVEL_VERBOSE, &Serial);
+#endif
   actuator.setup();
   pinMode(LED_BUILTIN, OUTPUT);
 }

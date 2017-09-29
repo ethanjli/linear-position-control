@@ -13,7 +13,7 @@ namespace States {
   }
 }
 
-template <class Limits, bool debug_serial>
+template <class Limits>
 class Oscillator {
   public:
     Oscillator(Motor &motor, Limits &limits);

@@ -3,7 +3,7 @@
 
 #include "Motors.h"
 
-template <bool debug_serial>
+template <class Limits>
 class Neutral {
   public:
     Neutral(Motor &motor);
