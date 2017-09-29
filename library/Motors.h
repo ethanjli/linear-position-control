@@ -17,6 +17,7 @@ typedef uint8_t MotorDirection;
 namespace States {
   enum class Motor : uint8_t {
     braking,
+    neutral,
     forwards,
     backwards
   };
@@ -29,6 +30,7 @@ class Motors {
     void setup();
     void run(MotorPort motor_port, MotorDirection direction, MotorSpeed speed);
     void brake(MotorPort motor_port);
+    void neutral(MotorPort motor_port);
 
     Adafruit_DCMotor *motors[4];
 
@@ -54,7 +56,10 @@ class Motor {
     void forwards(MotorSpeed speed);
     void backwards();
     void backwards(MotorSpeed speed);
+    void opposite();
+    void opposite(MotorSpeed speed);
     void brake();
+    void neutral();
 
     void swapDirections();
     bool directionsSwapped();

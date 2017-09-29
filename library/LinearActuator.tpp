@@ -3,15 +3,17 @@
 
 // LinearActuator
 
-template <class DirectionCalibrator>
-LinearActuator<DirectionCalibrator>::LinearActuator(
-    DirectionCalibrator &directionCalibrator
+template <class DirectionCalibrator, class MotionController>
+LinearActuator<DirectionCalibrator, MotionController>::LinearActuator(
+    DirectionCalibrator &directionCalibrator,
+    MotionController &motionController
 ) :
-  directionCalibrator(directionCalibrator) {
+  directionCalibrator(directionCalibrator),
+  motionController(motionController) {
 }
 
-template <class DirectionCalibrator>
-void LinearActuator<DirectionCalibrator>::setup() {
+template <class DirectionCalibrator, class MotionController>
+void LinearActuator<DirectionCalibrator, MotionController>::setup() {
   if (setupCompleted) return;
 
   directionCalibrator.setup();
@@ -19,8 +21,8 @@ void LinearActuator<DirectionCalibrator>::setup() {
   setupCompleted = true;
 }
 
-template <class DirectionCalibrator>
-void LinearActuator<DirectionCalibrator>::update() {
+template <class DirectionCalibrator, class MotionController>
+void LinearActuator<DirectionCalibrator, MotionController>::update() {
   using States::DirectionCalibration;
   using States::LinearActuator;
 
@@ -29,6 +31,7 @@ void LinearActuator<DirectionCalibrator>::update() {
     directionCalibrator.update();
     return;
   }
+  motionController.update();
 }
 
 #endif

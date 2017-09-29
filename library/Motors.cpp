@@ -25,6 +25,10 @@ void Motors::brake(MotorPort motor_port) {
   motors[motor_port]->setSpeed(0);
 }
 
+void Motors::neutral(MotorPort motor_port) {
+  motors[motor_port]->run(RELEASE);
+}
+
 // Motor
 
 Motor::Motor(Motors &motors, MotorPort motorPort) :
@@ -72,9 +76,30 @@ void Motor::backwards(MotorSpeed speed) {
   state = States::Motor::backwards;
 }
 
+void Motor::opposite() {
+  if (state == States::Motor::forwards) {
+    backwards();
+  } else if (state == States::Motor::backwards) {
+    forwards();
+  }
+}
+
+void Motor::opposite(MotorSpeed speed) {
+  if (state == States::Motor::forwards) {
+    backwards(speed);
+  } else if (state == States::Motor::backwards) {
+    forwards(speed);
+  }
+}
+
 void Motor::brake() {
   motors.brake(motorPort);
   state = States::Motor::braking;
+}
+
+void Motor::neutral() {
+  motors.neutral(motorPort);
+  state = States::Motor::neutral;
 }
 
 void Motor::swapDirections() {

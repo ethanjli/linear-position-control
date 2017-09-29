@@ -4,37 +4,37 @@
 #include <EnableInterrupt.h>
 #include <DebouncedButton.h>
 #include <Motors.h>
+#include <Limits.h>
+#include <DirectionCalibration.h>
+#include <Motion/Oscillator.h>
+#include <LinearActuator.h>
+
+// Compile-time flags
+
+const bool DEBUG_SERIAL = true;
+using DirectionCalibrator = AbsoluteDirectionCalibrator<DEBUG_SERIAL>;
+using MotionController = Oscillator<DEBUG_SERIAL>;
+
+// Singletons
+
+Motors motors = Motors();
 
 // Globals
 
-DebouncedButton left(12, &interruptCounter12, 50);
-DebouncedButton right(8, &interruptCounter8, 50);
-Motors motors = Motors();
-const MotorPort MOTOR_PORT = M2;
-const MotorSpeed MOTOR_SPEED = 255;
+Motor motor(motors, M2);
+DebouncedButton right(12, interruptCounter12, 50);
+DebouncedButton left(8, interruptCounter8, 50);
+AbsoluteLimits limits(left, right);
+DirectionCalibrator directionCalibrator(motor, limits);
+MotionController motionControl(motor, limits);
+LinearActuator<DirectionCalibrator, MotionController> actuator(directionCalibrator, motionControl);
 
 void setup() {
-  left.setup();
-  right.setup();
-  motors.setup();
-  delay(2000);
-  motors.run(MOTOR_PORT, FORWARD, MOTOR_SPEED);
+  if (DEBUG_SERIAL) Serial.begin(115200);
+  actuator.setup();
   pinMode(LED_BUILTIN, OUTPUT);
 }
 
 void loop() {
-  left.update();
-  right.update();
-  if (left.eventStatePressed) {
-    motors.brake(MOTOR_PORT);
-    delay(1000);
-    motors.run(MOTOR_PORT, FORWARD, MOTOR_SPEED);
-    left.eventStatePressed = false;
-  }
-  if (right.eventStatePressed) {
-    motors.brake(MOTOR_PORT);
-    delay(1000);
-    motors.run(MOTOR_PORT, BACKWARD, MOTOR_SPEED);
-    right.eventStatePressed = false;
-  }
+  actuator.update();
 }

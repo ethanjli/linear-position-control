@@ -26,10 +26,10 @@ void AbsoluteDirectionCalibrator<debug_serial>::update() {
   limits.update();
   switch (state) {
     case DirectionCalibration::uncalibrated:
-      updateDirectionUncalibrated();
+      updateUncalibrated();
       break;
     case DirectionCalibration::calibrating:
-      updateDirectionCalibrating();
+      updateCalibrating();
       break;
     case DirectionCalibration::calibrated: // Nothing to do!
       break;
@@ -37,7 +37,7 @@ void AbsoluteDirectionCalibrator<debug_serial>::update() {
 }
 
 template <bool debug_serial>
-void AbsoluteDirectionCalibrator<debug_serial>::updateDirectionUncalibrated() {
+void AbsoluteDirectionCalibrator<debug_serial>::updateUncalibrated() {
   using States::Limits;
   using States::DirectionCalibration;
 
@@ -51,7 +51,7 @@ void AbsoluteDirectionCalibrator<debug_serial>::updateDirectionUncalibrated() {
 }
 
 template <bool debug_serial>
-void AbsoluteDirectionCalibrator<debug_serial>::updateDirectionCalibrating() {
+void AbsoluteDirectionCalibrator<debug_serial>::updateCalibrating() {
   using States::Limits;
   using States::DirectionCalibration;
 
