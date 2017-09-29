@@ -6,12 +6,15 @@
 #include <Motors.h>
 #include <Limits.h>
 #include <DirectionCalibration.h>
+#include <Motion/Neutral.h>
 #include <LinearActuator.h>
 
 // Compile-time flags
 
 const bool DEBUG_SERIAL = false;
 using DirectionCalibrator = AbsoluteDirectionCalibrator<DEBUG_SERIAL>;
+using MotionController = Neutral<DEBUG_SERIAL>;
+using Actuator = LinearActuator<DirectionCalibrator, MotionController>;
 
 // Singletons
 
@@ -24,7 +27,8 @@ DebouncedButton right(12, interruptCounter12, 50);
 DebouncedButton left(8, interruptCounter8, 50);
 AbsoluteLimits limits(left, right);
 DirectionCalibrator directionCalibrator(motor, limits);
-LinearActuator<DirectionCalibrator> actuator(directionCalibrator);
+MotionController motionController(motor);
+Actuator actuator(directionCalibrator, motionController);
 
 void setup() {
   if (DEBUG_SERIAL) Serial.begin(115200);

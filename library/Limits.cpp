@@ -2,7 +2,8 @@
 
 // AbsoluteLimits
 AbsoluteLimits::AbsoluteLimits(DebouncedButton &leftLimit, DebouncedButton &rightLimit) :
-  leftLimit(leftLimit), rightLimit(rightLimit) {}
+  leftLimit(leftLimit), rightLimit(rightLimit) {
+}
 
 void AbsoluteLimits::setup() {
   if (setupCompleted) return;

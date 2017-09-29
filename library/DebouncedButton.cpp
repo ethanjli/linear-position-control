@@ -3,8 +3,15 @@
 #define LIBCALL_ENABLEINTERRUPT
 #include <EnableInterrupt.h>
 
-DebouncedButton::DebouncedButton(uint8_t buttonPin, volatile uint8_t &interruptCounter, unsigned int debounceDelay) :
-  buttonPin(buttonPin), interruptCounter(interruptCounter), debounceDelay(debounceDelay) {}
+DebouncedButton::DebouncedButton(
+    uint8_t buttonPin,
+    volatile uint8_t &interruptCounter,
+    unsigned int debounceDelay
+) :
+  buttonPin(buttonPin),
+  interruptCounter(interruptCounter),
+  debounceDelay(debounceDelay) {
+}
 
 void DebouncedButton::setup() {
   if (setupCompleted) return;

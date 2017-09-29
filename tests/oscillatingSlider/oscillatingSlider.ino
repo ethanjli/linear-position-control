@@ -14,6 +14,7 @@
 const bool DEBUG_SERIAL = true;
 using DirectionCalibrator = AbsoluteDirectionCalibrator<DEBUG_SERIAL>;
 using MotionController = Oscillator<DEBUG_SERIAL>;
+using Actuator = LinearActuator<DirectionCalibrator, MotionController>;
 
 // Singletons
 
@@ -27,7 +28,7 @@ DebouncedButton left(8, interruptCounter8, 50);
 AbsoluteLimits limits(left, right);
 DirectionCalibrator directionCalibrator(motor, limits);
 MotionController motionControl(motor, limits);
-LinearActuator<DirectionCalibrator, MotionController> actuator(directionCalibrator, motionControl);
+Actuator actuator(directionCalibrator, motionControl);
 
 void setup() {
   if (DEBUG_SERIAL) Serial.begin(115200);

@@ -3,7 +3,8 @@
 // Motors
 
 Motors::Motors() :
-  shield(Adafruit_MotorShield()) {}
+  shield(Adafruit_MotorShield()) {
+}
 
 void Motors::setup() {
   if (setupCompleted) return;
@@ -32,7 +33,8 @@ void Motors::neutral(MotorPort motor_port) {
 // Motor
 
 Motor::Motor(Motors &motors, MotorPort motorPort) :
-  motors(motors), motorPort(motorPort) {}
+  motors(motors), motorPort(motorPort) {
+}
 
 void Motor::setup() {
   if (setupCompleted) return;

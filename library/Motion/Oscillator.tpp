@@ -5,7 +5,8 @@
 
 template <bool debug_serial>
 Oscillator<debug_serial>::Oscillator(Motor &motor, AbsoluteLimits &limits) :
-  motor(motor), limits(limits) {}
+  motor(motor), limits(limits) {
+}
 
 template <bool debug_serial>
 void Oscillator<debug_serial>::setup() {
