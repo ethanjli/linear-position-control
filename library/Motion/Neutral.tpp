@@ -3,10 +3,12 @@
 
 #include <ArduinoLog.h>
 
+namespace LinearPositionControl { namespace Motion {
+
 // Neutral
 
 template <class Limits>
-Neutral<Limits>::Neutral(Motor &motor) :
+Neutral<Limits>::Neutral(Components::Motor &motor) :
   motor(motor) {
 }
 
@@ -21,11 +23,13 @@ void Neutral<Limits>::setup() {
 
 template <class Limits>
 void Neutral<Limits>::update() {
-  if (motor.state != States::Motor::neutral) {
+  if (motor.state != Components::Motor::States::neutral) {
     Log.notice(F("Setting motor to neutral!" CR));
     motor.neutral();
   }
 }
+
+} }
 
 #endif
 

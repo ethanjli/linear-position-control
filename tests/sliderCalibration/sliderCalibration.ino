@@ -13,10 +13,13 @@
 #include <Motion/Neutral.h>
 #include <LinearActuator.h>
 
+using namespace LinearPositionControl;
+using namespace Components;
+
 // Compile-time flags
 
-using AbsoluteDirectionCalibrator = DirectionCalibrator<AbsoluteLimits>;
-using MotionController = Neutral<AbsoluteLimits>;
+using AbsoluteDirectionCalibrator = Calibration::Direction<AbsoluteLimits>;
+using MotionController = Motion::Neutral<AbsoluteLimits>;
 using Actuator = LinearActuator<AbsoluteDirectionCalibrator, MotionController>;
 
 // Singletons

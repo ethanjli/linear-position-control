@@ -3,10 +3,12 @@
 
 #include "Motors.h"
 
+namespace LinearPositionControl { namespace Motion {
+
 template <class Limits>
 class Neutral {
   public:
-    Neutral(Motor &motor);
+    Neutral(Components::Motor &motor);
 
     void setup();
     void update();
@@ -14,8 +16,10 @@ class Neutral {
   private:
     bool setupCompleted = false;
 
-    Motor &motor;
+    Components::Motor &motor;
 };
+
+} }
 
 #include "Neutral.tpp"
 

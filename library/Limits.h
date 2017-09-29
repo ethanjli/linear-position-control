@@ -6,6 +6,8 @@
 #include "DebouncedButton.h"
 #include "Motors.h"
 
+namespace LinearPositionControl { namespace Components {
+
 namespace States {
   enum class Limits : uint8_t {
     none,
@@ -21,11 +23,13 @@ class AbsoluteLimits {
   public:
     AbsoluteLimits(DebouncedButton &leftLimit, DebouncedButton &rightLimit);
 
+    using States = States::Limits;
+
     void setup();
     void update();
 
-    States::Limits state;
-    States::Limits previousState;
+    States state;
+    States previousState;
 
   private:
     bool setupCompleted = false;
@@ -38,17 +42,21 @@ class MultiplexedLimits {
   public:
     MultiplexedLimits(DebouncedButton &leftAndRightLimits);
 
+    using States = States::Limits;
+
     void setup();
     void update();
 
-    States::Limits state;
-    States::Limits previousState;
+    States state;
+    States previousState;
 
   private:
     bool setupCompleted = false;
 
     DebouncedButton &leftAndRightLimits;
 };
+
+} }
 
 #endif
 

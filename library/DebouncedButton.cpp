@@ -1,7 +1,10 @@
 #include "DebouncedButton.h"
+
 #define NEEDFORSPEED
 #define LIBCALL_ENABLEINTERRUPT
 #include <EnableInterrupt.h>
+
+namespace LinearPositionControl { namespace Components {
 
 DebouncedButton::DebouncedButton(
     uint8_t buttonPin,
@@ -49,4 +52,6 @@ void DebouncedButton::clearEventFlags() {
   eventStatePressed = false;
   eventStateReleased = false;
 }
+
+} }
 

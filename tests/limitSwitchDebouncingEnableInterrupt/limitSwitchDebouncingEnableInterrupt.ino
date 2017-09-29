@@ -3,9 +3,11 @@
 #include <EnableInterrupt.h>
 #include <DebouncedButton.h>
 
+using namespace LinearPositionControl::Components;
+
 // Globals
 
-DebouncedButton debouncedButton(12, &interruptCounter12, 50);
+DebouncedButton debouncedButton(12, interruptCounter12, 50);
 bool ledState = LOW;
 
 void setup() {

@@ -5,9 +5,11 @@
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 
-enum MotorPort : uint8_t {
+enum MotorPort : uint8_t { // we keep this at global scope to mimic Arduino pin semantics
   M1 = 0, M2 = 1, M3 = 2, M4 = 3
 };
+
+namespace LinearPositionControl { namespace Components {
 
 typedef uint8_t MotorSpeed;
 typedef uint8_t MotorDirection;
@@ -43,11 +45,13 @@ class Motor {
   public:
     Motor(Motors &motors, MotorPort motorPort);
 
+    using States = States::Motor;
+
     void setup();
     void update();
 
     MotorSpeed speed = 255;
-    States::Motor state;
+    States state;
 
     void run(int speed);
     void run(MotorDirection direction, MotorSpeed speed);
@@ -79,6 +83,8 @@ class Motor {
 
     void updateLastDirection();
 };
+
+} }
 
 #endif
 

@@ -13,11 +13,14 @@
 #include <Motion/Oscillator.h>
 #include <LinearActuator.h>
 
+using namespace LinearPositionControl;
+using namespace Components;
+
 // Compile-time flags
 
-using MultiplexedDirectionCalibrator = DirectionCalibrator<MultiplexedLimits>;
-using MotionController = Oscillator<MultiplexedLimits>;
-using Actuator = LinearActuator<MultiplexedDirectionCalibrator, MotionController>;
+using DirectionCalibrator = Calibration::Direction<MultiplexedLimits>;
+using MotionController = Motion::Oscillator<MultiplexedLimits>;
+using Actuator = LinearActuator<DirectionCalibrator, MotionController>;
 
 // Singletons
 
@@ -25,10 +28,10 @@ Motors motors = Motors();
 
 // Globals
 
-Motor motor(motors, M2);
+Motor motor = Motor(motors, M2);
 DebouncedButton leftAndRight(12, interruptCounter12, 50);
 MultiplexedLimits limits(leftAndRight);
-MultiplexedDirectionCalibrator directionCalibrator(motor, limits);
+DirectionCalibrator directionCalibrator(motor, limits);
 MotionController motionController(motor, limits);
 Actuator actuator(directionCalibrator, motionController);
 

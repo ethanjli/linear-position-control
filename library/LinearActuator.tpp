@@ -1,6 +1,8 @@
 #ifndef LinearActuator_tpp
 #define LinearActuator_tpp
 
+namespace LinearPositionControl {
+
 // LinearActuator
 
 template <class DirectionCalibrator, class MotionController>
@@ -23,15 +25,17 @@ void LinearActuator<DirectionCalibrator, MotionController>::setup() {
 
 template <class DirectionCalibrator, class MotionController>
 void LinearActuator<DirectionCalibrator, MotionController>::update() {
-  using States::DirectionCalibration;
-  using States::LinearActuator;
+  using Calibration::States::Direction;
 
-  if (directionCalibrator.state != DirectionCalibration::calibrated) {
-    state = LinearActuator::calibratingDirection;
+  if (directionCalibrator.state != Direction::calibrated) {
+    state = States::calibratingDirection;
     directionCalibrator.update();
     return;
   }
+  state = States::operating;
   motionController.update();
+}
+
 }
 
 #endif

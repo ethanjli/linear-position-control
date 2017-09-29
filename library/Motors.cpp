@@ -1,5 +1,7 @@
 #include "Motors.h"
 
+namespace LinearPositionControl { namespace Components {
+
 // Motors
 
 Motors::Motors() :
@@ -48,13 +50,13 @@ void Motor::setup() {
 void Motor::run(int speed) {
   if (speed > 0) {
     motors.run(motorPort, forwardDirection, speed);
-    state = States::Motor::forwards;
+    state = States::forwards;
   } else if (speed < 0) {
     motors.run(motorPort, backwardDirection, -1 * speed);
-    state = States::Motor::backwards;
+    state = States::backwards;
   } else {
     motors.brake(motorPort);
-    state = States::Motor::braking;
+    state = States::braking;
   }
   updateLastDirection();
 }
@@ -63,21 +65,21 @@ void Motor::run(MotorDirection direction, MotorSpeed speed) {
   motors.run(motorPort, direction, speed);
   if (speed == 0) {
     motors.brake(motorPort);
-    state = States::Motor::braking;
+    state = States::braking;
     return;
   }
   switch (direction) {
     case RELEASE:
       motors.neutral(motorPort);
-      state = States::Motor::neutral;
+      state = States::neutral;
       return;
     case FORWARD:
       motors.run(motorPort, direction, speed);
-      state = States::Motor::forwards;
+      state = States::forwards;
       break;
     case BACKWARD:
       motors.run(motorPort, direction, speed);
-      state = States::Motor::backwards;
+      state = States::backwards;
       break;
   }
   updateLastDirection();
@@ -85,25 +87,25 @@ void Motor::run(MotorDirection direction, MotorSpeed speed) {
 
 void Motor::forwards() {
   motors.run(motorPort, forwardDirection, speed);
-  state = States::Motor::forwards;
+  state = States::forwards;
   updateLastDirection();
 }
 
 void Motor::forwards(MotorSpeed speed) {
   motors.run(motorPort, forwardDirection, speed);
-  state = States::Motor::forwards;
+  state = States::forwards;
   updateLastDirection();
 }
 
 void Motor::backwards() {
   motors.run(motorPort, backwardDirection, speed);
-  state = States::Motor::backwards;
+  state = States::backwards;
   updateLastDirection();
 }
 
 void Motor::backwards(MotorSpeed speed) {
   motors.run(motorPort, backwardDirection, speed);
-  state = States::Motor::backwards;
+  state = States::backwards;
   updateLastDirection();
 }
 
@@ -131,12 +133,12 @@ void Motor::resume(MotorSpeed speed) {
 
 void Motor::brake() {
   motors.brake(motorPort);
-  state = States::Motor::braking;
+  state = States::braking;
 }
 
 void Motor::neutral() {
   motors.neutral(motorPort);
-  state = States::Motor::neutral;
+  state = States::neutral;
 }
 
 void Motor::swapDirections() {
@@ -152,7 +154,9 @@ bool Motor::directionsSwapped() {
 }
 
 void Motor::updateLastDirection() {
-  if (state == States::Motor::forwards) lastDirection = FORWARD;
-  else if (state == States::Motor::backwards) lastDirection = BACKWARD;
+  if (state == States::forwards) lastDirection = FORWARD;
+  else if (state == States::backwards) lastDirection = BACKWARD;
 }
+
+} }
 

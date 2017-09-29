@@ -4,19 +4,21 @@
 #include "Motors.h"
 #include "Limits.h"
 
+namespace LinearPositionControl { namespace Motion {
+
 namespace States {
-  namespace Motion {
-    enum class Oscillator : uint8_t {
-      initializing,
-      operating
-    };
-  }
+  enum class Oscillator : uint8_t {
+    initializing,
+    operating
+  };
 }
 
 template <class Limits>
 class Oscillator {
   public:
-    Oscillator(Motor &motor, Limits &limits);
+    Oscillator(Components::Motor &motor, Limits &limits);
+
+    using States = States::Oscillator;
 
     void setup();
     void update();
@@ -24,14 +26,16 @@ class Oscillator {
   private:
     bool setupCompleted = false;
 
-    States::Motion::Oscillator state;
+    States state;
 
-    Motor &motor;
+    Components::Motor &motor;
     Limits &limits;
 
     void updateInitializing();
     void updateOperating();
 };
+
+} }
 
 #include "Oscillator.tpp"
 

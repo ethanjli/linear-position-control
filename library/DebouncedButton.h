@@ -3,6 +3,8 @@
 
 #include <elapsedMillis.h>
 
+namespace LinearPositionControl { namespace Components {
+
 class DebouncedButton {
   public:
     DebouncedButton(uint8_t buttonPin, volatile uint8_t &interruptCounter, unsigned int debounceDelay);
@@ -33,6 +35,8 @@ class DebouncedButton {
     bool buttonChanged = false;
     bool buttonState;
 };
+
+} }
 
 #endif
 

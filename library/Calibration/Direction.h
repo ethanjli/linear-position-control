@@ -6,8 +6,10 @@
 #include "Motors.h"
 #include "Limits.h"
 
+namespace LinearPositionControl { namespace Calibration {
+
 namespace States {
-  enum class DirectionCalibration : uint8_t {
+  enum class Direction : uint8_t {
     calibrated,
     uncalibrated,
     calibrating
@@ -15,20 +17,22 @@ namespace States {
 }
 
 template<class Limits>
-class DirectionCalibrator {
+class Direction {
   public:
-    DirectionCalibrator(Motor &motor, Limits &limits);
+    Direction(Components::Motor &motor, Limits &limits);
+
+    using States = States::Direction;
 
     void setup();
     void update();
 
-    States::DirectionCalibration state;
+    States state;
 
   private:
     bool setupCompleted = false;
 
   protected:
-    Motor &motor;
+    Components::Motor &motor;
     Limits &limits;
 
     elapsedMillis motorStallTimer;
@@ -39,6 +43,8 @@ class DirectionCalibrator {
     void updateMotorDirection();
     void onDirectionCalibrated();
 };
+
+} }
 
 #include "Direction.tpp"
 

@@ -7,6 +7,8 @@
 #include "Limits.h"
 #include "Calibration/Direction.h"
 
+namespace LinearPositionControl {
+
 namespace States {
   enum class LinearActuator : uint8_t {
     calibratingDirection,
@@ -23,6 +25,8 @@ class LinearActuator {
         MotionController &motionController
     );
 
+    using States = States::LinearActuator;
+
     void setup();
     void update();
 
@@ -32,8 +36,10 @@ class LinearActuator {
     DirectionCalibrator &directionCalibrator;
     MotionController &motionController;
 
-    States::LinearActuator state;
+    States state;
 };
+
+}
 
 #include "LinearActuator.tpp"
 

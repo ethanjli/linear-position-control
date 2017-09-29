@@ -1,5 +1,7 @@
 #include "Limits.h"
 
+namespace LinearPositionControl { namespace Components {
+
 // AbsoluteLimits
 
 AbsoluteLimits::AbsoluteLimits(DebouncedButton &leftLimit, DebouncedButton &rightLimit) :
@@ -19,21 +21,19 @@ void AbsoluteLimits::setup() {
 }
 
 void AbsoluteLimits::update() {
-  using States::Limits;
-
   previousState = state;
 
   leftLimit.update();
   rightLimit.update();
 
   if (leftLimit.isPressed() && rightLimit.isPressed()) {
-    state = Limits::both;
+    state = States::both;
   } else if (leftLimit.isPressed()) {
-    state = Limits::left;
+    state = States::left;
   } else if (rightLimit.isPressed()) {
-    state = Limits::right;
+    state = States::right;
   } else {
-    state = Limits::none;
+    state = States::none;
   }
 }
 
@@ -55,16 +55,16 @@ void MultiplexedLimits::setup() {
 }
 
 void MultiplexedLimits::update() {
-  using States::Limits;
-
   previousState = state;
 
   leftAndRightLimits.update();
 
   if (leftAndRightLimits.isPressed()) {
-    state = Limits::either;
+    state = States::either;
   } else {
-    state = Limits::none;
+    state = States::none;
   }
 }
+
+} }
 
