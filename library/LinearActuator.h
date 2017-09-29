@@ -5,7 +5,7 @@
 
 #include "Motors.h"
 #include "Limits.h"
-#include "DirectionCalibration.h"
+#include "Calibration/Direction.h"
 
 namespace States {
   enum class LinearActuator : uint8_t {

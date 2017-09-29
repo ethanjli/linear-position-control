@@ -1,5 +1,5 @@
-#ifndef DirectionCalibration_h
-#define DirectionCalibration_h
+#ifndef Calibration_Direction_h
+#define Calibration_Direction_h
 
 #include <elapsedMillis.h>
 
@@ -40,7 +40,7 @@ class DirectionCalibrator {
     void onDirectionCalibrated();
 };
 
-#include "DirectionCalibration.tpp"
+#include "Direction.tpp"
 
 #endif
 

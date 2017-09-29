@@ -1,5 +1,5 @@
-#ifndef DirectionCalibration_tpp
-#define DirectionCalibration_tpp
+#ifndef Calibration_Direction_tpp
+#define Calibration_Direction_tpp
 
 #include <ArduinoLog.h>
 

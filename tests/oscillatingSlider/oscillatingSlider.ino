@@ -9,7 +9,7 @@
 #include <DebouncedButton.h>
 #include <Motors.h>
 #include <Limits.h>
-#include <DirectionCalibration.h>
+#include <Calibration/Direction.h>
 #include <Motion/Oscillator.h>
 #include <LinearActuator.h>
 
