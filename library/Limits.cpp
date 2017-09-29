@@ -26,11 +26,12 @@ void AbsoluteLimits::update() {
   leftLimit.update();
   rightLimit.update();
 
-  if (leftLimit.isPressed() && rightLimit.isPressed()) {
+  if (leftLimit.state == DebouncedButton::States::pressed &&
+      rightLimit.state == DebouncedButton::States::pressed) {
     state = States::both;
-  } else if (leftLimit.isPressed()) {
+  } else if (leftLimit.state == DebouncedButton::States::pressed) {
     state = States::left;
-  } else if (rightLimit.isPressed()) {
+  } else if (rightLimit.state == DebouncedButton::States::pressed) {
     state = States::right;
   } else {
     state = States::none;
@@ -59,7 +60,7 @@ void MultiplexedLimits::update() {
 
   leftAndRightLimits.update();
 
-  if (leftAndRightLimits.isPressed()) {
+  if (leftAndRightLimits.state == DebouncedButton::States::pressed) {
     state = States::either;
   } else {
     state = States::none;

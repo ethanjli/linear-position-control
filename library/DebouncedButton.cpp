@@ -21,36 +21,23 @@ void DebouncedButton::setup() {
 
   pinMode(buttonPin, INPUT_PULLUP);
   enableInterruptFast(buttonPin, CHANGE);
-  buttonState = digitalRead(buttonPin);
-  eventStatePressed = buttonState;
-  eventStateReleased = !buttonState;
+  state = States::bouncing;
 
   setupCompleted = true;
 }
 
 void DebouncedButton::update() {
+  previousState = state;
   if (interruptCounter) {
     interruptCounter = 0;
     debounceTimer = 0;
-    buttonChanged = true;
+    state = States::bouncing;
   }
-  if (buttonChanged && debounceTimer > debounceDelay) {
-    buttonState = digitalRead(buttonPin);
-    eventStateChanged = true;
-    eventStatePressed = eventStateChanged && !buttonState;
-    eventStateReleased = eventStateChanged && buttonState;
-    buttonChanged = false;
+  if (state == States::bouncing && debounceTimer > debounceDelay) {
+    if (!digitalRead(buttonPin)) state = States::pressed;
+    else state = States::released;
   }
-}
-
-bool DebouncedButton::isPressed() {
-  return !buttonState;
-}
-
-void DebouncedButton::clearEventFlags() {
-  eventStateChanged = false;
-  eventStatePressed = false;
-  eventStateReleased = false;
+  if (previousState != state) previousDistinctState = previousState;
 }
 
 } }

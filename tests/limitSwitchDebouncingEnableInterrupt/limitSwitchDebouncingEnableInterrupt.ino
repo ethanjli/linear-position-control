@@ -3,7 +3,7 @@
 #include <EnableInterrupt.h>
 #include <DebouncedButton.h>
 
-using namespace LinearPositionControl::Components;
+using LinearPositionControl::Components::DebouncedButton;
 
 // Globals
 
@@ -18,9 +18,9 @@ void setup() {
 
 void loop() {
   debouncedButton.update();
-  if (debouncedButton.eventStatePressed) {
+  if (debouncedButton.previousState == DebouncedButton::States::bouncing &&
+      debouncedButton.state == DebouncedButton::States::pressed) {
     ledState = !ledState;
     digitalWrite(LED_BUILTIN, ledState);
-    debouncedButton.eventStatePressed = false;
   }
 }

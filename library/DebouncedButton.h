@@ -5,20 +5,26 @@
 
 namespace LinearPositionControl { namespace Components {
 
+namespace States {
+  enum class DebouncedButton : uint8_t {
+    pressed,
+    released,
+    bouncing
+  };
+}
+
 class DebouncedButton {
   public:
     DebouncedButton(uint8_t buttonPin, volatile uint8_t &interruptCounter, unsigned int debounceDelay);
 
+    using States = States::DebouncedButton;
+
     void setup();
     void update();
 
-    // Button state
-    bool isPressed();
-    // Event flags
-    bool eventStateChanged = false; // set to true when state changes, must be reset by client
-    bool eventStatePressed = false; // set to true when button is pressed, must be reset by client
-    bool eventStateReleased = false; // set to true when button is released, must be reset by client
-    void clearEventFlags();
+    States state;
+    States previousState;
+    States previousDistinctState;
 
   private:
     bool setupCompleted = false;
@@ -30,10 +36,6 @@ class DebouncedButton {
     volatile uint8_t &interruptCounter;
     unsigned int debounceDelay;
     elapsedMillis debounceTimer;
-
-    // Button state
-    bool buttonChanged = false;
-    bool buttonState;
 };
 
 } }
