@@ -55,7 +55,6 @@ void Motor::run(int speed) {
   } else {
     motors.brake(motorPort);
     state = States::Motor::braking;
-    return;
   }
   updateLastDirection();
 }

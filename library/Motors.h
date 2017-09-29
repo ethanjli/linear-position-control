@@ -5,11 +5,9 @@
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 
-typedef uint8_t MotorPort;
-const MotorPort M1 = 0;
-const MotorPort M2 = 1;
-const MotorPort M3 = 2;
-const MotorPort M4 = 3;
+enum MotorPort : uint8_t {
+  M1 = 0, M2 = 1, M3 = 2, M4 = 3
+};
 
 typedef uint8_t MotorSpeed;
 typedef uint8_t MotorDirection;
