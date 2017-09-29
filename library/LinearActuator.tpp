@@ -1,17 +1,17 @@
 #ifndef LinearActuator_tpp
 #define LinearActuator_tpp
 
-// AbsoluteLinearActuator
+// LinearActuator
 
 template <class DirectionCalibrator>
-AbsoluteLinearActuator<DirectionCalibrator>::AbsoluteLinearActuator(
+LinearActuator<DirectionCalibrator>::LinearActuator(
     DirectionCalibrator &directionCalibrator
 ) :
   directionCalibrator(directionCalibrator) {
 }
 
 template <class DirectionCalibrator>
-void AbsoluteLinearActuator<DirectionCalibrator>::setup() {
+void LinearActuator<DirectionCalibrator>::setup() {
   if (setupCompleted) return;
 
   directionCalibrator.setup();
@@ -20,7 +20,7 @@ void AbsoluteLinearActuator<DirectionCalibrator>::setup() {
 }
 
 template <class DirectionCalibrator>
-void AbsoluteLinearActuator<DirectionCalibrator>::update() {
+void LinearActuator<DirectionCalibrator>::update() {
   using States::DirectionCalibration;
   using States::LinearActuator;
 

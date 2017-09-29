@@ -8,12 +8,6 @@
 #include "DirectionCalibration.h"
 
 namespace States {
-  enum class PositionCalibration : uint8_t {
-    uncalibrated,
-    calibrated,
-    calibrating
-  };
-
   enum class LinearActuator : uint8_t {
     calibratingDirection,
     calibratingPosition,
@@ -21,11 +15,10 @@ namespace States {
   };
 }
 
-// A linear actuator with an absolute sense of direction - it knows which end is left and which end is right
 template <class DirectionCalibrator>
-class AbsoluteLinearActuator {
+class LinearActuator {
   public:
-    AbsoluteLinearActuator(
+    LinearActuator(
         DirectionCalibrator &directionCalibrator
     );
 
