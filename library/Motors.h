@@ -50,7 +50,6 @@ class Motor {
     using State = States::Motor;
 
     void setup();
-    void update();
 
     MotorSpeed speed = 255;
     StateVariable<State> state;
