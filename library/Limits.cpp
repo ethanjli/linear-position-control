@@ -13,28 +13,31 @@ void AbsoluteLimits::setup() {
 
   leftLimit.setup();
   rightLimit.setup();
-
-  update();
-  previousState = state;
+  state.setup(State::unknown);
 
   setupCompleted = true;
 }
 
 void AbsoluteLimits::update() {
-  previousState = state;
-
   leftLimit.update();
   rightLimit.update();
+  state.update(currentState());
+}
 
-  if (leftLimit.state == DebouncedButton::States::pressed &&
-      rightLimit.state == DebouncedButton::States::pressed) {
-    state = States::both;
-  } else if (leftLimit.state == DebouncedButton::States::pressed) {
-    state = States::left;
-  } else if (rightLimit.state == DebouncedButton::States::pressed) {
-    state = States::right;
+AbsoluteLimits::State AbsoluteLimits::currentState() {
+  if (leftLimit.state.current() == DebouncedButton::State::pressed &&
+      rightLimit.state.current() == DebouncedButton::State::pressed) {
+    return State::both;
+  } else if (leftLimit.state.current() == DebouncedButton::State::bouncing ||
+      rightLimit.state.current() == DebouncedButton::State::bouncing) {
+    // Wait for bouncing to stop before updating state
+    return state.current();
+  } else if (leftLimit.state.current() == DebouncedButton::State::pressed) {
+    return State::left;
+  } else if (rightLimit.state.current() == DebouncedButton::State::pressed) {
+    return State::right;
   } else {
-    state = States::none;
+    return State::none;
   }
 }
 
@@ -48,22 +51,23 @@ void MultiplexedLimits::setup() {
   if (setupCompleted) return;
 
   leftAndRightLimits.setup();
-
-  update();
-  previousState = state;
+  state.setup(State::unknown);
 
   setupCompleted = true;
 }
 
 void MultiplexedLimits::update() {
-  previousState = state;
-
   leftAndRightLimits.update();
+  state.update(currentState());
+}
 
-  if (leftAndRightLimits.state == DebouncedButton::States::pressed) {
-    state = States::either;
+MultiplexedLimits::State MultiplexedLimits::currentState() {
+  if (leftAndRightLimits.state.current() == DebouncedButton::State::pressed) {
+    return State::either;
+  } else if (leftAndRightLimits.state.current() == DebouncedButton::State::bouncing) {
+    return state.current();
   } else {
-    state = States::none;
+    return State::none;
   }
 }
 

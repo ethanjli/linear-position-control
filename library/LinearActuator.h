@@ -3,6 +3,7 @@
 
 #include <elapsedMillis.h>
 
+#include "StateVariable.h"
 #include "Motors.h"
 #include "Limits.h"
 #include "Calibration/Direction.h"
@@ -11,6 +12,7 @@ namespace LinearPositionControl {
 
 namespace States {
   enum class LinearActuator : uint8_t {
+    readyToCalibrate,
     calibratingDirection,
     calibratingPosition,
     operating
@@ -25,7 +27,7 @@ class LinearActuator {
         MotionController &motionController
     );
 
-    using States = States::LinearActuator;
+    using State = States::LinearActuator;
 
     void setup();
     void update();
@@ -36,7 +38,7 @@ class LinearActuator {
     DirectionCalibrator &directionCalibrator;
     MotionController &motionController;
 
-    States state;
+    StateVariable<State> state;
 };
 
 }

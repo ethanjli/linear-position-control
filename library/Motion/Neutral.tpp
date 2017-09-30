@@ -23,7 +23,7 @@ void Neutral<Limits>::setup() {
 
 template <class Limits>
 void Neutral<Limits>::update() {
-  if (motor.state != Components::Motor::States::neutral) {
+  if (motor.state.current() != Components::Motor::State::neutral) {
     Log.notice(F("Setting motor to neutral!" CR));
     motor.neutral();
   }

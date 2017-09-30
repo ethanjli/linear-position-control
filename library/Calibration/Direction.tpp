@@ -19,7 +19,7 @@ void Direction<Limits>::setup() {
   motor.setup();
   limits.setup();
 
-  state = States::uncalibrated;
+  state.setup(State::uncalibrated);
 
   setupCompleted = true;
 }
@@ -27,22 +27,21 @@ void Direction<Limits>::setup() {
 template <class Limits>
 void Direction<Limits>::update() {
   limits.update();
-  switch (state) {
-    case States::uncalibrated:
+  switch (state.current()) {
+    case State::uncalibrated:
       updateUncalibrated();
       break;
-    case States::calibrating:
+    case State::calibrating:
       updateCalibrating();
       break;
-    case States::calibrated: // Nothing to do!
+    case State::calibrated: // Nothing to do!
       break;
   }
 }
 
-
 template <class Limits>
 void Direction<Limits>::onDirectionCalibrated() {
-  state = States::calibrated;
+  state.update(State::calibrated);
   motor.neutral();
 
   Log.notice(F("Calibrated!" CR));
@@ -57,10 +56,14 @@ void Direction<Limits>::onDirectionCalibrated() {
 
 template<>
 void Direction<Components::AbsoluteLimits>::updateUncalibrated() {
-  if (limits.state == Components::States::Limits::both) return; // delay calibration as long as both limit switches are pressed
+  if (limits.state.current() == Components::States::Limits::both ||
+      limits.state.current() == Components::States::Limits::unknown) {
+    // Delay calibration as long as the limits are unknown or impossible
+    return;
+  }
 
   // Start calibration
-  state = States::calibrating;
+  state.update(State::calibrating);
   Log.notice(F("Calibrating motor direction..." CR));
   motorStallTimer = 0;
   motor.forwards();
@@ -71,8 +74,8 @@ void Direction<Components::AbsoluteLimits>::updateMotorDirection() {
   using Components::States::Motor;
   using Components::States::Limits;
 
-  if ((motor.state == Motor::forwards && limits.state == Limits::left) ||
-      (motor.state == Motor::backwards && limits.state == Limits::right)) {
+  if ((motor.state.current() == Motor::forwards && limits.state.current() == Limits::left) ||
+      (motor.state.current() == Motor::backwards && limits.state.current() == Limits::right)) {
     Log.trace(F("Flipping motor directions!" CR));
     motor.swapDirections();
   }
@@ -83,15 +86,15 @@ template<>
 void Direction<Components::AbsoluteLimits>::updateCalibrating() {
   using Components::States::Limits;
 
-  if (limits.state == Limits::both) { // cancel calibration if both limit switches are pressed
-    state = States::uncalibrated;
+  if (limits.state.current() == Limits::both) { // cancel calibration if both limit switches are pressed
+    state.update(State::uncalibrated);
     Log.warning(F("Restarting motor direction calibration..." CR));
     return;
   }
-  if (limits.state == Limits::none) return; // let the motor continue to run until it hits a limit
-  if (limits.previousState == Limits::none) { // the motor just hit a limit switch
-    if (limits.state == Limits::left) Log.trace(F("Just hit the left limit switch!" CR));
-    else Log.trace(F("Just hit the right limit switch!" CR)); // limits.state == Limits::right
+  if (limits.state.current() == Limits::none) return; // let the motor continue to run until it hits a limit
+  if (limits.state.previous() == Limits::none) { // the motor just hit a limit switch
+    if (limits.state.current() == Limits::left) Log.trace(F("Just hit the left limit switch!" CR));
+    else Log.trace(F("Just hit the right limit switch!" CR)); // limits.state.current() == Limits::right
 
     updateMotorDirection();
     onDirectionCalibrated();
@@ -108,7 +111,12 @@ void Direction<Components::AbsoluteLimits>::updateCalibrating() {
 
 template<>
 void Direction<Components::MultiplexedLimits>::updateUncalibrated() {
-  state = States::calibrating;
+  if (limits.state.current() == Components::States::Limits::unknown) {
+    // Delay calibration as long as the limits are unknown
+    return;
+  }
+
+  state.update(State::calibrating);
   Log.notice(F("Calibrating motor direction..." CR));
   motorStallTimer = 0;
   motor.forwards();
@@ -118,7 +126,7 @@ template<>
 void Direction<Components::MultiplexedLimits>::updateCalibrating() {
   using Components::States::Limits;
 
-  if (limits.state == Limits::none) { // the motor is now free to move in either direction, which means its direction is "calibrated"
+  if (limits.state.current() == Limits::none) { // the motor is now free to move in either direction, which means its direction is "calibrated"
     onDirectionCalibrated();
     return;
   }

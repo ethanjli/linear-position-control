@@ -1,6 +1,7 @@
 #ifndef Motion_Oscillator_h
 #define Motion_Oscillator_h
 
+#include "StateVariable.h"
 #include "Motors.h"
 #include "Limits.h"
 
@@ -18,7 +19,7 @@ class Oscillator {
   public:
     Oscillator(Components::Motor &motor, Limits &limits);
 
-    using States = States::Oscillator;
+    using State = States::Oscillator;
 
     void setup();
     void update();
@@ -26,7 +27,7 @@ class Oscillator {
   private:
     bool setupCompleted = false;
 
-    States state;
+    StateVariable<State> state;
 
     Components::Motor &motor;
     Limits &limits;

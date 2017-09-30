@@ -1,6 +1,10 @@
 #define NEEDFORSPEED
 #define INTERRUPT_FLAG_PIN12 interruptCounter12
 #include <EnableInterrupt.h>
+
+//#define DISABLE_LOGGING
+#include <ArduinoLog.h>
+
 #include <DebouncedButton.h>
 
 using LinearPositionControl::Components::DebouncedButton;
@@ -11,6 +15,10 @@ DebouncedButton debouncedButton(12, interruptCounter12, 50);
 bool ledState = LOW;
 
 void setup() {
+#ifndef DISABLE_LOGGING
+  Serial.begin(115200);
+  Log.begin(LOG_LEVEL_VERBOSE, &Serial);
+#endif
   debouncedButton.setup();
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, ledState);
@@ -18,8 +26,9 @@ void setup() {
 
 void loop() {
   debouncedButton.update();
-  if (debouncedButton.previousState == DebouncedButton::States::bouncing &&
-      debouncedButton.state == DebouncedButton::States::pressed) {
+  Log.trace("Current button: %d, previous button: %d, current led: %d" CR, debouncedButton.state.current(), debouncedButton.state.previous(), ledState);
+  if (debouncedButton.state.previous() == DebouncedButton::State::bouncing &&
+      debouncedButton.state.current() == DebouncedButton::State::pressed) {
     ledState = !ledState;
     digitalWrite(LED_BUILTIN, ledState);
   }

@@ -3,6 +3,8 @@
 
 #include <elapsedMillis.h>
 
+#include "StateVariable.h"
+
 namespace LinearPositionControl { namespace Components {
 
 namespace States {
@@ -17,14 +19,12 @@ class DebouncedButton {
   public:
     DebouncedButton(uint8_t buttonPin, volatile uint8_t &interruptCounter, unsigned int debounceDelay);
 
-    using States = States::DebouncedButton;
+    using State = States::DebouncedButton;
 
     void setup();
     void update();
 
-    States state;
-    States previousState;
-    States previousDistinctState;
+    StateVariable<State> state;
 
   private:
     bool setupCompleted = false;

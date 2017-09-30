@@ -21,23 +21,21 @@ void DebouncedButton::setup() {
 
   pinMode(buttonPin, INPUT_PULLUP);
   enableInterruptFast(buttonPin, CHANGE);
-  state = States::bouncing;
+  state.setup(State::bouncing);
 
   setupCompleted = true;
 }
 
 void DebouncedButton::update() {
-  previousState = state;
-  if (interruptCounter) {
+  if (interruptCounter) { // we've sensed a button press or a bounce
     interruptCounter = 0;
     debounceTimer = 0;
-    state = States::bouncing;
+    state.update(State::bouncing);
   }
-  if (state == States::bouncing && debounceTimer > debounceDelay) {
-    if (!digitalRead(buttonPin)) state = States::pressed;
-    else state = States::released;
+  if (debounceTimer > debounceDelay) { // we're confident that the button is no longer bouncing
+    if (!digitalRead(buttonPin)) state.update(State::pressed);
+    else state.update(State::released);
   }
-  if (previousState != state) previousDistinctState = previousState;
 }
 
 } }

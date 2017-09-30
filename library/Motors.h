@@ -5,6 +5,8 @@
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 
+#include "StateVariable.h"
+
 enum MotorPort : uint8_t { // we keep this at global scope to mimic Arduino pin semantics
   M1 = 0, M2 = 1, M3 = 2, M4 = 3
 };
@@ -45,16 +47,15 @@ class Motor {
   public:
     Motor(Motors &motors, MotorPort motorPort);
 
-    using States = States::Motor;
+    using State = States::Motor;
 
     void setup();
     void update();
 
     MotorSpeed speed = 255;
-    States state;
+    StateVariable<State> state;
 
     void run(int speed);
-    void run(MotorDirection direction, MotorSpeed speed);
     void forwards();
     void forwards(MotorSpeed speed);
     void backwards();

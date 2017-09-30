@@ -3,6 +3,7 @@
 
 #include <elapsedMillis.h>
 
+#include "StateVariable.h"
 #include "DebouncedButton.h"
 #include "Motors.h"
 
@@ -14,7 +15,8 @@ namespace States {
     left,
     right,
     either,
-    both
+    both,
+    unknown
   };
 }
 
@@ -23,37 +25,39 @@ class AbsoluteLimits {
   public:
     AbsoluteLimits(DebouncedButton &leftLimit, DebouncedButton &rightLimit);
 
-    using States = States::Limits;
+    using State = States::Limits;
 
     void setup();
     void update();
 
-    States state;
-    States previousState;
+    StateVariable<State> state;
 
   private:
     bool setupCompleted = false;
 
     DebouncedButton &leftLimit;
     DebouncedButton &rightLimit;
+
+    State currentState();
 };
 
 class MultiplexedLimits {
   public:
     MultiplexedLimits(DebouncedButton &leftAndRightLimits);
 
-    using States = States::Limits;
+    using State = States::Limits;
 
     void setup();
     void update();
 
-    States state;
-    States previousState;
+    StateVariable<State> state;
 
   private:
     bool setupCompleted = false;
 
     DebouncedButton &leftAndRightLimits;
+
+    State currentState();
 };
 
 } }

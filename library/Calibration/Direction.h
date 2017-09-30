@@ -3,6 +3,7 @@
 
 #include <elapsedMillis.h>
 
+#include "StateVariable.h"
 #include "Motors.h"
 #include "Limits.h"
 
@@ -21,12 +22,12 @@ class Direction {
   public:
     Direction(Components::Motor &motor, Limits &limits);
 
-    using States = States::Direction;
+    using State = States::Direction;
 
     void setup();
     void update();
 
-    States state;
+    StateVariable<State> state;
 
   private:
     bool setupCompleted = false;
