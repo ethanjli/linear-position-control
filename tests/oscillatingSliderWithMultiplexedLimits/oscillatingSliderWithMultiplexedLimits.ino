@@ -24,7 +24,7 @@ using Actuator = LinearActuator<DirectionCalibrator, MotionController>;
 
 // Singletons
 
-Motors motors = Motors();
+Motors motors;
 
 // Globals
 

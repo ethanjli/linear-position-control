@@ -28,27 +28,27 @@ void StateVariable<State>::update(State nextState) {
 }
 
 template <class State>
-State StateVariable<State>::current() const {
+inline State StateVariable<State>::current() const {
   return currentState;
 }
 
 template <class State>
-State StateVariable<State>::previous() const {
+inline State StateVariable<State>::previous() const {
   return previousState;
 }
 
 template <class State>
-State StateVariable<State>::previousDistinct() const {
+inline State StateVariable<State>::previousDistinct() const {
   return previousDistinctState;
 }
 
 template <class State>
-unsigned long StateVariable<State>::currentDuration() const {
+inline unsigned long StateVariable<State>::currentDuration() const {
   return currentTimer;
 }
 
 template <class State>
-unsigned long StateVariable<State>::previousDistinctDuration() const {
+inline unsigned long StateVariable<State>::previousDistinctDuration() const {
   return previousDistinctTimer;
 }
 
