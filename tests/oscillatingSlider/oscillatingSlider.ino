@@ -6,6 +6,7 @@
 //#define DISABLE_LOGGING
 #include <ArduinoLog.h>
 
+#include <LED.h>
 #include <DebouncedButton.h>
 #include <Motors.h>
 #include <Limits.h>
@@ -28,6 +29,7 @@ Motors motors;
 
 // Globals
 
+LED led(LED_BUILTIN);
 Motor motor(motors, M2);
 DebouncedButton right(12, interruptCounter12, 50);
 DebouncedButton left(8, interruptCounter8, 50);
@@ -42,9 +44,26 @@ void setup() {
   Log.begin(LOG_LEVEL_VERBOSE, &Serial);
 #endif
   actuator.setup();
-  pinMode(LED_BUILTIN, OUTPUT);
+  led.setup();
 }
 
 void loop() {
   actuator.update();
+  led.update();
+  if (actuator.state.current() == Actuator::State::calibratingDirection &&
+      actuator.state.previous() != Actuator::State::calibratingDirection) {
+    led.lowInterval = 50;
+    led.highInterval = 50;
+    led.blink();
+  } else if (actuator.state.current() == Actuator::State::calibratingPosition &&
+      actuator.state.previous() != Actuator::State::calibratingPosition) {
+    led.lowInterval = 50;
+    led.highInterval = 200;
+    led.blink();
+  } else if (actuator.state.current() == Actuator::State::operating &&
+      actuator.state.previous() != Actuator::State::operating) {
+    led.lowInterval = 50;
+    led.highInterval = 800;
+    led.blink();
+  }
 }

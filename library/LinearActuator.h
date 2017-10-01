@@ -32,13 +32,13 @@ class LinearActuator {
     void setup();
     void update();
 
+    StateVariable<State> state;
+
   private:
     bool setupCompleted = false;
 
     DirectionCalibrator &directionCalibrator;
     MotionController &motionController;
-
-    StateVariable<State> state;
 };
 
 }

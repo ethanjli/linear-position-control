@@ -47,8 +47,6 @@ void Direction<Limits>::onDirectionCalibrated() {
   Log.notice(F("Calibrated!" CR));
   if (motor.directionsSwapped()) Log.notice(F("We flipped the motor's pins in software." CR));
   else Log.notice(F("We don't need to flip the motor's pins." CR));
-
-  digitalWrite(LED_BUILTIN, HIGH);
 }
 
 
