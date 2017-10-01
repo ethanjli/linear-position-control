@@ -13,7 +13,7 @@ using LinearPositionControl::Components::LED;
 
 // Globals
 
-DebouncedButton debouncedButton(12, interruptCounter12, 50);
+DebouncedButton debouncedButton(12, interruptCounter12, 5);
 LED led(LED_BUILTIN);
 
 void setup() {
@@ -33,13 +33,13 @@ void loop() {
     led.off();
   } else if (debouncedButton.state.current() == DebouncedButton::State::pressed &&
       debouncedButton.state.previous() == DebouncedButton::State::bouncing) {
-    led.highInterval = 2000;
-    led.lowInterval = 100;
+    led.highInterval = 800;
+    led.lowInterval = 200;
     led.blink();
   } else if (debouncedButton.state.current() == DebouncedButton::State::released &&
       debouncedButton.state.previous() == DebouncedButton::State::bouncing) {
-    led.highInterval = 100;
-    led.lowInterval = 2000;
+    led.highInterval = 200;
+    led.lowInterval = 800;
     led.blink();
   }
 }

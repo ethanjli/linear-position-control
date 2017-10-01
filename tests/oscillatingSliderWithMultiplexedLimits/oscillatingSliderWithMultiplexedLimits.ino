@@ -31,7 +31,7 @@ Motors motors;
 
 LED led(LED_BUILTIN);
 Motor motor = Motor(motors, M2);
-DebouncedButton leftAndRight(12, interruptCounter12, 50);
+DebouncedButton leftAndRight(12, interruptCounter12, 5);
 MultiplexedLimits limits(leftAndRight);
 DirectionCalibrator directionCalibrator(motor, limits);
 MotionController motionController(motor, limits);

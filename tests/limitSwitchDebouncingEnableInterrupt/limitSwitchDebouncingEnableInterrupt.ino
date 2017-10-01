@@ -11,7 +11,7 @@ using LinearPositionControl::Components::DebouncedButton;
 
 // Globals
 
-DebouncedButton debouncedButton(12, interruptCounter12, 50);
+DebouncedButton debouncedButton(12, interruptCounter12, 5);
 bool ledState = LOW;
 
 void setup() {
