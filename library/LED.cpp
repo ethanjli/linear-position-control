@@ -20,27 +20,15 @@ void LED::setup() {
 
 void LED::update() {
   if (state.current() == State::off || state.current() == State::on) return; // nothing to update!
-  if (periods == 0) return; // we've finished our blink/fade cycles!
-  if (state.current() == State::fadingHigh || state.current() == State::fadingLow) {
-    led.update();
-    if (!led.is_fading()) {
-      if (state.current() == State::fadingLow) led.fade(highBrightness, highInterval);
-      else led.fade(lowBrightness, lowInterval); // state.current() == State::fadingHigh
-    }
+  if (periods == 0) {
+    onPeriodsFinished();
     return;
   }
-  // state.current() == State::blinkingHigh || state.current() == State::blinkingLow
-  if ((state.current() == State::blinkingHigh && state.currentDuration() > highInterval) ||
-      (state.current() == State::blinkingLow && state.currentDuration() > lowInterval)) {
-    if (state.current() == State::blinkingLow) {
-      led.set_value(highBrightness);
-      state.update(State::blinkingHigh);
-    } else { // state.current() == State::blinkingHigh
-      led.set_value(lowBrightness);
-      state.update(State::blinkingLow);
-    }
+  if (state.current() == State::fadingHigh || state.current() == State::fadingLow) {
+    updateFading();
+  } else {
+    updateBlinking();
   }
-  if (periods > 0) --periods;
 }
 
 void LED::off() {
@@ -59,14 +47,48 @@ void LED::on(uint8_t brightness) {
 }
 
 void LED::blink() {
-  led.set_value(lowBrightness);
-  state.update(State::blinkingLow);
+  if (periods == 0) {
+    led.set_value(lowBrightness);
+    state.update(State::off);
+  } else {
+    led.set_value(highBrightness);
+    state.update(State::blinkingHigh);
+  }
 }
 
 void LED::fade() {
   led.set_value(lowBrightness);
   led.fade(highBrightness, highInterval);
   state.update(State::fadingHigh);
+}
+
+void LED::onPeriodsFinished() {
+  led.set_value(lowBrightness);
+  state.update(State::off);
+}
+
+void LED::updateFading() {
+  led.update();
+  if (led.is_fading()) return;
+  if (state.current() == State::fadingLow) {
+    led.fade(highBrightness, highInterval);
+    if (periods > 0) --periods;
+  } else { // state.current() == State::fadingHigh
+    led.fade(lowBrightness, lowInterval);
+  }
+}
+
+void LED::updateBlinking() {
+  if (state.current() == State::blinkingHigh && state.currentDuration() < highInterval) return;
+  if (state.current() == State::blinkingLow && state.currentDuration() < lowInterval) return;
+  if (state.current() == State::blinkingLow) {
+    led.set_value(highBrightness);
+    state.update(State::blinkingHigh);
+    if (periods > 0) --periods;
+  } else { // state.current() == State::blinkingHigh
+    led.set_value(lowBrightness);
+    state.update(State::blinkingLow);
+  }
 }
 
 } }

@@ -46,6 +46,10 @@ class LED {
 
     LEDFader led;
     const uint8_t ledPin;
+
+    void updateFading();
+    void updateBlinking();
+    void onPeriodsFinished();
 };
 
 } }
