@@ -46,8 +46,7 @@ void Oscillator<Limits>::updateInitializing() {
 
 template <class Limits>
 void Oscillator<Limits>::updateOperating() {
-  if (limits.state.current() == Limits::State::none ||
-      limits.state.current() == limits.state.previous()) {
+  if (limits.state.current() == Limits::State::none || !limits.state.justChanged()) {
     // Nothing to do
     return;
   }

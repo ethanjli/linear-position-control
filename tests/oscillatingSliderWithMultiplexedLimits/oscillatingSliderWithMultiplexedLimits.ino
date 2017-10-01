@@ -49,18 +49,15 @@ void setup() {
 void loop() {
   actuator.update();
   led.update();
-  if (actuator.state.current() == Actuator::State::calibratingDirection &&
-      actuator.state.previous() != Actuator::State::calibratingDirection) {
+  if (actuator.state.justEntered(Actuator::State::calibratingDirection)) {
     led.lowInterval = 50;
     led.highInterval = 50;
     led.blink();
-  } else if (actuator.state.current() == Actuator::State::calibratingPosition &&
-      actuator.state.previous() != Actuator::State::calibratingPosition) {
+  } else if (actuator.state.justEntered(Actuator::State::calibratingPosition)) {
     led.lowInterval = 50;
     led.highInterval = 200;
     led.blink();
-  } else if (actuator.state.current() == Actuator::State::operating &&
-      actuator.state.previous() != Actuator::State::operating) {
+  } else if (actuator.state.justEntered(Actuator::State::operating)) {
     led.lowInterval = 50;
     led.highInterval = 800;
     led.blink();

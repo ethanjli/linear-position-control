@@ -18,6 +18,9 @@ class StateVariable {
     unsigned long currentDuration() const;
     unsigned long previousDistinctDuration() const;
 
+    bool justEntered(State state) const;
+    bool justChanged() const;
+
   private:
     bool setupCompleted = false;
 

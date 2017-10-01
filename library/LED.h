@@ -1,7 +1,6 @@
 #ifndef LED_h
 #define LED_h
 
-#include <elapsedMillis.h>
 #include <LEDFader.h>
 
 #include "StateVariable.h"
@@ -47,7 +46,6 @@ class LED {
 
     LEDFader led;
     const uint8_t ledPin;
-    elapsedMillis blinkIntervalTimer;
 };
 
 } }

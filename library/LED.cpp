@@ -30,8 +30,8 @@ void LED::update() {
     return;
   }
   // state.current() == State::blinkingHigh || state.current() == State::blinkingLow
-  if ((state.current() == State::blinkingHigh && blinkIntervalTimer > highInterval) ||
-      (state.current() == State::blinkingLow && blinkIntervalTimer > lowInterval)) {
+  if ((state.current() == State::blinkingHigh && state.currentDuration() > highInterval) ||
+      (state.current() == State::blinkingLow && state.currentDuration() > lowInterval)) {
     if (state.current() == State::blinkingLow) {
       led.set_value(highBrightness);
       state.update(State::blinkingHigh);
@@ -39,8 +39,6 @@ void LED::update() {
       led.set_value(lowBrightness);
       state.update(State::blinkingLow);
     }
-
-    blinkIntervalTimer = 0;
   }
   if (periods > 0) --periods;
 }
@@ -61,7 +59,6 @@ void LED::on(uint8_t brightness) {
 }
 
 void LED::blink() {
-  blinkIntervalTimer = 0;
   led.set_value(lowBrightness);
   state.update(State::blinkingLow);
 }

@@ -52,6 +52,16 @@ inline unsigned long StateVariable<State>::previousDistinctDuration() const {
   return previousDistinctTimer;
 }
 
+template <class State>
+inline bool StateVariable<State>::justEntered(State state) const {
+  return currentState == state && previousState != currentState;
+}
+
+template <class State>
+inline bool StateVariable<State>::justChanged() const {
+  return currentState != previousState;
+}
+
 }
 
 #endif
