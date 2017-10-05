@@ -19,11 +19,16 @@ namespace States {
   };
 }
 
-template <class DirectionCalibrator, class MotionController>
+template <
+  class DirectionCalibrator,
+  class PositionCalibrator,
+  class MotionController
+>
 class LinearActuator {
   public:
     LinearActuator(
         DirectionCalibrator &directionCalibrator,
+        PositionCalibrator &positionCalibrator,
         MotionController &motionController
     );
 
@@ -38,6 +43,7 @@ class LinearActuator {
     bool setupCompleted = false;
 
     DirectionCalibrator &directionCalibrator;
+    PositionCalibrator &positionCalibrator;
     MotionController &motionController;
 };
 

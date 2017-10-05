@@ -84,7 +84,8 @@ template<>
 void Direction<Components::AbsoluteLimits>::updateCalibrating() {
   using Components::States::Limits;
 
-  if (limits.state.current() == Limits::both) { // cancel calibration if both limit switches are pressed
+  if (limits.state.current() == Limits::both) {
+    // Cancel calibration if both limit switches are pressed
     state.update(State::uncalibrated);
     Log.warning(F("Restarting motor direction calibration..." CR));
     return;
@@ -124,7 +125,8 @@ template<>
 void Direction<Components::MultiplexedLimits>::updateCalibrating() {
   using Components::States::Limits;
 
-  if (limits.state.current() == Limits::none) { // the motor is now free to move in either direction, which means its direction is "calibrated"
+  if (limits.state.current() == Limits::none) {
+    // The motor is now free to move in either direction, which means its direction is "calibrated"
     onDirectionCalibrated();
     return;
   }
