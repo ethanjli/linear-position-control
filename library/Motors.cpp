@@ -102,6 +102,10 @@ void Motor::resume(MotorSpeed speed) {
   else if (lastDirection == BACKWARD) backwards(speed);
 }
 
+MotorDirection Motor::resumeDirection() const {
+  return lastDirection;
+}
+
 void Motor::brake() {
   motors.brake(motorPort);
   state.update(State::braking);
@@ -120,7 +124,7 @@ void Motor::swapDirections() {
   else lastDirection = FORWARD; // lastDirection == BACKWARD
 }
 
-bool Motor::directionsSwapped() {
+bool Motor::directionsSwapped() const {
   return forwardDirection == BACKWARD;
 }
 

@@ -64,7 +64,7 @@ void Direction<Components::AbsoluteLimits>::updateUncalibrated() {
   state.update(State::calibrating);
   Log.notice(F("Calibrating motor direction..." CR));
   motorStallTimer = 0;
-  motor.forwards();
+  motor.forwards(calibrationSpeed);
 }
 
 template<>
@@ -101,7 +101,7 @@ void Direction<Components::AbsoluteLimits>::updateCalibrating() {
   }
   if (motorStallTimer > motorStallTimeout) {
     Log.trace(F("Motor stall detected! Running the motor in the opposite direction..." CR));
-    motor.opposite();
+    motor.opposite(calibrationSpeed);
     motorStallTimer = 0;
   }
 }
@@ -118,7 +118,7 @@ void Direction<Components::MultiplexedLimits>::updateUncalibrated() {
   state.update(State::calibrating);
   Log.notice(F("Calibrating motor direction..." CR));
   motorStallTimer = 0;
-  motor.forwards();
+  motor.forwards(calibrationSpeed);
 }
 
 template<>
@@ -133,7 +133,7 @@ void Direction<Components::MultiplexedLimits>::updateCalibrating() {
 
   if (motorStallTimer > motorStallTimeout) {
     Log.trace(F("Motor stall detected! Running the motor in the opposite direction..." CR));
-    motor.opposite();
+    motor.opposite(calibrationSpeed);
     motorStallTimer = 0;
   }
 }

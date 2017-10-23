@@ -64,12 +64,13 @@ class Motor {
     void opposite(MotorSpeed speed);
     void resume();
     void resume(MotorSpeed speed);
+    MotorDirection resumeDirection() const;
 
     void brake();
     void neutral();
 
     void swapDirections();
-    bool directionsSwapped();
+    bool directionsSwapped() const;
 
   private:
     bool setupCompleted = false;

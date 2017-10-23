@@ -3,7 +3,6 @@
 
 #include "StateVariable.h"
 #include "Motors.h"
-#include "Limits.h"
 
 namespace LinearPositionControl { namespace Motion {
 
@@ -14,10 +13,10 @@ namespace States {
   };
 }
 
-template <class Limits>
+template <class PositionTracker>
 class Oscillator {
   public:
-    Oscillator(Components::Motor &motor, Limits &limits);
+    Oscillator(Components::Motor &motor, PositionTracker &positionTracker);
 
     using State = States::Oscillator;
 
@@ -30,7 +29,7 @@ class Oscillator {
     StateVariable<State> state;
 
     Components::Motor &motor;
-    Limits &limits;
+    PositionTracker &positionTracker;
 
     void updateInitializing();
     void updateOperating();

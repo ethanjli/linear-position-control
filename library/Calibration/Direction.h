@@ -43,6 +43,8 @@ class Direction {
     void updateCalibrating();
     void updateMotorDirection();
     void onDirectionCalibrated();
+
+    const Components::MotorSpeed calibrationSpeed = 255;
 };
 
 } }

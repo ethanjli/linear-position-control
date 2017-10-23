@@ -25,6 +25,9 @@ void EdgeCounter::setup() {
 void EdgeCounter::update() {
   if (digitalRead(sensorPin)) state.update(State::light);
   else state.update(State::dark);
+
+  //uint8_t counter = interruptCounter;
+  //if (counter) Serial.println(counter);
 }
 
 uint8_t EdgeCounter::getAndReset() {

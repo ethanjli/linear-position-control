@@ -4,9 +4,6 @@
 #include <elapsedMillis.h>
 
 #include "StateVariable.h"
-#include "Motors.h"
-#include "Limits.h"
-#include "Calibration/Direction.h"
 
 namespace LinearPositionControl {
 
@@ -15,6 +12,7 @@ namespace States {
     readyToCalibrate,
     calibratingDirection,
     calibratingPosition,
+    localizingPosition,
     operating
   };
 }
@@ -22,6 +20,7 @@ namespace States {
 template <
   class DirectionCalibrator,
   class PositionCalibrator,
+  class PositionTracker,
   class MotionController
 >
 class LinearActuator {
@@ -29,6 +28,7 @@ class LinearActuator {
     LinearActuator(
         DirectionCalibrator &directionCalibrator,
         PositionCalibrator &positionCalibrator,
+        PositionTracker &positionTracker,
         MotionController &motionController
     );
 
@@ -44,6 +44,7 @@ class LinearActuator {
 
     DirectionCalibrator &directionCalibrator;
     PositionCalibrator &positionCalibrator;
+    PositionTracker &positionTracker;
     MotionController &motionController;
 };
 

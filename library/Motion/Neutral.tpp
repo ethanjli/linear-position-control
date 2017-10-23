@@ -7,13 +7,13 @@ namespace LinearPositionControl { namespace Motion {
 
 // Neutral
 
-template <class Limits>
-Neutral<Limits>::Neutral(Components::Motor &motor) :
+template <class PositionTracker>
+Neutral<PositionTracker>::Neutral(Components::Motor &motor, PositionTracker &positionTracker) :
   motor(motor) {
 }
 
-template <class Limits>
-void Neutral<Limits>::setup() {
+template <class PositionTracker>
+void Neutral<PositionTracker>::setup() {
   if (setupCompleted) return;
 
   motor.setup();
@@ -21,8 +21,8 @@ void Neutral<Limits>::setup() {
   setupCompleted = true;
 }
 
-template <class Limits>
-void Neutral<Limits>::update() {
+template <class PositionTracker>
+void Neutral<PositionTracker>::update() {
   if (motor.state.current() != Components::Motor::State::neutral) {
     Log.notice(F("Setting motor to neutral!" CR));
     motor.neutral();

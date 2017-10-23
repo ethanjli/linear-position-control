@@ -7,17 +7,21 @@ namespace LinearPositionControl { namespace Calibration {
 
 // Position
 
-template <class Limits, class EdgeCounter>
-Position<Limits, EdgeCounter>::Position(
+template <class Limits, class EdgeCounter, class PositionTracker>
+Position<Limits, EdgeCounter, PositionTracker>::Position(
     Components::Motor &motor,
     Limits &limits,
-    EdgeCounter &edgeCounter
+    EdgeCounter &edgeCounter,
+    PositionTracker &positionTracker
 ) :
-  motor(motor), limits(limits), edgeCounter(edgeCounter) {
+  motor(motor),
+  limits(limits),
+  edgeCounter(edgeCounter),
+  positionTracker(positionTracker) {
 }
 
-template <class Limits, class EdgeCounter>
-void Position<Limits, EdgeCounter>::setup() {
+template <class Limits, class EdgeCounter, class PositionTracker>
+void Position<Limits, EdgeCounter, PositionTracker>::setup() {
   if (setupCompleted) return;
 
   // The motor and limits were set up before/during direction calibration setup, so we skip that
@@ -28,8 +32,8 @@ void Position<Limits, EdgeCounter>::setup() {
   setupCompleted = true;
 }
 
-template <class Limits, class EdgeCounter>
-void Position<Limits, EdgeCounter>::update() {
+template <class Limits, class EdgeCounter, class PositionTracker>
+void Position<Limits, EdgeCounter, PositionTracker>::update() {
   limits.update();
   edgeCounter.update();
   switch (state.current()) {
@@ -47,8 +51,8 @@ void Position<Limits, EdgeCounter>::update() {
   }
 }
 
-template<class Limits, class EdgeCounter>
-void Position<Limits, EdgeCounter>::updateUncalibrated() {
+template<class Limits, class EdgeCounter, class PositionTracker>
+void Position<Limits, EdgeCounter, PositionTracker>::updateUncalibrated() {
   using Components::States::Limits;
 
   if (limits.state.current() == Limits::both ||
@@ -61,11 +65,11 @@ void Position<Limits, EdgeCounter>::updateUncalibrated() {
   state.update(State::initializing);
   Log.notice(F("Initializing motor position..." CR));
   limitSwitchTimer = 0;
-  motor.backwards();
+  motor.backwards(255);
 }
 
-template<class Limits, class EdgeCounter>
-void Position<Limits, EdgeCounter>::updateInitializing() {
+template<class Limits, class EdgeCounter, class PositionTracker>
+void Position<Limits, EdgeCounter, PositionTracker>::updateInitializing() {
   using Components::States::Limits;
 
   if (limits.state.current() == Limits::both) {
@@ -93,11 +97,11 @@ void Position<Limits, EdgeCounter>::updateInitializing() {
   Log.notice(F("Calibrating motor position..." CR));
   edgeCounter.getAndReset();
   limitSwitchTimer = 0;
-  motor.forwards();
+  motor.forwards(calibrationSpeed);
 }
 
-template<class Limits, class EdgeCounter>
-void Position<Limits, EdgeCounter>::updateCalibrating() {
+template<class Limits, class EdgeCounter, class PositionTracker>
+void Position<Limits, EdgeCounter, PositionTracker>::updateCalibrating() {
   using Components::States::Limits;
 
   if (limits.state.current() == Limits::both ||
@@ -115,22 +119,15 @@ void Position<Limits, EdgeCounter>::updateCalibrating() {
     motor.brake();
 
     if (limitSwitchTimer < limitSwitchTimeout) return; // Wait until we've settled on the right limit
-    updateMotorPosition();
+    numEdges = edgeCounter.getAndReset();
+    positionTracker.updateNumTotalEdges(numEdges);
     onPositionCalibrated();
     return;
   }
 }
 
-template<class Limits, class EdgeCounter>
-void Position<Limits, EdgeCounter>::updateMotorPosition() {
-  using Components::States::Motor;
-  using Components::States::Limits;
-
-  numEdges = edgeCounter.getAndReset();
-}
-
-template <class Limits, class EdgeCounter>
-void Position<Limits, EdgeCounter>::onPositionCalibrated() {
+template <class Limits, class EdgeCounter, class PositionTracker>
+void Position<Limits, EdgeCounter, PositionTracker>::onPositionCalibrated() {
   state.update(State::calibrated);
   motor.brake();
 

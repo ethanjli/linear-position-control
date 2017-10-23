@@ -5,10 +5,10 @@
 
 namespace LinearPositionControl { namespace Motion {
 
-template <class Limits>
+template <class PositionTracker>
 class Neutral {
   public:
-    Neutral(Components::Motor &motor);
+    Neutral(Components::Motor &motor, PositionTracker &positionTracker);
 
     void setup();
     void update();

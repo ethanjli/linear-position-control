@@ -7,66 +7,44 @@
 //#define DISABLE_LOGGING
 #include <ArduinoLog.h>
 
-#include <LED.h>
-#include <DebouncedButton.h>
-#include <Motors.h>
+#include <LinearPositionControl.h>
 #include <OpticalSensor.h>
-#include <Limits.h>
-#include <Calibration/Direction.h>
-#include <Calibration/Position.h>
+#include <Tracking/Discrete.h>
 #include <Motion/Neutral.h>
-#include <LinearActuator.h>
-
 using namespace LinearPositionControl;
-using namespace Components;
-
-// Compile-time flags
-
-using AbsoluteDirectionCalibrator = Calibration::Direction<AbsoluteLimits>;
-using PositionCalibrator = Calibration::Position<AbsoluteLimits, EdgeCounter>;
-using MotionController = Motion::Neutral<AbsoluteLimits>;
-using Actuator = LinearActuator<AbsoluteDirectionCalibrator, PositionCalibrator, MotionController>;
 
 // Singletons
 
-Motors motors;
+SharedComponents shared;
 
 // Globals
 
-LED led(LED_BUILTIN);
-Motor motor(motors, M2);
-EdgeCounter edgeCounter(2, interruptCounter2);
-DebouncedButton right(12, interruptCounter12, 5);
-DebouncedButton left(8, interruptCounter8, 5);
-AbsoluteLimits limits(left, right);
-AbsoluteDirectionCalibrator directionCalibrator(motor, limits);
-PositionCalibrator positionCalibrator(motor, limits, edgeCounter);
-MotionController motionController(motor);
-Actuator actuator(directionCalibrator, positionCalibrator, motionController);
+using Actuator = UnmultiplexedLinearActuator<Components::EdgeCounter, Tracking::Discrete, Motion::Neutral>;
+Actuator actuator(shared, M2, 2, interruptCounter2, 8, interruptCounter8, 12, interruptCounter12);
 
 void setup() {
 #ifndef DISABLE_LOGGING
   Serial.begin(115200);
   Log.begin(LOG_LEVEL_VERBOSE, &Serial);
 #endif
-  actuator.setup();
-  led.setup();
+  actuator.actuator.setup();
+  shared.led.setup();
 }
 
 void loop() {
-  actuator.update();
-  led.update();
-  if (actuator.state.justEntered(Actuator::State::calibratingDirection)) {
-    led.lowInterval = 50;
-    led.highInterval = 50;
-    led.blink();
-  } else if (actuator.state.justEntered(Actuator::State::calibratingPosition)) {
-    led.lowInterval = 50;
-    led.highInterval = 200;
-    led.blink();
-  } else if (actuator.state.justEntered(Actuator::State::operating)) {
-    led.lowInterval = 50;
-    led.highInterval = 800;
-    led.blink();
+  actuator.actuator.update();
+  shared.led.update();
+  if (actuator.actuator.state.justEntered(Actuator::Actuator::State::calibratingDirection)) {
+    shared.led.lowInterval = 50;
+    shared.led.highInterval = 50;
+    shared.led.blink();
+  } else if (actuator.actuator.state.justEntered(Actuator::Actuator::State::calibratingPosition)) {
+    shared.led.lowInterval = 50;
+    shared.led.highInterval = 200;
+    shared.led.blink();
+  } else if (actuator.actuator.state.justEntered(Actuator::Actuator::State::operating)) {
+    shared.led.lowInterval = 50;
+    shared.led.highInterval = 800;
+    shared.led.blink();
   }
 }

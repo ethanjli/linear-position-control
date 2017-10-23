@@ -6,6 +6,7 @@
 #include "StateVariable.h"
 #include "Motors.h"
 #include "Limits.h"
+#include "OpticalSensor.h"
 
 namespace LinearPositionControl { namespace Calibration {
 
@@ -18,10 +19,15 @@ namespace States {
   };
 }
 
-template<class Limits, class EdgeCounter>
+template<class Limits, class EdgeCounter, class PositionTracker>
 class Position {
   public:
-    Position(Components::Motor &motor, Limits &limits, EdgeCounter &edgeCounter);
+    Position(
+        Components::Motor &motor,
+        Limits &limits,
+        EdgeCounter &edgeCounter,
+        PositionTracker &positionTracker
+    );
 
     using State = States::Position;
 
@@ -37,17 +43,19 @@ class Position {
     Components::Motor &motor;
     Limits &limits;
     EdgeCounter &edgeCounter;
+    PositionTracker &positionTracker;
 
     elapsedMillis limitSwitchTimer;
     unsigned int limitSwitchTimeout = 250;
 
-    uint8_t numEdges = 0;
+    int numEdges = 0;
 
     void updateUncalibrated();
     void updateInitializing();
     void updateCalibrating();
     void onPositionCalibrated();
-    void updateMotorPosition();
+
+    const Components::MotorSpeed calibrationSpeed = 127;
 };
 
 } }
