@@ -1,6 +1,7 @@
 #ifndef LinearPositionControl_h
 #define LinearPositionControl_h
 
+#include "FastInterrupts.h"
 #include "StateVariable.h"
 #include "Motors.h"
 #include "LED.h"
@@ -34,11 +35,8 @@ class UnmultiplexedLinearActuator {
         SharedComponents &shared,
         MotorPort motorPort,
         uint8_t opticalSensorPin,
-        volatile uint8_t &opticalSensorInterruptCounter,
         uint8_t limitSwitchLeftSensorPin,
-        volatile uint8_t &limitSwitchLeftInterruptCounter,
-        uint8_t limitSwitchRightSensorPin,
-        volatile uint8_t &limitSwitchRightInterruptCounter
+        uint8_t limitSwitchRightSensorPin
     );
 
     using Limits = Components::AbsoluteLimits;
@@ -79,9 +77,7 @@ class MultiplexedLinearActuator {
         SharedComponents &shared,
         MotorPort motorPort,
         uint8_t opticalSensorPin,
-        volatile uint8_t &opticalSensorInterruptCounter,
-        uint8_t limitSwitchesSensorPin,
-        volatile uint8_t &limitSwitchesInterruptCounter
+        uint8_t limitSwitchesSensorPin
     );
 
     using Limits = Components::MultiplexedLimits;

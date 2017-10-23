@@ -31,17 +31,18 @@ UnmultiplexedLinearActuator<
     SharedComponents &shared,
     MotorPort motorPort,
     uint8_t opticalSensorPin,
-    volatile uint8_t &opticalSensorInterruptCounter,
     uint8_t limitSwitchLeftSensorPin,
-    volatile uint8_t &limitSwitchLeftInterruptCounter,
-    uint8_t limitSwitchRightSensorPin,
-    volatile uint8_t &limitSwitchRightInterruptCounter
+    uint8_t limitSwitchRightSensorPin
 ) :
   shared(shared),
   motor(shared.motors, motorPort),
-  opticalSensor(opticalSensorPin, opticalSensorInterruptCounter),
-  limitSwitchLeft(limitSwitchLeftSensorPin, limitSwitchLeftInterruptCounter, 5),
-  limitSwitchRight(limitSwitchRightSensorPin, limitSwitchRightInterruptCounter, 5),
+  opticalSensor(opticalSensorPin, getInterruptCounter(opticalSensorPin)),
+  limitSwitchLeft(
+      limitSwitchLeftSensorPin, getInterruptCounter(limitSwitchLeftSensorPin), 5
+  ),
+  limitSwitchRight(
+      limitSwitchRightSensorPin, getInterruptCounter(limitSwitchRightSensorPin), 5
+  ),
   limits(limitSwitchLeft, limitSwitchRight),
   directionCalibrator(motor, limits),
   positionTracker(motor, limits, opticalSensor),
@@ -94,14 +95,12 @@ MultiplexedLinearActuator<
     SharedComponents &shared,
     MotorPort motorPort,
     uint8_t opticalSensorPin,
-    volatile uint8_t &opticalSensorInterruptCounter,
-    uint8_t limitSwitchesSensorPin,
-    volatile uint8_t &limitSwitchesInterruptCounter
+    uint8_t limitSwitchesSensorPin
 ) :
   shared(shared),
   motor(shared.motors, motorPort),
-  opticalSensor(opticalSensorPin, opticalSensorInterruptCounter),
-  limitSwitches(limitSwitchesSensorPin, limitSwitchesInterruptCounter, 5),
+  opticalSensor(opticalSensorPin, getInterruptCounter(opticalSensorPin)),
+  limitSwitches(limitSwitchesSensorPin, getInterruptCounter(limitSwitchesSensorPin), 5),
   limits(limitSwitches),
   directionCalibrator(motor, limits),
   positionTracker(motor, limits, opticalSensor),

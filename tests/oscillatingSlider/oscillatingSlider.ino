@@ -1,9 +1,3 @@
-#define NEEDFORSPEED
-#define INTERRUPT_FLAG_PIN12 interruptCounter12
-#define INTERRUPT_FLAG_PIN8 interruptCounter8
-#define INTERRUPT_FLAG_PIN2 interruptCounter2
-#include <EnableInterrupt.h>
-
 //#define DISABLE_LOGGING
 #include <ArduinoLog.h>
 
@@ -20,7 +14,7 @@ SharedComponents shared;
 // Globals
 
 using Actuator = UnmultiplexedLinearActuator<Components::EdgeCounter, Tracking::Discrete, Motion::Oscillator>;
-Actuator actuator(shared, M2, 2, interruptCounter2, 8, interruptCounter8, 12, interruptCounter12);
+Actuator actuator(shared, M2, 2, 8, 12);
 
 void setup() {
 #ifndef DISABLE_LOGGING
