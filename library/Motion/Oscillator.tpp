@@ -48,10 +48,10 @@ template <class PositionTracker>
 void Oscillator<PositionTracker>::updateOperating() {
   if (!positionTracker.position.justChanged()) return;
   if (positionTracker.atLeftLimit()) {
-      Log.trace(F("Hit left limit switch. Moving forwards!" CR));
+      Log.trace(F("Reached left limit. Moving forwards!" CR));
       motor.forwards();
   } else if (positionTracker.atRightLimit()) {
-      Log.trace(F("Hit right limit switch. Moving backwards!" CR));
+      Log.trace(F("Reached right limit. Moving backwards!" CR));
       motor.backwards();
   }
 }

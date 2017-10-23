@@ -1,6 +1,7 @@
 #ifndef LinearPositionControl_h
 #define LinearPositionControl_h
 
+#include "StateVariable.h"
 #include "Motors.h"
 #include "LED.h"
 #include "DebouncedButton.h"
@@ -48,6 +49,7 @@ class UnmultiplexedLinearActuator {
     using Actuator = LinearActuator<
       DirectionCalibrator, PositionCalibrator, PositionTracker, MotionController
     >;
+    using State = typename Actuator::State;
 
     SharedComponents &shared;
     Components::Motor motor;
@@ -60,6 +62,7 @@ class UnmultiplexedLinearActuator {
     PositionCalibrator positionCalibrator;
     MotionController motionController;
     Actuator actuator;
+    StateVariable<State> &state;
 
     void setup();
     void update();
@@ -89,6 +92,7 @@ class MultiplexedLinearActuator {
     using Actuator = LinearActuator<
       DirectionCalibrator, PositionCalibrator, PositionTracker, MotionController
     >;
+    using State = typename Actuator::State;
 
     SharedComponents &shared;
     Components::Motor motor;
@@ -100,6 +104,7 @@ class MultiplexedLinearActuator {
     PositionCalibrator positionCalibrator;
     MotionController motionController;
     Actuator actuator;
+    StateVariable<State> &state;
 
     void setup();
     void update();

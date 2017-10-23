@@ -47,7 +47,8 @@ UnmultiplexedLinearActuator<
   positionTracker(motor, limits, opticalSensor),
   positionCalibrator(motor, limits, opticalSensor, positionTracker),
   motionController(motor, positionTracker),
-  actuator(directionCalibrator, positionCalibrator, positionTracker, motionController) {
+  actuator(directionCalibrator, positionCalibrator, positionTracker, motionController),
+  state(actuator.state) {
 }
 
 template <
@@ -106,7 +107,9 @@ MultiplexedLinearActuator<
   positionTracker(motor, limits, opticalSensor),
   positionCalibrator(motor, limits, opticalSensor, positionTracker),
   motionController(motor, positionTracker),
-  actuator(directionCalibrator, positionCalibrator, positionTracker, motionController) {
+  actuator(directionCalibrator, positionCalibrator, positionTracker, motionController),
+  state(actuator.state)
+{
 }
 
 template <
