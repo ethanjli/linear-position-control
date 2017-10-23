@@ -1,6 +1,9 @@
 //#define DISABLE_LOGGING
 #include <ArduinoLog.h>
 
+#define SENSOR_PIN2
+#define SENSOR_PIN8
+#define SENSOR_PIN12
 #include <LinearPositionControl.h>
 #include <OpticalSensor.h>
 #include <Tracking/Discrete.h>
