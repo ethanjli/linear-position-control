@@ -41,5 +41,12 @@ uint8_t EdgeCounter::getAndReset() {
   return counter;
 }
 
+void EdgeCounter::getAndReset(uint8_t &count) {
+  disableInterrupt(sensorPin);
+  count = interruptCounter;
+  interruptCounter = 0;
+  enableInterruptFast(sensorPin, CHANGE);
+}
+
 } }
 

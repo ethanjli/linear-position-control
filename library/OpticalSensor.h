@@ -27,6 +27,7 @@ class EdgeCounter {
 
     void reset();
     uint8_t getAndReset();
+    void getAndReset(uint8_t &count);
 
   private:
     bool setupCompleted = false;
