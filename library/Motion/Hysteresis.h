@@ -23,7 +23,7 @@ class Hysteresis {
     StateVariable<State> state;
 
     StateVariable<int> targetPosition;
-    Components::MotorSpeed adjustmentSpeed = 255;
+    Components::MotorSpeed adjustmentSpeed = 63;
 
     void setup();
     void update();

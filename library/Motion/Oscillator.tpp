@@ -27,6 +27,8 @@ void Oscillator<PositionTracker>::setup() {
 template <class PositionTracker>
 void Oscillator<PositionTracker>::update() {
   positionTracker.update();
+  if (positionTracker.state.current() != PositionTracker::State::tracking) return;
+
   switch (state.current()) {
     case State::operating:
       updateOperating();
@@ -46,12 +48,11 @@ void Oscillator<PositionTracker>::updateInitializing() {
 
 template <class PositionTracker>
 void Oscillator<PositionTracker>::updateOperating() {
-  if (!positionTracker.position.justChanged()) return;
   if (positionTracker.atLeftLimit()) {
-      Log.trace(F("Reached left limit. Moving forwards!" CR));
+      if (positionTracker.position.justChanged()) Log.trace(F("Reached left limit. Moving forwards!" CR));
       motor.forwards();
   } else if (positionTracker.atRightLimit()) {
-      Log.trace(F("Reached right limit. Moving backwards!" CR));
+      if (positionTracker.position.justChanged()) Log.trace(F("Reached right limit. Moving backwards!" CR));
       motor.backwards();
   }
 }

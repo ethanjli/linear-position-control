@@ -1,4 +1,4 @@
-//#define DISABLE_LOGGING
+#define DISABLE_LOGGING
 #include <ArduinoLog.h>
 
 #define SENSOR_PIN2
@@ -24,7 +24,8 @@ void setup() {
   Log.begin(LOG_LEVEL_VERBOSE, &Serial);
 #endif
   actuator.setup();
-  actuator.motor.speed = 63;
+  actuator.positionCalibrator.expectedNumEdges = 32;
+  actuator.motor.speed = 127;
 }
 
 void loop() {

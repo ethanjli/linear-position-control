@@ -56,9 +56,8 @@ class Discrete {
     void updateUnlocalized();
     void updateLocalizing();
     void updateTracking();
-    void onPositionLocalized();
     void updateMotorPosition(bool setup = false);
-    int inferMotorPosition();
+    int inferMotorPosition(bool &error);
 
     Components::MotorDirection limitSwitchPressDirection;
 };
