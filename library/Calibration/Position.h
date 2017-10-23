@@ -35,6 +35,7 @@ class Position {
     void update();
 
     StateVariable<State> state;
+    const Components::MotorSpeed calibrationSpeed = 255;
 
   private:
     bool setupCompleted = false;
@@ -54,8 +55,6 @@ class Position {
     void updateInitializing();
     void updateCalibrating();
     void onPositionCalibrated();
-
-    const Components::MotorSpeed calibrationSpeed = 63;
 };
 
 } }

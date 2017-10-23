@@ -55,6 +55,11 @@ void Discrete<Limits, EdgeCounter>::updateNumTotalEdges(int numEdges) {
 }
 
 template<class Limits, class EdgeCounter>
+int Discrete<Limits, EdgeCounter>::getNumTotalEdges() const {
+  return numTotalEdges;
+}
+
+template<class Limits, class EdgeCounter>
 bool Discrete<Limits, EdgeCounter>::atLeftLimit() const {
   return position.current() == 0;
 }
@@ -79,9 +84,9 @@ void Discrete<Limits, EdgeCounter>::updateUnlocalized() {
   Log.notice(F("Resetting motor position to nearest limit switch..." CR));
   limitSwitchTimer = 0;
   if (position.current() < numTotalEdges / 2) {
-    motor.backwards();
+    motor.backwards(relocalizationSpeed);
   } else {
-    motor.forwards();
+    motor.forwards(relocalizationSpeed);
   }
 }
 
@@ -101,7 +106,9 @@ void Discrete<Limits, EdgeCounter>::updateLocalizing() {
   if (limits.state.previous() == Limits::none) {
     // Brake for a bit to let the motor stabilize at the limit
     limitSwitchTimer = 0;
-    Log.trace(F("Just hit a limit switch!" CR));
+    limitSwitchPressDirection = motor.resumeDirection();
+    if (limitSwitchPressDirection == FORWARD) Log.trace(F("Just hit the right limit switch!" CR));
+    else Log.trace(F("Just hit the left limit switch!" CR)); // limitSwitchPressDirection == BACKWARD
     motor.brake();
     return;
   }
@@ -118,6 +125,10 @@ template<class Limits, class EdgeCounter>
 void Discrete<Limits, EdgeCounter>::updateTracking() {
   edgeCounter.update();
   updateMotorPosition();
+  if (position.current() < 0 || position.current() > numTotalEdges) { // invalid position
+    Log.trace(F("Relocalization required with invalid position %d." CR), position.current());
+    state.update(State::unlocalized);
+  }
 }
 
 template<class Limits, class EdgeCounter>
@@ -128,8 +139,12 @@ void Discrete<Limits, EdgeCounter>::updateMotorPosition(bool setup) {
   int motorPosition = inferMotorPosition();
   if (motorPosition == -1) state.update(State::unlocalized);
 
-  if (setup) position.setup(motorPosition);
-  else position.update(motorPosition);
+  if (setup) {
+    position.setup(motorPosition, true);
+    Log.trace(F("Finished localization at position %d." CR), motorPosition);
+  } else {
+    position.update(motorPosition);
+  }
 }
 
 template<class Limits, class EdgeCounter>
@@ -141,7 +156,13 @@ int Discrete<Limits, EdgeCounter>::inferMotorPosition() {
     case Limits::none: // update position with counter
       switch (motor.state.current()) {
         case Motor::neutral:
-          return -1;
+        //case Motor::braking:
+          if (edgeCounter.getAndReset()) {
+            Log.trace(F("Relocalization required because of motion with stopped motor." CR));
+            return -1; // we moved without the motor
+          } else {
+            return position.current();
+          }
         default:
           if (motor.resumeDirection() == FORWARD) {
             return position.current() + edgeCounter.getAndReset();
@@ -160,8 +181,9 @@ int Discrete<Limits, EdgeCounter>::inferMotorPosition() {
       }
       // limitSwitchPressDirection is same even when motor direction changes to release switch
       if (limitSwitchPressDirection == BACKWARD) return 0;
-      else return numTotalEdges; // limitSwitchPressDirection == BACKWARD
+      else return numTotalEdges; // limitSwitchPressDirection == FORWARD
   }
+  Log.trace(F("Relocalization required with invalid limits state." CR));
   return -1; // invalid state
 }
 

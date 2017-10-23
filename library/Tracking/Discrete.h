@@ -31,8 +31,10 @@ class Discrete {
 
     StateVariable<State> state;
     StateVariable<int> position;
+    Components::MotorSpeed relocalizationSpeed = 255;
 
     void updateNumTotalEdges(int numEdges);
+    int getNumTotalEdges() const;
     bool atLeftLimit() const;
     bool atRightLimit() const;
 

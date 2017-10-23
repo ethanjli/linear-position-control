@@ -6,8 +6,8 @@ namespace LinearPositionControl {
 // StateVariable
 
 template <class State>
-void StateVariable<State>::setup(State initialState) {
-  if (setupCompleted) return;
+void StateVariable<State>::setup(State initialState, bool force) {
+  if (!force && setupCompleted) return;
 
   currentState = initialState;
   previousState = initialState;

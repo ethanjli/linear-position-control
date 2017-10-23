@@ -8,7 +8,7 @@ namespace LinearPositionControl {
 template <class State>
 class StateVariable {
   public:
-    void setup(State initialState);
+    void setup(State initialState, bool force = false);
     void update(State nextState);
 
     State current() const;
