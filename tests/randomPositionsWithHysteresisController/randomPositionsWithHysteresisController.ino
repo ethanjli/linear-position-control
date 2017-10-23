@@ -34,6 +34,6 @@ void loop() {
   if (actuator.state.current() != Actuator::State::operating) return;
   if (actuator.motionController.state.current() != Actuator::MotionController::State::maintaining) return;
   if (actuator.motionController.state.currentDuration() < 1000) return;
-  int newTargetPosition = map(random(0, 5), 0, 5, 0, actuator.positionTracker.getNumTotalEdges());
+  int newTargetPosition = actuator.positionTracker.mapPositionFrom(random(0, 5), 0, 5);
   actuator.motionController.targetPosition.update(newTargetPosition);
 }

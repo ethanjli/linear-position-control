@@ -37,6 +37,8 @@ class Discrete {
     int getNumTotalEdges() const;
     bool atLeftLimit() const;
     bool atRightLimit() const;
+    int mapPositionTo(int position, int toMin, int toMax) const;
+    int mapPositionFrom(int position, int fromMin, int fromMax) const;
 
   private:
     bool setupCompleted = false;

@@ -70,6 +70,16 @@ bool Discrete<Limits, EdgeCounter>::atRightLimit() const {
 }
 
 template<class Limits, class EdgeCounter>
+int Discrete<Limits, EdgeCounter>::mapPositionTo(int position, int toMin, int toMax) const {
+  return map(position, 0, numTotalEdges, toMin, toMax);
+}
+
+template<class Limits, class EdgeCounter>
+int Discrete<Limits, EdgeCounter>::mapPositionFrom(int position, int fromMin, int fromMax) const {
+  return map(position, fromMin, fromMax, 0, numTotalEdges);
+}
+
+template<class Limits, class EdgeCounter>
 void Discrete<Limits, EdgeCounter>::updateUnlocalized() {
   using Components::States::Limits;
 
