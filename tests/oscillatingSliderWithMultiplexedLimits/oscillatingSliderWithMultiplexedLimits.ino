@@ -26,14 +26,12 @@ void setup() {
   Serial.begin(115200);
   Log.begin(LOG_LEVEL_VERBOSE, &Serial);
 #endif
-  shared.led.setup();
-  actuator.actuator.setup();
+  actuator.setup();
   actuator.motor.speed = 63;
 }
 
 void loop() {
-  actuator.actuator.update();
-  shared.led.update();
+  actuator.update();
   if (actuator.actuator.state.justEntered(Actuator::Actuator::State::calibratingDirection)) {
     shared.led.lowInterval = 50;
     shared.led.highInterval = 50;

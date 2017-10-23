@@ -17,6 +17,9 @@ class SharedComponents {
 
     Components::Motors motors;
     Components::LED led;
+
+    void setup();
+    void update();
 };
 
 template <
@@ -57,6 +60,9 @@ class UnmultiplexedLinearActuator {
     PositionCalibrator positionCalibrator;
     MotionController motionController;
     Actuator actuator;
+
+    void setup();
+    void update();
 };
 
 template <
@@ -94,6 +100,9 @@ class MultiplexedLinearActuator {
     PositionCalibrator positionCalibrator;
     MotionController motionController;
     Actuator actuator;
+
+    void setup();
+    void update();
 };
 
 }

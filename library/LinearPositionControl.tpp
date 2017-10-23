@@ -8,6 +8,14 @@ SharedComponents::SharedComponents() :
   led(Components::LED(LED_BUILTIN)) {
 }
 
+void SharedComponents::setup() {
+  led.setup();
+}
+
+void SharedComponents::update() {
+  led.update();
+}
+
 // UnmultiplexedLinearActuator
 
 template <
@@ -42,6 +50,34 @@ UnmultiplexedLinearActuator<
   actuator(directionCalibrator, positionCalibrator, positionTracker, motionController) {
 }
 
+template <
+  class OpticalSensor,
+  template <class, class> class PositionTrackingStrategy,
+  template <class> class MotionControlStrategy
+>
+void UnmultiplexedLinearActuator<
+  OpticalSensor,
+  PositionTrackingStrategy,
+  MotionControlStrategy
+>::setup() {
+  shared.setup();
+  actuator.setup();
+}
+
+template <
+  class OpticalSensor,
+  template <class, class> class PositionTrackingStrategy,
+  template <class> class MotionControlStrategy
+>
+void UnmultiplexedLinearActuator<
+  OpticalSensor,
+  PositionTrackingStrategy,
+  MotionControlStrategy
+>::update() {
+  shared.update();
+  actuator.update();
+}
+
 // MultiplexedLinearActuator
 
 template <
@@ -71,6 +107,34 @@ MultiplexedLinearActuator<
   positionCalibrator(motor, limits, opticalSensor, positionTracker),
   motionController(motor, positionTracker),
   actuator(directionCalibrator, positionCalibrator, positionTracker, motionController) {
+}
+
+template <
+  class OpticalSensor,
+  template <class, class> class PositionTrackingStrategy,
+  template <class> class MotionControlStrategy
+>
+void MultiplexedLinearActuator<
+  OpticalSensor,
+  PositionTrackingStrategy,
+  MotionControlStrategy
+>::setup() {
+  shared.setup();
+  actuator.setup();
+}
+
+template <
+  class OpticalSensor,
+  template <class, class> class PositionTrackingStrategy,
+  template <class> class MotionControlStrategy
+>
+void MultiplexedLinearActuator<
+  OpticalSensor,
+  PositionTrackingStrategy,
+  MotionControlStrategy
+>::update() {
+  shared.update();
+  actuator.update();
 }
 
 }
