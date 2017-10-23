@@ -94,7 +94,8 @@ void Position<Limits, EdgeCounter, PositionTracker>::updateInitializing() {
 
   // Start calibration
   state.update(State::calibrating);
-  Log.notice(F("Calibrating motor position..." CR));
+  if (expectedNumEdges != -1) Log.notice(F("Calibrating motor position, expecteding to count %d edges..." CR), expectedNumEdges);
+  else Log.notice(F("Calibrating motor position..." CR));
   edgeCounter.reset();
   limitSwitchTimer = 0;
   motor.forwards(calibrationSpeed);
@@ -120,6 +121,12 @@ void Position<Limits, EdgeCounter, PositionTracker>::updateCalibrating() {
 
     if (limitSwitchTimer < limitSwitchTimeout) return; // Wait until we've settled on the right limit
     numEdges = edgeCounter.getAndReset();
+    if (expectedNumEdges != -1 && numEdges != expectedNumEdges) {
+      Log.error(F("Expected %d edges, counted %d edges. Restarting motor position calibration..." CR), expectedNumEdges, numEdges);
+      motor.neutral();
+      state.update(State::uncalibrated);
+      return;
+    }
     positionTracker.updateNumTotalEdges(numEdges);
     onPositionCalibrated();
     return;

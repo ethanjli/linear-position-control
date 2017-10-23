@@ -24,6 +24,7 @@ void setup() {
   Log.begin(LOG_LEVEL_VERBOSE, &Serial);
 #endif
   actuator.setup();
+  actuator.positionCalibrator.expectedNumEdges = 32;
   actuator.motor.speed = 63;
   randomSeed(analogRead(0));
 }

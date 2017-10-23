@@ -36,6 +36,7 @@ class Position {
 
     StateVariable<State> state;
     const Components::MotorSpeed calibrationSpeed = 255;
+    int expectedNumEdges = -1;
 
   private:
     bool setupCompleted = false;
