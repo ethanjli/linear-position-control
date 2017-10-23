@@ -95,7 +95,7 @@ void Position<Limits, EdgeCounter, PositionTracker>::updateInitializing() {
   // Start calibration
   state.update(State::calibrating);
   Log.notice(F("Calibrating motor position..." CR));
-  edgeCounter.getAndReset();
+  edgeCounter.reset();
   limitSwitchTimer = 0;
   motor.forwards(calibrationSpeed);
 }

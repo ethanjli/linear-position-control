@@ -27,8 +27,9 @@ void setup() {
   Serial.begin(115200);
   Log.begin(LOG_LEVEL_VERBOSE, &Serial);
 #endif
-  actuator.actuator.setup();
   shared.led.setup();
+  actuator.actuator.setup();
+  actuator.motor.speed = 63;
 }
 
 void loop() {

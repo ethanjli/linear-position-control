@@ -55,7 +55,7 @@ class Position {
     void updateCalibrating();
     void onPositionCalibrated();
 
-    const Components::MotorSpeed calibrationSpeed = 127;
+    const Components::MotorSpeed calibrationSpeed = 63;
 };
 
 } }

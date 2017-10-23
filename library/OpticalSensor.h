@@ -25,6 +25,7 @@ class EdgeCounter {
 
     StateVariable<State> state;
 
+    void reset();
     uint8_t getAndReset();
 
   private:

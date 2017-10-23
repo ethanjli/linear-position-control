@@ -1,6 +1,5 @@
 #define NEEDFORSPEED
 #define INTERRUPT_FLAG_PIN12 interruptCounter12
-#define INTERRUPT_FLAG_PIN8 interruptCounter8
 #define INTERRUPT_FLAG_PIN2 interruptCounter2
 #include <EnableInterrupt.h>
 
@@ -27,8 +26,9 @@ void setup() {
   Serial.begin(115200);
   Log.begin(LOG_LEVEL_VERBOSE, &Serial);
 #endif
-  actuator.actuator.setup();
   shared.led.setup();
+  actuator.actuator.setup();
+  actuator.motor.speed = 63;
 }
 
 void loop() {

@@ -155,8 +155,12 @@ int Discrete<Limits, EdgeCounter>::inferMotorPosition() {
     case Limits::right:
       return numTotalEdges;
     case Limits::either:
-      if (motor.resumeDirection() == BACKWARD) return 0;
-      else return numTotalEdges; // motor.resumeDirection() == BACKWARD
+      if (limits.state.previous() == Limits::none) {
+        limitSwitchPressDirection = motor.resumeDirection();
+      }
+      // limitSwitchPressDirection is same even when motor direction changes to release switch
+      if (limitSwitchPressDirection == BACKWARD) return 0;
+      else return numTotalEdges; // limitSwitchPressDirection == BACKWARD
   }
   return -1; // invalid state
 }

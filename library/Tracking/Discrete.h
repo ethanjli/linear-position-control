@@ -55,6 +55,8 @@ class Discrete {
     void onPositionLocalized();
     void updateMotorPosition(bool setup = false);
     int inferMotorPosition();
+
+    Components::MotorDirection limitSwitchPressDirection;
 };
 
 } }
