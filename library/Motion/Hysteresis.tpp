@@ -61,9 +61,9 @@ void Hysteresis<PositionTracker>::updateAdjusting() {
     return;
   }
   if (positionTracker.position.current() < targetPosition.current()) {
-    motor.forwards(adjustmentSpeed);
+    motor.forwards();
   } else if (positionTracker.position.current() > targetPosition.current()) {
-    motor.backwards(adjustmentSpeed);
+    motor.backwards();
   } else { // positionTracker.position.current() == targetPosition
     state.update(State::maintaining);
   }
