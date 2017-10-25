@@ -9,6 +9,7 @@ namespace LinearPositionControl { namespace Components {
 
 namespace States {
   enum class EdgeCounter : uint8_t {
+    unknown,
     dark,
     light
   };

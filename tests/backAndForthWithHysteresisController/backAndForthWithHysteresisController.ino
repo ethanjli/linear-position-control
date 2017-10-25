@@ -10,6 +10,8 @@
 using namespace LinearPositionControl;
 
 const int numCuvettes = 6;
+const int cuvetteOrder[] = {0, 4, 1, 3, 2, 5};
+int cuvetteIndex = 0;
 
 // Singletons
 
@@ -27,7 +29,7 @@ void setup() {
 #endif
   actuator.setup();
   actuator.positionCalibrator.expectedNumEdges = 32;
-  actuator.motor.speed = 100;
+  actuator.motor.speed = 80;
   randomSeed(analogRead(0));
 }
 
@@ -36,6 +38,7 @@ void loop() {
   if (actuator.state.current() != Actuator::State::operating) return;
   if (actuator.motionController.state.current() != Actuator::MotionController::State::maintaining) return;
   if (actuator.motionController.state.currentDuration() < 1000) return;
-  int newTargetPosition = actuator.positionTracker.mapPositionFrom(random(numCuvettes), 0, numCuvettes - 1);
+  int newTargetPosition = actuator.positionTracker.mapPositionFrom(cuvetteOrder[cuvetteIndex], 0, numCuvettes - 1);
+  cuvetteIndex = (cuvetteIndex + 1) % numCuvettes;
   actuator.motionController.targetPosition.update(newTargetPosition);
 }

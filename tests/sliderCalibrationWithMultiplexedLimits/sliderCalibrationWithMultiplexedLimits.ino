@@ -1,7 +1,7 @@
 //#define DISABLE_LOGGING
 #include <ArduinoLog.h>
 
-#define SENSOR_PIN2
+#define SENSOR_PIN4
 #define SENSOR_PIN12
 #include <LinearPositionControl.h>
 #include <OpticalSensor.h>
@@ -16,7 +16,7 @@ SharedComponents shared;
 // Globals
 
 using Actuator = MultiplexedLinearActuator<Components::EdgeCounter, Tracking::Discrete, Motion::Neutral>;
-Actuator actuator(shared, M2, 2, 12);
+Actuator actuator(shared, M2, 4, 12);
 
 void setup() {
 #ifndef DISABLE_LOGGING

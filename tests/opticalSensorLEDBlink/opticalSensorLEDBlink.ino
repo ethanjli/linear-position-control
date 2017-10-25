@@ -1,5 +1,5 @@
 #define NEEDFORSPEED
-#define INTERRUPT_FLAG_PIN2 interruptCounter2
+#define INTERRUPT_FLAG_PIN4 interruptCounter4
 #include <EnableInterrupt.h>
 
 //#define DISABLE_LOGGING
@@ -13,7 +13,7 @@ using LinearPositionControl::Components::LED;
 
 // Globals
 
-EdgeCounter edgeCounter(2, interruptCounter2);
+EdgeCounter edgeCounter(4, interruptCounter4);
 LED led(LED_BUILTIN);
 
 void setup() {
