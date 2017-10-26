@@ -1,8 +1,6 @@
 #ifndef OpticalSensor_h
 #define OpticalSensor_h
 
-#include <elapsedMillis.h>
-
 #include "StateVariable.h"
 
 namespace LinearPositionControl { namespace Components {
