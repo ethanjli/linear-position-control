@@ -36,6 +36,7 @@ void setup() {
 
 void loop() {
   actuator.update();
+  potentiometer.update();
   if (actuator.state.current() != Actuator::State::operating) return;
   if (actuator.motionController.state.current() != Actuator::MotionController::State::maintaining) return;
   if (actuator.motionController.state.currentDuration() < 1000) return;
