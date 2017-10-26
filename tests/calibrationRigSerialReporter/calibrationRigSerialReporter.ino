@@ -29,7 +29,10 @@ const int numPositions = 1024;
 int targetPosition = -1;
 elapsedMillis targetingTimer;
 elapsedMicros targetingTimerMicroseconds;
-bool maintainedPositionReported = false;
+
+// Additional Globals
+
+int targetID = 0;
 
 inline int mapToEdgeCount(int position) {
   return actuator.positionTracker.mapPositionFrom(position, 0, numPositions - 1);
@@ -40,6 +43,8 @@ inline int mapToPosition(int edgeCount) {
 }
 
 void printHeader() {
+  // ID
+  Serial.print(F("targetID,"));
   // Clock
   Serial.print(F("targetingTimeMilliseconds,"));
   Serial.print(F("targetingTimeMicroseconds,"));
@@ -73,7 +78,10 @@ void printHeader() {
 
 void reportState() {
   if (targetPosition == -1) return;
-  
+
+  // ID
+  Serial.print(targetID);
+  Serial.print(',');
   // Clock
   Serial.print(targetingTimer);
   Serial.print(',');
@@ -144,7 +152,7 @@ void setNewTargetPosition() {
   actuator.motionController.targetPosition.update(mapToEdgeCount(targetPosition));
   targetingTimer = 0;
   targetingTimerMicroseconds = 0;
-  maintainedPositionReported = false;
+  ++targetID;
 }
 
 void setup() {
@@ -163,15 +171,8 @@ void loop() {
   potentiometer.update();
   opticalSensor.update();
   if (actuator.state.current() != Actuator::State::operating) return;
-  if (actuator.motionController.state.current() != Actuator::MotionController::State::maintaining) {
-    reportState();
-    return;
-  }
-  if (!maintainedPositionReported && actuator.motor.state.current() == Components::States::Motor::braking) {
-    reportState();
-    maintainedPositionReported = true;
-  }
-  if (actuator.motionController.state.currentDuration() < 1000) return;
   reportState();
+  if (actuator.motionController.state.current() != Actuator::MotionController::State::maintaining) return;
+  if (actuator.motionController.state.currentDuration() < 1000) return;
   setNewTargetPosition();
 }

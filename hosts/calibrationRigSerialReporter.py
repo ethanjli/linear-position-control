@@ -7,6 +7,8 @@ import serial
 FILENAME = 'calibrationRig.csv'
 
 def main():
+    print('Please connect the calibration rig now.')
+    time.sleep(1.0)
     while True:
         try:
             ser = serial.Serial('/dev/ttyACM0', 115200)
