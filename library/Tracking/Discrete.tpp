@@ -179,14 +179,17 @@ int Discrete<Limits, EdgeCounter>::inferMotorPosition(bool &error) {
           return position.current();
         default:
           int newPosition;
+          uint8_t edgesCounted = edgeCounter.getAndReset();
           if (motor.resumeDirection() == FORWARD) {
-            newPosition = position.current() + edgeCounter.getAndReset();
+            newPosition = position.current() + edgesCounted;
+            forwardsEdgesSinceLastLimit += edgesCounted;
             if (newPosition == numTotalEdges) {
               Log.trace(F("Relocalizing to right limit switch..." CR));
               error = true;
             }
           } else { // motor.resumeDirection() == BACKWARD
-            newPosition = position.current() - edgeCounter.getAndReset();
+            newPosition = position.current() - edgesCounted;
+            backwardsEdgesSinceLastLimit += edgesCounted;
             if (newPosition == 0) {
               Log.trace(F("Relocalizing to left limit switch..." CR));
               error = true;
@@ -194,22 +197,35 @@ int Discrete<Limits, EdgeCounter>::inferMotorPosition(bool &error) {
           }
           return newPosition;
       }
-      break;
     case Limits::left:
+      onLimitPressed(Limits::left);
       return 0;
     case Limits::right:
+      onLimitPressed(Limits::right);
       return numTotalEdges;
     case Limits::either:
       if (limits.state.previous() == Limits::none) {
         limitSwitchPressDirection = motor.resumeDirection();
       }
       // limitSwitchPressDirection is same even when motor direction changes to release switch
-      if (limitSwitchPressDirection == BACKWARD) return 0;
-      else return numTotalEdges; // limitSwitchPressDirection == FORWARD
+      if (limitSwitchPressDirection == BACKWARD) {
+        onLimitPressed(Limits::left);
+        return 0;
+      } else { // limitSwitchPressDirection == FORWARD
+        onLimitPressed(Limits::right);
+        return numTotalEdges;
+      }
   }
   Log.warning(F("Relocalization required with invalid limits state." CR));
   error = true;
   return position.current();
+}
+
+template<class Limits, class EdgeCounter>
+void Discrete<Limits, EdgeCounter>::onLimitPressed(Components::States::Limits state) {
+  lastLimit.update(state);
+  forwardsEdgesSinceLastLimit = 0;
+  backwardsEdgesSinceLastLimit = 0;
 }
 
 } }

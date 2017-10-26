@@ -32,6 +32,9 @@ class Discrete {
     StateVariable<State> state;
     StateVariable<int> position;
     Components::MotorSpeed relocalizationSpeed = 255;
+    StateVariable<Components::States::Limits> lastLimit;
+    int forwardsEdgesSinceLastLimit = 0;
+    int backwardsEdgesSinceLastLimit = 0;
 
     void updateNumTotalEdges(int numEdges);
     int getNumTotalEdges() const;
@@ -60,6 +63,8 @@ class Discrete {
     int inferMotorPosition(bool &error);
 
     Components::MotorDirection limitSwitchPressDirection;
+
+    void onLimitPressed(Components::States::Limits state);
 };
 
 } }

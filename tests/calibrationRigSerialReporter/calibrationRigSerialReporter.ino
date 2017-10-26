@@ -50,8 +50,18 @@ void printHeader() {
   Serial.print(F("groundTruthPosition,"));
   // Baseline prediction
   Serial.print(F("estimatedPosition,"));
-  // Estimated position features
   Serial.print(F("estimatedEdgesFromLeft,"));
+  // Limits features
+  Serial.print(F("lastLimit,"));
+  Serial.print(F("timeSinceLastLimit,"));
+  Serial.print(F("edgesBetweenLimits,"));
+  Serial.print(F("atLeftLimit,"));
+  Serial.print(F("atRightLimit,"));
+  // Position tracking features
+  Serial.print(F("timeSinceLastEdge,"));
+  Serial.print(F("timeBetweenLastEdges,"));
+  Serial.print(F("forwardsEdgesSinceLastLimit,"));
+  Serial.print(F("backwardsEdgesSinceLastLimit,"));
   // Optical sensor features
   Serial.print(F("opticalSensorDarkness,"));
   // Motor features
@@ -80,8 +90,34 @@ void reportState() {
   // Baseline prediction
   Serial.print(mapToPosition(actuator.positionTracker.position.current()));
   Serial.print(',');
-  // Estimated position features
   Serial.print(actuator.positionTracker.position.current());
+  Serial.print(',');
+  // Limits features
+  switch (actuator.positionTracker.lastLimit.current()) {
+    case Components::States::Limits::left:
+      Serial.print(-1);
+      break;
+    case Components::States::Limits::right:
+      Serial.print(1);
+      break;
+  }
+  Serial.print(',');
+  Serial.print(actuator.positionTracker.lastLimit.currentDuration());
+  Serial.print(',');
+  Serial.print(actuator.positionTracker.getNumTotalEdges());
+  Serial.print(',');
+  Serial.print(actuator.positionTracker.atLeftLimit());
+  Serial.print(',');
+  Serial.print(actuator.positionTracker.atRightLimit());
+  Serial.print(',');
+  // Position tracking features
+  Serial.print(actuator.positionTracker.position.currentDuration());
+  Serial.print(',');
+  Serial.print(actuator.positionTracker.position.previousDistinctDuration());
+  Serial.print(',');
+  Serial.print(actuator.positionTracker.forwardsEdgesSinceLastLimit);
+  Serial.print(',');
+  Serial.print(actuator.positionTracker.backwardsEdgesSinceLastLimit);
   Serial.print(',');
   // Optical sensor features
   Serial.print(opticalSensor.state.current());
