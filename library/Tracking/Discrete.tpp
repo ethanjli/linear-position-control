@@ -113,16 +113,21 @@ void Discrete<Limits, EdgeCounter>::updateLocalizing() {
   }
   if (limits.state.current() == Limits::none) return; // wait until we've hit a limit
 
+  limitSwitchPressDirection = motor.resumeDirection();
   if (limits.state.previous() == Limits::none) {
     // Brake for a bit to let the motor stabilize at the limit
     limitSwitchTimer = 0;
-    limitSwitchPressDirection = motor.resumeDirection();
-    if (limitSwitchPressDirection == FORWARD) Log.trace(F("Just hit the right limit switch!" CR));
-    else Log.trace(F("Just hit the left limit switch!" CR)); // limitSwitchPressDirection == BACKWARD
+    if (limitSwitchPressDirection == FORWARD) {
+      onLimitPressed(Limits::right);
+      Log.trace(F("Just hit the right limit switch!" CR));
+    } else { // limitSwitchPressDirection == BACKWARD
+      onLimitPressed(Limits::left);
+      Log.trace(F("Just hit the left limit switch!" CR));
+    }
     motor.brake();
     return;
   }
-  if (limitSwitchTimer < limitSwitchTimeout) return; // Wait until we've settled on the left limit
+  if (limitSwitchTimer < limitSwitchTimeout) return; // Wait until we've settled on the limit
 
   // Start tracking
   edgeCounter.getAndReset();
