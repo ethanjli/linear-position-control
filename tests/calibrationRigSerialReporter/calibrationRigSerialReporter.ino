@@ -173,6 +173,6 @@ void loop() {
   if (actuator.state.current() != Actuator::State::operating) return;
   reportState();
   if (actuator.motionController.state.current() != Actuator::MotionController::State::maintaining) return;
-  if (actuator.motionController.state.currentDuration() < 1000) return;
+  if (actuator.motionController.state.currentDuration() < 250) return;
   setNewTargetPosition();
 }
