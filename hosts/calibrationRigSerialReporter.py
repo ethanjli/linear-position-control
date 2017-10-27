@@ -7,14 +7,14 @@ import serial
 FILENAME = 'calibrationRig.csv'
 
 def main():
-    print('Please connect the calibration rig now.')
-    time.sleep(1.0)
+    print('Please connect the calibration rig now...')
+    time.sleep(2.0)
     while True:
         try:
             ser = serial.Serial('/dev/ttyACM0', 115200)
             break
         except serial.serialutil.SerialException:
-            print('Could not connect! Trying again in 1 second...')
+            print('Arduino not found. Trying again in 1 second...')
             time.sleep(1.0)
 
     print('Connected!')
