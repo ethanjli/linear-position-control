@@ -22,12 +22,20 @@ def main():
     f = open('calibrationRig.csv', 'w')
 
     try:
+        num_fields_expected = None
         while True:
-            line = str(ser.readline(), 'ascii')
-            sys.stdout.write(line)
-            f.write(line)
-            f.close()
-            f = open('calibrationRig.csv', 'a')
+            line = str(ser.readline(), 'ascii').rstrip()
+            num_fields = line.count(',')
+            if num_fields_expected is None:
+                num_fields_expected = num_fields
+                print('Number of fields in output:', num_fields_expected)
+            if not (line.startswith('[') and line.endswith(']') and
+                    num_fields == num_fields_expected):
+                print('Malformed line:', line)
+            else:
+                print(line[1:-1], file=f)
+                f.close()
+                f = open('calibrationRig.csv', 'a')
     except KeyboardInterrupt:
         print('Quitting...')
         f.close()

@@ -199,6 +199,7 @@ void CalibrationRig<EncapsulatedLinearActuator>::setNewTargetPosition() {
 
 template<class EncapsulatedLinearActuator>
 void CalibrationRig<EncapsulatedLinearActuator>::printHeader() const {
+  Serial.print('[');
   // ID
   Serial.print(F("targetID,"));
   // Clock
@@ -229,13 +230,14 @@ void CalibrationRig<EncapsulatedLinearActuator>::printHeader() const {
   Serial.print(F("motorDirection,"));
   Serial.print(F("motorDuty"));
 
-  Serial.println();
+  Serial.println(']');
 }
 
 template<class EncapsulatedLinearActuator>
 void CalibrationRig<EncapsulatedLinearActuator>::printState() const {
   if (targetPosition == -1) return;
 
+  Serial.print('[');
   // ID
   Serial.print(targetID);
   Serial.print(',');
@@ -301,7 +303,7 @@ void CalibrationRig<EncapsulatedLinearActuator>::printState() const {
   Serial.print(',');
   Serial.print(actuator.motor.speed);
 
-  Serial.println();
+  Serial.println(']');
 }
 
 }
