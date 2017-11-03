@@ -56,14 +56,11 @@ void Position<Limits, EdgeCounter, PositionTracker>::updateUncalibrated() {
 
   if (limitsTracker.state.current() == Limits::both ||
       limitsTracker.state.current() == Limits::unknown) {
-    // Delay calibration as long as the limits are unknown or impossible
     return;
   }
 
-  // Start initialization
   state.update(State::initializing);
   Log.notice(F("Initializing motor position..." CR));
-  limitSwitchTimer = 0;
   motor.backwards(255);
 }
 
@@ -72,31 +69,28 @@ void Position<Limits, EdgeCounter, PositionTracker>::updateInitializing() {
   using Components::States::Limits;
 
   if (limitsTracker.state.current() == Limits::both) {
-    // Cancel calibration if both limit switches are pressed
     state.update(State::uncalibrated);
     Log.warning(F("Restarting motor position calibration..." CR));
     return;
   }
+
+  // Wait for the motor to hit and stabilize at the left limit
   if (limitsTracker.state.current() == Limits::none ||
       limitsTracker.state.current() == Limits::right) {
     return;
   }
   // limitsTracker.state.current() == Limits::left
-
   if (limitsTracker.state.previous() == Limits::none) {
-    // Brake for a bit to let the motor stabilize at the left limit
-    limitSwitchTimer = 0;
     motor.brake();
     return;
   }
-  if (limitSwitchTimer < limitSwitchTimeout) return;
+  if (limitsTracker.state.currentDuration() < limitSwitchTimeout) return;
 
   // Start calibration
   state.update(State::calibrating);
   if (expectedNumEdges != -1) Log.notice(F("Calibrating motor position, expecting to count %d edges..." CR), expectedNumEdges);
   else Log.notice(F("Calibrating motor position..." CR));
   edgeCounter.reset();
-  limitSwitchTimer = 0;
   motor.forwards(calibrationSpeed);
 }
 
@@ -106,7 +100,7 @@ void Position<Limits, EdgeCounter, PositionTracker>::updateCalibrating() {
 
   if (limitsTracker.state.current() == Limits::both ||
       (limitsTracker.state.current() == Limits::left &&
-       limitSwitchTimer > limitSwitchTimeout)) {
+       state.currentDuration() > limitSwitchTimeout)) {
     // Cancel calibration if both limit switches are pressed or the wrong limit switch is pressed
     motor.neutral();
     state.update(State::uncalibrated);
@@ -115,12 +109,12 @@ void Position<Limits, EdgeCounter, PositionTracker>::updateCalibrating() {
   }
 
   // Let the motor continue to run until it hits and settles at the right limit
-  if (limitsTracker.state.current() == Limits::none) return;
+  if (limitsTracker.state.current() != Limits::right) return;
   if (limitsTracker.state.previous() == Limits::none) {
     Log.trace(F("Just hit the right limit switch!" CR));
     motor.brake();
   }
-  if (limitSwitchTimer < limitSwitchTimeout) return;
+  if (limitsTracker.state.currentDuration() < limitSwitchTimeout) return;
 
   numEdges = edgeCounter.getAndReset();
   if (expectedNumEdges != -1 && numEdges != expectedNumEdges) {
@@ -129,6 +123,8 @@ void Position<Limits, EdgeCounter, PositionTracker>::updateCalibrating() {
     state.update(State::uncalibrated);
     return;
   }
+
+  // Finish calibration
   positionTracker.updateNumTotalEdges(numEdges);
   onPositionCalibrated();
 }

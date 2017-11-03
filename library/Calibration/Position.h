@@ -48,7 +48,6 @@ class Position {
     EdgeCounter &edgeCounter;
     PositionTracker &positionTracker;
 
-    elapsedMillis limitSwitchTimer;
     unsigned int limitSwitchTimeout = 250;
 
     int numEdges = 0;

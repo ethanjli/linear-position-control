@@ -40,8 +40,7 @@ void AbsoluteLimits<Limits>::update() {
       return;
   }
   // limits.state.current() == State::either
-  bool justPressed = limits.state.previous() == State::none;
-  if (justPressed || overrideUpdate) limitSwitchPressDirection = motor.resumeDirection();
+  if (limits.state.previous() == State::none) limitSwitchPressDirection = motor.resumeDirection();
   if (limitSwitchPressDirection == FORWARD) {
     state.update(State::right);
     lastLimit.update(State::right);

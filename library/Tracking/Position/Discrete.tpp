@@ -88,7 +88,6 @@ void Discrete<Limits, EdgeCounter>::updateUnlocalized() {
 
   // Start localization
   state.update(State::localizing);
-  limitsTracker.overrideUpdate = true;
   Log.trace(F("Resetting motor position to nearest limit switch..." CR));
   if (position.current() < numTotalEdges / 2) {
     motor.backwards(relocalizationSpeed);
@@ -126,7 +125,6 @@ void Discrete<Limits, EdgeCounter>::updateLocalizing() {
   // Start tracking
   edgeCounter.getAndReset();
   updateMotorPosition(true);
-  limitsTracker.overrideUpdate = false;
   Log.notice(F("Localized! Current position is %d." CR), position.current());
   state.update(State::tracking);
   motor.brake();

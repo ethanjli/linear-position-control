@@ -20,8 +20,6 @@ class AbsoluteLimits {
     StateVariable<State> state;
     StateVariable<State> lastLimit;
 
-    bool overrideUpdate = false;
-
   private:
     bool setupCompleted = false;
 
