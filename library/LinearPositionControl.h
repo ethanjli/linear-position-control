@@ -1,12 +1,15 @@
 #ifndef LinearPositionControl_h
 #define LinearPositionControl_h
 
+#include <elapsedMillis.h>
+
 #include "FastInterrupts.h"
 #include "StateVariable.h"
 #include "Motors.h"
 #include "LED.h"
 #include "DebouncedButton.h"
 #include "Limits.h"
+#include "AnalogSensor.h"
 #include "Calibration/Direction.h"
 #include "Calibration/Position.h"
 #include "Tracking/Limits.h"
@@ -113,6 +116,42 @@ class MultiplexedLinearActuator {
 
     void setup();
     void update();
+};
+
+template<class EncapsulatedLinearActuator>
+class CalibrationRig {
+  public:
+    CalibrationRig(
+        SharedComponents &shared,
+        EncapsulatedLinearActuator &actuator,
+        uint8_t potentiometerPin,
+        uint8_t opticalSensorAnalogPin
+    );
+
+    using State = typename EncapsulatedLinearActuator::State;
+
+    SharedComponents &shared;
+    EncapsulatedLinearActuator &actuator;
+    Components::AnalogSensor potentiometer;
+    Components::AnalogSensor opticalSensorAnalog;
+    StateVariable<State> &state;
+
+    const int numPositions = 1024;
+
+    int targetPosition = -1;
+    elapsedMillis targetingTimer;
+    elapsedMicros targetingTimerMicroseconds;
+    int targetID = -1;
+
+    void setup();
+    void update();
+
+    int mapToEdgeCount(int position) const;
+    int mapToPosition(int edgeCount) const;
+
+    void setNewTargetPosition();
+    void printHeader() const;
+    void printState() const;
 };
 
 }

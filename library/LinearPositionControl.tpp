@@ -149,6 +149,161 @@ void MultiplexedLinearActuator<
   actuator.update();
 }
 
+template<class EncapsulatedLinearActuator>
+CalibrationRig<EncapsulatedLinearActuator>::CalibrationRig(
+    SharedComponents &shared,
+    EncapsulatedLinearActuator &actuator,
+    uint8_t potentiometerPin,
+    uint8_t opticalSensorAnalogPin
+) :
+  shared(shared),
+  actuator(actuator),
+  potentiometer(potentiometerPin),
+  opticalSensorAnalog(opticalSensorAnalogPin),
+  state(actuator.state) {
+}
+
+template<class EncapsulatedLinearActuator>
+void CalibrationRig<EncapsulatedLinearActuator>::setup() {
+  Serial.begin(115200);
+  actuator.setup();
+  potentiometer.setup();
+  opticalSensorAnalog.setup();
+}
+
+template<class EncapsulatedLinearActuator>
+void CalibrationRig<EncapsulatedLinearActuator>::update() {
+  actuator.update();
+  potentiometer.update();
+  opticalSensorAnalog.update();
+}
+
+template<class EncapsulatedLinearActuator>
+int CalibrationRig<EncapsulatedLinearActuator>::mapToEdgeCount(int position) const {
+  return actuator.positionTracker.mapPositionFrom(position, 0, numPositions - 1);
+}
+
+template<class EncapsulatedLinearActuator>
+int CalibrationRig<EncapsulatedLinearActuator>::mapToPosition(int edgeCount) const {
+  return actuator.positionTracker.mapPositionTo(edgeCount, 0, numPositions - 1);
+}
+
+template<class EncapsulatedLinearActuator>
+void CalibrationRig<EncapsulatedLinearActuator>::setNewTargetPosition() {
+  targetPosition = random(numPositions);
+  actuator.motionController.targetPosition.update(mapToEdgeCount(targetPosition));
+  targetingTimer = 0;
+  targetingTimerMicroseconds = 0;
+  ++targetID;
+}
+
+template<class EncapsulatedLinearActuator>
+void CalibrationRig<EncapsulatedLinearActuator>::printHeader() const {
+  // ID
+  Serial.print(F("targetID,"));
+  // Clock
+  Serial.print(F("targetingTimeMilliseconds,"));
+  Serial.print(F("targetingTimeMicroseconds,"));
+  // Target
+  Serial.print(F("targetPosition,"));
+  Serial.print(F("targetEdgesFromLeft,"));
+  // Ground truth
+  Serial.print(F("groundTruthPosition,"));
+  // Baseline prediction
+  Serial.print(F("estimatedPosition,"));
+  Serial.print(F("estimatedEdgesFromLeft,"));
+  // Limits features
+  Serial.print(F("lastLimit,"));
+  Serial.print(F("timeSinceLastLimit,"));
+  Serial.print(F("edgesBetweenLimits,"));
+  Serial.print(F("atLeftLimit,"));
+  Serial.print(F("atRightLimit,"));
+  // Position tracking features
+  Serial.print(F("timeSinceLastEdge,"));
+  Serial.print(F("timeBetweenLastEdges,"));
+  Serial.print(F("forwardsEdgesSinceLastLimit,"));
+  Serial.print(F("backwardsEdgesSinceLastLimit,"));
+  // Optical sensor features
+  Serial.print(F("opticalSensorDarkness,"));
+  // Motor features
+  Serial.print(F("motorDirection,"));
+  Serial.print(F("motorDuty"));
+
+  Serial.println();
+}
+
+template<class EncapsulatedLinearActuator>
+void CalibrationRig<EncapsulatedLinearActuator>::printState() const {
+  if (targetPosition == -1) return;
+
+  // ID
+  Serial.print(targetID);
+  Serial.print(',');
+  // Clock
+  Serial.print(targetingTimer);
+  Serial.print(',');
+  Serial.print(targetingTimerMicroseconds);
+  Serial.print(',');
+  // Target
+  Serial.print(targetPosition);
+  Serial.print(',');
+  Serial.print(mapToEdgeCount(targetPosition));
+  Serial.print(',');
+  // Ground truth
+  Serial.print(potentiometer.state.current());
+  Serial.print(',');
+  // Baseline prediction
+  Serial.print(mapToPosition(actuator.positionTracker.position.current()));
+  Serial.print(',');
+  Serial.print(actuator.positionTracker.position.current());
+  Serial.print(',');
+  // Limits features
+  switch (actuator.limitsTracker.lastLimit.current()) {
+    case Components::States::Limits::left:
+      Serial.print(-1);
+      break;
+    case Components::States::Limits::right:
+      Serial.print(1);
+      break;
+  }
+  Serial.print(',');
+  Serial.print(actuator.limitsTracker.lastLimit.currentDuration());
+  Serial.print(',');
+  Serial.print(actuator.positionTracker.getNumTotalEdges());
+  Serial.print(',');
+  Serial.print(actuator.positionTracker.atLeftLimit());
+  Serial.print(',');
+  Serial.print(actuator.positionTracker.atRightLimit());
+  Serial.print(',');
+  // Position tracking features
+  Serial.print(actuator.positionTracker.position.currentDuration());
+  Serial.print(',');
+  Serial.print(actuator.positionTracker.position.previousDistinctDuration());
+  Serial.print(',');
+  Serial.print(actuator.positionTracker.forwardsEdgesSinceLastLimit);
+  Serial.print(',');
+  Serial.print(actuator.positionTracker.backwardsEdgesSinceLastLimit);
+  Serial.print(',');
+  // Optical sensor features
+  Serial.print(opticalSensorAnalog.state.current());
+  Serial.print(',');
+  // Motor features
+  switch (actuator.motor.state.current()) {
+    case Components::States::Motor::forwards:
+      Serial.print(1);
+      break;
+    case Components::States::Motor::backwards:
+      Serial.print(-1);
+      break;
+    default:
+      Serial.print(0);
+  }
+  Serial.print(',');
+  Serial.print(actuator.motor.speed);
+
+  Serial.println();
+}
+
 }
 
 #endif
