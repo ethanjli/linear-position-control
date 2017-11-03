@@ -9,6 +9,7 @@
 #include "Limits.h"
 #include "Calibration/Direction.h"
 #include "Calibration/Position.h"
+#include "Tracking/Limits.h"
 #include "LinearActuator.h"
 
 namespace LinearPositionControl {
@@ -41,11 +42,14 @@ class UnmultiplexedLinearActuator {
 
     using Limits = Components::AbsoluteLimits;
     using DirectionCalibrator = Calibration::Direction<Limits>;
+    using LimitsTracker = Tracking::AbsoluteLimits<Limits>;
     using PositionTracker = PositionTrackingStrategy<Limits, OpticalSensor>;
     using PositionCalibrator = Calibration::Position<Limits, OpticalSensor, PositionTracker>;
     using MotionController = MotionControlStrategy<PositionTracker>;
     using Actuator = LinearActuator<
-      DirectionCalibrator, PositionCalibrator, PositionTracker, MotionController
+      DirectionCalibrator, LimitsTracker,
+      PositionCalibrator, PositionTracker,
+      MotionController
     >;
     using State = typename Actuator::State;
 
@@ -56,6 +60,7 @@ class UnmultiplexedLinearActuator {
     Components::DebouncedButton limitSwitchRight;
     Components::AbsoluteLimits limits;
     DirectionCalibrator directionCalibrator;
+    LimitsTracker limitsTracker;
     PositionTracker positionTracker;
     PositionCalibrator positionCalibrator;
     MotionController motionController;
@@ -82,11 +87,14 @@ class MultiplexedLinearActuator {
 
     using Limits = Components::MultiplexedLimits;
     using DirectionCalibrator = Calibration::Direction<Limits>;
+    using LimitsTracker = Tracking::AbsoluteLimits<Limits>;
     using PositionTracker = PositionTrackingStrategy<Limits, OpticalSensor>;
     using PositionCalibrator = Calibration::Position<Limits, OpticalSensor, PositionTracker>;
     using MotionController = MotionControlStrategy<PositionTracker>;
     using Actuator = LinearActuator<
-      DirectionCalibrator, PositionCalibrator, PositionTracker, MotionController
+      DirectionCalibrator, LimitsTracker,
+      PositionCalibrator, PositionTracker,
+      MotionController
     >;
     using State = typename Actuator::State;
 
@@ -96,6 +104,7 @@ class MultiplexedLinearActuator {
     Components::DebouncedButton limitSwitches;
     Components::MultiplexedLimits limits;
     DirectionCalibrator directionCalibrator;
+    LimitsTracker limitsTracker;
     PositionTracker positionTracker;
     PositionCalibrator positionCalibrator;
     MotionController motionController;

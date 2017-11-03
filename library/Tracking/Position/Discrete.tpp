@@ -1,7 +1,5 @@
-#ifndef Tracking_Discrete_tpp
-#define Tracking_Discrete_tpp
-
-#include <ArduinoLog.h>
+#ifndef Tracking_Position_Discrete_tpp
+#define Tracking_Position_Discrete_tpp
 
 namespace LinearPositionControl { namespace Tracking {
 
@@ -10,10 +8,10 @@ namespace LinearPositionControl { namespace Tracking {
 template <class Limits, class EdgeCounter>
 Discrete<Limits, EdgeCounter>::Discrete(
     Components::Motor &motor,
-    Limits &limits,
+    Tracking::AbsoluteLimits<Limits> &limitsTracker,
     EdgeCounter &edgeCounter
 ) :
-  motor(motor), limits(limits), edgeCounter(edgeCounter) {
+  motor(motor), limitsTracker(limitsTracker), edgeCounter(edgeCounter) {
 }
 
 template <class Limits, class EdgeCounter>
@@ -21,7 +19,7 @@ void Discrete<Limits, EdgeCounter>::setup() {
   if (setupCompleted) return;
 
   motor.setup();
-  limits.setup();
+  limitsTracker.setup();
   edgeCounter.setup();
 
   state.setup(State::uncalibrated);
@@ -31,7 +29,6 @@ void Discrete<Limits, EdgeCounter>::setup() {
 
 template <class Limits, class EdgeCounter>
 void Discrete<Limits, EdgeCounter>::update() {
-  limits.update();
   edgeCounter.update();
   switch (state.current()) {
     case State::tracking:
@@ -83,16 +80,16 @@ template<class Limits, class EdgeCounter>
 void Discrete<Limits, EdgeCounter>::updateUnlocalized() {
   using Components::States::Limits;
 
-  if (limits.state.current() == Limits::both ||
-      limits.state.current() == Limits::unknown) {
+  if (limitsTracker.state.current() == Limits::both ||
+      limitsTracker.state.current() == Limits::unknown) {
     // Delay localization as long as the limits are unknown or impossible
     return;
   }
 
   // Start localization
   state.update(State::localizing);
+  limitsTracker.overrideUpdate = true;
   Log.trace(F("Resetting motor position to nearest limit switch..." CR));
-  limitSwitchTimer = 0;
   if (position.current() < numTotalEdges / 2) {
     motor.backwards(relocalizationSpeed);
   } else {
@@ -104,34 +101,32 @@ template<class Limits, class EdgeCounter>
 void Discrete<Limits, EdgeCounter>::updateLocalizing() {
   using Components::States::Limits;
 
-  if (limits.state.current() == Limits::both) {
+  if (limitsTracker.state.current() == Limits::both) {
     // Cancel calibration if both limit switches are pressed
     motor.neutral();
     state.update(State::unlocalized);
     Log.warning(F("Restarting motor position localization..." CR));
     return;
   }
-  if (limits.state.current() == Limits::none) return; // wait until we've hit a limit
+  if (limitsTracker.state.current() == Limits::none) return; // wait until we've hit a limit
 
-  limitSwitchPressDirection = motor.resumeDirection();
-  if (limits.state.previous() == Limits::none) {
+  if (limitsTracker.state.previous() == Limits::none) {
     // Brake for a bit to let the motor stabilize at the limit
-    limitSwitchTimer = 0;
-    if (limitSwitchPressDirection == FORWARD) {
-      onLimitPressed(Limits::right);
+    onLimitPressed(limitsTracker.state.current());
+    if (limitsTracker.state.current() == Limits::right) {
       Log.trace(F("Just hit the right limit switch!" CR));
-    } else { // limitSwitchPressDirection == BACKWARD
-      onLimitPressed(Limits::left);
+    } else { // limitsTracker.state.current() == Limits::left
       Log.trace(F("Just hit the left limit switch!" CR));
     }
     motor.brake();
     return;
   }
-  if (limitSwitchTimer < limitSwitchTimeout) return; // Wait until we've settled on the limit
+  if (limitsTracker.state.currentDuration() < limitSwitchTimeout) return; // Wait until we've settled on the limit
 
   // Start tracking
   edgeCounter.getAndReset();
   updateMotorPosition(true);
+  limitsTracker.overrideUpdate = false;
   Log.notice(F("Localized! Current position is %d." CR), position.current());
   state.update(State::tracking);
   motor.brake();
@@ -172,7 +167,13 @@ int Discrete<Limits, EdgeCounter>::inferMotorPosition(bool &error) {
   using Components::States::Limits;
 
   error = false;
-  switch (limits.state.current()) {
+  switch (limitsTracker.state.current()) {
+    case Limits::left:
+      onLimitPressed(Limits::left);
+      return 0;
+    case Limits::right:
+      onLimitPressed(Limits::right);
+      return numTotalEdges;
     case Limits::none: // update position with counter
       switch (motor.state.current()) {
         case Motor::neutral:
@@ -202,24 +203,6 @@ int Discrete<Limits, EdgeCounter>::inferMotorPosition(bool &error) {
           }
           return newPosition;
       }
-    case Limits::left:
-      onLimitPressed(Limits::left);
-      return 0;
-    case Limits::right:
-      onLimitPressed(Limits::right);
-      return numTotalEdges;
-    case Limits::either:
-      if (limits.state.previous() == Limits::none) {
-        limitSwitchPressDirection = motor.resumeDirection();
-      }
-      // limitSwitchPressDirection is same even when motor direction changes to release switch
-      if (limitSwitchPressDirection == BACKWARD) {
-        onLimitPressed(Limits::left);
-        return 0;
-      } else { // limitSwitchPressDirection == FORWARD
-        onLimitPressed(Limits::right);
-        return numTotalEdges;
-      }
   }
   Log.warning(F("Relocalization required with invalid limits state." CR));
   error = true;
@@ -228,7 +211,6 @@ int Discrete<Limits, EdgeCounter>::inferMotorPosition(bool &error) {
 
 template<class Limits, class EdgeCounter>
 void Discrete<Limits, EdgeCounter>::onLimitPressed(Components::States::Limits state) {
-  lastLimit.update(state);
   forwardsEdgesSinceLastLimit = 0;
   backwardsEdgesSinceLastLimit = 0;
 }

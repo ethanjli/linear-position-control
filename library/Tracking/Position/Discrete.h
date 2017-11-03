@@ -1,11 +1,10 @@
-#ifndef Tracking_Discrete_h
-#define Tracking_Discrete_h
-
-#include <elapsedMillis.h>
+#ifndef Tracking_Position_Discrete_h
+#define Tracking_Position_Discrete_h
 
 #include "StateVariable.h"
 #include "Motors.h"
 #include "Limits.h"
+#include "Tracking/Limits.h"
 #include "OpticalSensor.h"
 
 namespace LinearPositionControl { namespace Tracking {
@@ -22,9 +21,14 @@ namespace States {
 template<class Limits, class EdgeCounter>
 class Discrete {
   public:
-    Discrete(Components::Motor &motor, Limits &limits, EdgeCounter &edgeCounter);
+    Discrete(
+        Components::Motor &motor,
+        Tracking::AbsoluteLimits<Limits> &limitsTracker,
+        EdgeCounter &edgeCounter
+    );
 
     using State = States::Discrete;
+    using LimitsTracker = Tracking::AbsoluteLimits<Limits>;
 
     void setup();
     void update();
@@ -32,7 +36,6 @@ class Discrete {
     StateVariable<State> state;
     StateVariable<int> position;
     Components::MotorSpeed relocalizationSpeed = 255;
-    StateVariable<Components::States::Limits> lastLimit;
     int forwardsEdgesSinceLastLimit = 0;
     int backwardsEdgesSinceLastLimit = 0;
 
@@ -48,10 +51,9 @@ class Discrete {
 
   protected:
     Components::Motor &motor;
-    Limits &limits;
+    LimitsTracker &limitsTracker;
     EdgeCounter &edgeCounter;
 
-    elapsedMillis limitSwitchTimer;
     unsigned int limitSwitchTimeout = 250;
 
     int numTotalEdges = 0;
@@ -61,8 +63,6 @@ class Discrete {
     void updateTracking();
     void updateMotorPosition(bool setup = false);
     int inferMotorPosition(bool &error);
-
-    Components::MotorDirection limitSwitchPressDirection;
 
     void onLimitPressed(Components::States::Limits state);
 };

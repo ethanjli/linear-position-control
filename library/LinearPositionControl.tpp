@@ -45,10 +45,15 @@ UnmultiplexedLinearActuator<
   ),
   limits(limitSwitchLeft, limitSwitchRight),
   directionCalibrator(motor, limits),
-  positionTracker(motor, limits, opticalSensor),
-  positionCalibrator(motor, limits, opticalSensor, positionTracker),
+  limitsTracker(motor, limits),
+  positionTracker(motor, limitsTracker, opticalSensor),
+  positionCalibrator(motor, limitsTracker, opticalSensor, positionTracker),
   motionController(motor, positionTracker),
-  actuator(directionCalibrator, positionCalibrator, positionTracker, motionController),
+  actuator(
+    directionCalibrator, limitsTracker,
+    positionCalibrator, positionTracker,
+    motionController
+  ),
   state(actuator.state) {
 }
 
@@ -103,10 +108,15 @@ MultiplexedLinearActuator<
   limitSwitches(limitSwitchesSensorPin, getInterruptCounter(limitSwitchesSensorPin), 5),
   limits(limitSwitches),
   directionCalibrator(motor, limits),
-  positionTracker(motor, limits, opticalSensor),
-  positionCalibrator(motor, limits, opticalSensor, positionTracker),
+  limitsTracker(motor, limits),
+  positionTracker(motor, limitsTracker, opticalSensor),
+  positionCalibrator(motor, limitsTracker, opticalSensor, positionTracker),
   motionController(motor, positionTracker),
-  actuator(directionCalibrator, positionCalibrator, positionTracker, motionController),
+  actuator(
+    directionCalibrator, limitsTracker,
+    positionCalibrator, positionTracker,
+    motionController
+  ),
   state(actuator.state)
 {
 }

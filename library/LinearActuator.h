@@ -19,6 +19,7 @@ namespace States {
 
 template <
   class DirectionCalibrator,
+  class LimitsTracker,
   class PositionCalibrator,
   class PositionTracker,
   class MotionController
@@ -27,6 +28,7 @@ class LinearActuator {
   public:
     LinearActuator(
         DirectionCalibrator &directionCalibrator,
+        LimitsTracker &limitsTracker,
         PositionCalibrator &positionCalibrator,
         PositionTracker &positionTracker,
         MotionController &motionController
@@ -43,6 +45,7 @@ class LinearActuator {
     bool setupCompleted = false;
 
     DirectionCalibrator &directionCalibrator;
+    LimitsTracker &limitsTracker;
     PositionCalibrator &positionCalibrator;
     PositionTracker &positionTracker;
     MotionController &motionController;

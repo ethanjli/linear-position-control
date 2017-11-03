@@ -5,7 +5,7 @@
 
 #include "StateVariable.h"
 #include "Motors.h"
-#include "Limits.h"
+#include "Tracking/Limits.h"
 #include "OpticalSensor.h"
 
 namespace LinearPositionControl { namespace Calibration {
@@ -24,12 +24,13 @@ class Position {
   public:
     Position(
         Components::Motor &motor,
-        Limits &limits,
+        Tracking::AbsoluteLimits<Limits> &limitsTracker,
         EdgeCounter &edgeCounter,
         PositionTracker &positionTracker
     );
 
     using State = States::Position;
+    using LimitsTracker = Tracking::AbsoluteLimits<Limits>;
 
     void setup();
     void update();
@@ -43,7 +44,7 @@ class Position {
 
   protected:
     Components::Motor &motor;
-    Limits &limits;
+    LimitsTracker &limitsTracker;
     EdgeCounter &edgeCounter;
     PositionTracker &positionTracker;
 

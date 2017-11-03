@@ -7,7 +7,7 @@
 #define SENSOR_PIN12
 #include <LinearPositionControl.h>
 #include <OpticalSensor.h>
-#include <Tracking/Discrete.h>
+#include <Tracking/Position/Discrete.h>
 #include <Motion/Hysteresis.h>
 #include <AnalogSensor.h>
 using namespace LinearPositionControl;
@@ -101,7 +101,7 @@ void reportState() {
   Serial.print(actuator.positionTracker.position.current());
   Serial.print(',');
   // Limits features
-  switch (actuator.positionTracker.lastLimit.current()) {
+  switch (actuator.limitsTracker.lastLimit.current()) {
     case Components::States::Limits::left:
       Serial.print(-1);
       break;
@@ -110,7 +110,7 @@ void reportState() {
       break;
   }
   Serial.print(',');
-  Serial.print(actuator.positionTracker.lastLimit.currentDuration());
+  Serial.print(actuator.limitsTracker.lastLimit.currentDuration());
   Serial.print(',');
   Serial.print(actuator.positionTracker.getNumTotalEdges());
   Serial.print(',');

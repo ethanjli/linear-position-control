@@ -5,7 +5,7 @@
 #define SENSOR_PIN12
 #include <LinearPositionControl.h>
 #include <OpticalSensor.h>
-#include <Tracking/Discrete.h>
+#include <Tracking/Position/Discrete.h>
 #include <Motion/Neutral.h>
 using namespace LinearPositionControl;
 

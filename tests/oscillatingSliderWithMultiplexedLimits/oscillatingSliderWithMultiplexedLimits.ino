@@ -1,11 +1,11 @@
-#define DISABLE_LOGGING
+//#define DISABLE_LOGGING
 #include <ArduinoLog.h>
 
 #define SENSOR_PIN4
 #define SENSOR_PIN12
 #include <LinearPositionControl.h>
 #include <OpticalSensor.h>
-#include <Tracking/Discrete.h>
+#include <Tracking/Position/Discrete.h>
 #include <Motion/Oscillator.h>
 using namespace LinearPositionControl;
 

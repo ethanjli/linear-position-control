@@ -5,7 +5,7 @@
 #define SENSOR_PIN12
 #include <LinearPositionControl.h>
 #include <OpticalSensor.h>
-#include <Tracking/Discrete.h>
+#include <Tracking/Position/Discrete.h>
 #include <Motion/Hysteresis.h>
 using namespace LinearPositionControl;
 
@@ -27,7 +27,7 @@ void setup() {
 #endif
   actuator.setup();
   actuator.positionCalibrator.expectedNumEdges = 32;
-  actuator.motor.speed = 100;
+  actuator.motor.speed = 127;
   randomSeed(analogRead(0));
 }
 
@@ -35,7 +35,7 @@ void loop() {
   actuator.update();
   if (actuator.state.current() != Actuator::State::operating) return;
   if (actuator.motionController.state.current() != Actuator::MotionController::State::maintaining) return;
-  if (actuator.motionController.state.currentDuration() < 1000) return;
+  if (actuator.motionController.state.currentDuration() < 2000) return;
   int newTargetPosition = actuator.positionTracker.mapPositionFrom(random(numCuvettes), 0, numCuvettes - 1);
   actuator.motionController.targetPosition.update(newTargetPosition);
 }
