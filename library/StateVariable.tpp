@@ -22,7 +22,9 @@ void StateVariable<State>::update(State nextState) {
   if (currentState != nextState) {
     previousDistinctState = currentState;
     previousDistinctTimer = currentTimer;
+    previousDistinctTimerMicros = currentTimerMicros;
     currentTimer = 0;
+    currentTimerMicros = 0;
   }
   currentState = nextState;
 }
@@ -50,6 +52,16 @@ inline unsigned long StateVariable<State>::currentDuration() const {
 template <class State>
 inline unsigned long StateVariable<State>::previousDistinctDuration() const {
   return previousDistinctTimer;
+}
+
+template <class State>
+inline unsigned long StateVariable<State>::currentDurationMicros() const {
+  return currentTimerMicros;
+}
+
+template <class State>
+inline unsigned long StateVariable<State>::previousDistinctDurationMicros() const {
+  return previousDistinctTimerMicros;
 }
 
 template <class State>

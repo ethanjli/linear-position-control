@@ -216,12 +216,15 @@ void CalibrationRig<EncapsulatedLinearActuator>::printHeader() const {
   // Limits features
   Serial.print(F("lastLimit,"));
   Serial.print(F("timeSinceLastLimit,"));
+  Serial.print(F("timeSinceLastLimitMicroseconds,"));
   Serial.print(F("edgesBetweenLimits,"));
   Serial.print(F("atLeftLimit,"));
   Serial.print(F("atRightLimit,"));
   // Position tracking features
   Serial.print(F("timeSinceLastEdge,"));
+  Serial.print(F("timeSinceLastEdgeMicroseconds,"));
   Serial.print(F("timeBetweenLastEdges,"));
+  Serial.print(F("timeBetweenLastEdgesMicroseconds,"));
   Serial.print(F("forwardsEdgesSinceLastLimit,"));
   Serial.print(F("backwardsEdgesSinceLastLimit,"));
   // Optical sensor features
@@ -271,6 +274,8 @@ void CalibrationRig<EncapsulatedLinearActuator>::printState() const {
   Serial.print(',');
   Serial.print(actuator.limitsTracker.lastLimit.currentDuration());
   Serial.print(',');
+  Serial.print(actuator.limitsTracker.lastLimit.currentDurationMicros());
+  Serial.print(',');
   Serial.print(actuator.positionTracker.getNumTotalEdges());
   Serial.print(',');
   Serial.print(actuator.positionTracker.atLeftLimit());
@@ -280,7 +285,11 @@ void CalibrationRig<EncapsulatedLinearActuator>::printState() const {
   // Position tracking features
   Serial.print(actuator.positionTracker.position.currentDuration());
   Serial.print(',');
+  Serial.print(actuator.positionTracker.position.currentDurationMicros());
+  Serial.print(',');
   Serial.print(actuator.positionTracker.position.previousDistinctDuration());
+  Serial.print(',');
+  Serial.print(actuator.positionTracker.position.previousDistinctDurationMicros());
   Serial.print(',');
   Serial.print(actuator.positionTracker.forwardsEdgesSinceLastLimit);
   Serial.print(',');
