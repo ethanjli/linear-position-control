@@ -5,7 +5,7 @@
 #define SENSOR_PIN12
 #include <LinearPositionControl.h>
 #include <OpticalSensor.h>
-#include <Tracking/Discrete.h>
+#include <Tracking/Position/Discrete.h>
 #include <Motion/Hysteresis.h>
 using namespace LinearPositionControl;
 
@@ -19,7 +19,7 @@ SharedComponents shared;
 
 // Globals
 
-using Actuator = MultiplexedLinearActuator<Components::EdgeCounter, Tracking::Discrete, Motion::Hysteresis>;
+using Actuator = MultiplexedLinearActuator<Components::EdgeCounter, Tracking::Position::Discrete, Motion::Hysteresis>;
 Actuator actuator(shared, M2, 4, 12);
 
 void setup() {

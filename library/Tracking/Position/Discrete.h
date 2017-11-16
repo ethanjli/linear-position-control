@@ -6,17 +6,9 @@
 #include "Limits.h"
 #include "Tracking/Limits.h"
 #include "OpticalSensor.h"
+#include "Position.h"
 
-namespace LinearPositionControl { namespace Tracking {
-
-namespace States {
-  enum class Discrete : uint8_t {
-    uncalibrated,
-    unlocalized,
-    localizing,
-    tracking
-  };
-}
+namespace LinearPositionControl { namespace Tracking { namespace Position {
 
 template<class Limits, class EdgeCounter>
 class Discrete {
@@ -27,7 +19,7 @@ class Discrete {
         EdgeCounter &edgeCounter
     );
 
-    using State = States::Discrete;
+    using State = States::Position;
     using LimitsTracker = Tracking::AbsoluteLimits<Limits>;
 
     void setup();
@@ -67,7 +59,7 @@ class Discrete {
     void onLimitPressed(Components::States::Limits state);
 };
 
-} }
+} } }
 
 #include "Discrete.tpp"
 

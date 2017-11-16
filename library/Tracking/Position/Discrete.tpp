@@ -1,7 +1,7 @@
 #ifndef Tracking_Position_Discrete_tpp
 #define Tracking_Position_Discrete_tpp
 
-namespace LinearPositionControl { namespace Tracking {
+namespace LinearPositionControl { namespace Tracking { namespace Position {
 
 // Discrete
 
@@ -213,7 +213,7 @@ void Discrete<Limits, EdgeCounter>::onLimitPressed(Components::States::Limits st
   backwardsEdgesSinceLastLimit = 0;
 }
 
-} }
+} } }
 
 #endif
 

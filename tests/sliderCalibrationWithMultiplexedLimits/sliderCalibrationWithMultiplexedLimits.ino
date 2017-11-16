@@ -15,7 +15,7 @@ SharedComponents shared;
 
 // Globals
 
-using Actuator = MultiplexedLinearActuator<Components::EdgeCounter, Tracking::Discrete, Motion::Neutral>;
+using Actuator = MultiplexedLinearActuator<Components::EdgeCounter, Tracking::Position::Discrete, Motion::Neutral>;
 Actuator actuator(shared, M2, 4, 12);
 
 void setup() {

@@ -16,7 +16,7 @@ SharedComponents shared;
 
 // Hardware Abstraction Layer
 
-using Actuator = MultiplexedLinearActuator<Components::EdgeCounter, Tracking::Discrete, Motion::Hysteresis>;
+using Actuator = MultiplexedLinearActuator<Components::EdgeCounter, Tracking::Position::Discrete, Motion::Hysteresis>;
 Actuator actuator(shared, M2, 4, 12);
 CalibrationRig<Actuator> calibrationRig(shared, actuator, A0, A1);
 

@@ -6,7 +6,7 @@
 #define SENSOR_PIN12
 #include <LinearPositionControl.h>
 #include <OpticalSensor.h>
-#include <Tracking/Discrete.h>
+#include <Tracking/Position/Discrete.h>
 #include <Motion/Neutral.h>
 using namespace LinearPositionControl;
 
@@ -16,7 +16,7 @@ SharedComponents shared;
 
 // Globals
 
-using Actuator = UnmultiplexedLinearActuator<Components::EdgeCounter, Tracking::Discrete, Motion::Neutral>;
+using Actuator = UnmultiplexedLinearActuator<Components::EdgeCounter, Tracking::Position::Discrete, Motion::Neutral>;
 Actuator actuator(shared, M2, 4, 8, 12);
 
 void setup() {
