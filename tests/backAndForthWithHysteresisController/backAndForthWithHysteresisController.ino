@@ -38,7 +38,7 @@ void loop() {
   if (actuator.state.current() != Actuator::State::operating) return;
   if (actuator.motionController.state.current() != Actuator::MotionController::State::maintaining) return;
   if (actuator.motionController.state.currentDuration() < 1000) return;
-  int newTargetPosition = actuator.positionTracker.mapPositionFrom(cuvetteOrder[cuvetteIndex], 0, numCuvettes - 1);
+  int newTargetPosition = actuator.positionTracker.mapPositionFrom(cuvetteOrder[cuvetteIndex], numCuvettes - 1);
   cuvetteIndex = (cuvetteIndex + 1) % numCuvettes;
   actuator.motionController.targetPosition.update(newTargetPosition);
 }

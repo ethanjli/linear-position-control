@@ -41,8 +41,8 @@ void loop() {
   if (actuator.motionController.state.current() != Actuator::MotionController::State::maintaining) return;
   if (actuator.motionController.state.currentDuration() < 1000) return;
   Log.notice(F("Actual tracked position is %d." CR), actuator.positionTracker.position.current());
-  Log.notice(F("Ground truth position is %d, which maps to %d." CR), potentiometer.state.current(), actuator.positionTracker.mapPositionFrom(potentiometer.state.current(), 0, numPositions - 1));
+  Log.notice(F("Ground truth position is %d, which maps to %d." CR), potentiometer.state.current(), actuator.positionTracker.mapPositionFrom(potentiometer.state.current(), numPositions - 1));
   int newTargetPosition = random(numPositions);
-  Log.notice(F("Targeting position %d, which maps to %d." CR), newTargetPosition, actuator.positionTracker.mapPositionFrom(newTargetPosition, 0, numPositions - 1));
-  actuator.motionController.targetPosition.update(actuator.positionTracker.mapPositionFrom(newTargetPosition, 0, numPositions - 1));
+  Log.notice(F("Targeting position %d, which maps to %d." CR), newTargetPosition, actuator.positionTracker.mapPositionFrom(newTargetPosition, numPositions - 1));
+  actuator.motionController.targetPosition.update(actuator.positionTracker.mapPositionFrom(newTargetPosition, numPositions - 1));
 }

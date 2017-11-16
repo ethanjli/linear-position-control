@@ -72,8 +72,18 @@ int Discrete<Limits, EdgeCounter>::mapPositionTo(int position, int toMin, int to
 }
 
 template<class Limits, class EdgeCounter>
+int Discrete<Limits, EdgeCounter>::mapPositionTo(int position, int toMax) const {
+  return map(position, 0, numTotalEdges, 0, toMax);
+}
+
+template<class Limits, class EdgeCounter>
 int Discrete<Limits, EdgeCounter>::mapPositionFrom(int position, int fromMin, int fromMax) const {
   return map(position, fromMin, fromMax, 0, numTotalEdges);
+}
+
+template<class Limits, class EdgeCounter>
+int Discrete<Limits, EdgeCounter>::mapPositionFrom(int position, int fromMax) const {
+  return map(position, 0, fromMax, 0, numTotalEdges);
 }
 
 template<class Limits, class EdgeCounter>

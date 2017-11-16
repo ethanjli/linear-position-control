@@ -36,7 +36,9 @@ class Discrete {
     bool atLeftLimit() const;
     bool atRightLimit() const;
     int mapPositionTo(int position, int toMin, int toMax) const;
+    int mapPositionTo(int position, int toMax) const;
     int mapPositionFrom(int position, int fromMin, int fromMax) const;
+    int mapPositionFrom(int position, int fromMax) const;
 
   private:
     bool setupCompleted = false;

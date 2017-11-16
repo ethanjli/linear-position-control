@@ -36,6 +36,6 @@ void loop() {
   if (actuator.state.current() != Actuator::State::operating) return;
   if (actuator.motionController.state.current() != Actuator::MotionController::State::maintaining) return;
   if (actuator.motionController.state.currentDuration() < 2000) return;
-  int newTargetPosition = actuator.positionTracker.mapPositionFrom(random(numCuvettes), 0, numCuvettes - 1);
+  int newTargetPosition = actuator.positionTracker.mapPositionFrom(random(numCuvettes), numCuvettes - 1);
   actuator.motionController.targetPosition.update(newTargetPosition);
 }
