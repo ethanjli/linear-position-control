@@ -1,4 +1,5 @@
-//#define DISABLE_LOGGING
+#define DISABLE_LOGGING
+//#define DISABLE_PLOT
 #include <ArduinoLog.h>
 
 #define SENSOR_PIN4
@@ -24,6 +25,10 @@ void setup() {
 #ifndef DISABLE_LOGGING
   Serial.begin(115200);
   Log.begin(LOG_LEVEL_NOTICE, &Serial);
+#else
+#ifndef DISABLE_PLOT
+  Serial.begin(115200);
+#endif  
 #endif
   actuator.setup();
   actuator.positionCalibrator.expectedNumEdges = 32;
@@ -33,6 +38,13 @@ void setup() {
 
 void loop() {
   actuator.update();
+#ifdef DISABLE_LOGGING
+#ifndef DISABLE_PLOT
+  Serial.print(analogRead(A1));
+  Serial.print(',');
+  Serial.println(1023 * digitalRead(A1));
+#endif
+#endif
   if (actuator.state.current() != Actuator::State::operating) return;
   if (actuator.motionController.state.current() != Actuator::MotionController::State::maintaining) return;
   if (actuator.motionController.state.currentDuration() < 2000) return;
