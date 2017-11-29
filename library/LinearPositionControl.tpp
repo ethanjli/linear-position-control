@@ -200,7 +200,7 @@ void CalibrationRig<EncapsulatedLinearActuator>::setNewTargetPosition() {
 
 template<class EncapsulatedLinearActuator>
 void CalibrationRig<EncapsulatedLinearActuator>::setLocalizationPosition() {
-  targetPosition = (potentiometer.state.current() < numPositions / 2) ? 0 : numPositions - 1;
+  targetPosition = (numPositions - 1) * random(2);
   actuator.motionController.targetPosition.update(mapToEdgeCount(targetPosition));
   targeting = false;
 }
