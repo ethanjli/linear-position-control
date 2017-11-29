@@ -1,4 +1,4 @@
-#define DISABLE_LOGGING
+//#define DISABLE_LOGGING
 //#define DISABLE_PLOT
 #include <ArduinoLog.h>
 

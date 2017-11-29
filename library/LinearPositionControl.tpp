@@ -195,6 +195,14 @@ void CalibrationRig<EncapsulatedLinearActuator>::setNewTargetPosition() {
   targetingTimer = 0;
   targetingTimerMicroseconds = 0;
   ++targetID;
+  targeting = true;
+}
+
+template<class EncapsulatedLinearActuator>
+void CalibrationRig<EncapsulatedLinearActuator>::setLocalizationPosition() {
+  targetPosition = (potentiometer.state.current() < numPositions / 2) ? 0 : numPositions - 1;
+  actuator.motionController.targetPosition.update(mapToEdgeCount(targetPosition));
+  targeting = false;
 }
 
 template<class EncapsulatedLinearActuator>

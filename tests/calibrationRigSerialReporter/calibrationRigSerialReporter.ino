@@ -22,7 +22,7 @@ CalibrationRig<Actuator> calibrationRig(shared, actuator, A0, A1);
 
 void setup() {
   calibrationRig.setup();
-  actuator.positionCalibrator.expectedNumEdges = 24;
+  actuator.positionCalibrator.expectedNumEdges = 20;
   actuator.motor.speed = 255;
   randomSeed(analogRead(0));
   calibrationRig.printHeader();
@@ -31,8 +31,14 @@ void setup() {
 void loop() {
   calibrationRig.update();
   if (actuator.state.current() != Actuator::State::operating) return;
-  if (calibrationRig.targetID > 0) calibrationRig.printState();
+#ifdef DISABLE_LOGGING
+  if (calibrationRig.targetID > 0 && calibrationRig.targeting) calibrationRig.printState();
+#endif
   if (actuator.motionController.state.current() != Actuator::MotionController::State::maintaining) return;
   if (actuator.motionController.state.currentDuration() < 250) return;
-  calibrationRig.setNewTargetPosition();
+  if (calibrationRig.targeting) {
+    calibrationRig.setLocalizationPosition();
+  } else {
+    calibrationRig.setNewTargetPosition();
+  }
 }

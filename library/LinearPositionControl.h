@@ -142,6 +142,7 @@ class CalibrationRig {
     elapsedMillis targetingTimer;
     elapsedMicros targetingTimerMicroseconds;
     int targetID = -1;
+    bool targeting = true;
 
     void setup();
     void update();
@@ -150,6 +151,7 @@ class CalibrationRig {
     int mapToPosition(int edgeCount) const;
 
     void setNewTargetPosition();
+    void setLocalizationPosition();
     void printHeader() const;
     void printState() const;
 };
