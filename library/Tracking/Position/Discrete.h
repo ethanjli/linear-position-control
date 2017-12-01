@@ -56,7 +56,7 @@ class Discrete {
     void updateLocalizing();
     void updateTracking();
     void updateMotorPosition(bool setup = false);
-    int inferMotorPosition(bool &error);
+    int inferMotorPosition(bool &error, bool setup = false);
 
     void onLimitPressed(Components::States::Limits state);
 };

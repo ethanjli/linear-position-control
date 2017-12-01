@@ -13,7 +13,7 @@ EdgeCounter::EdgeCounter(uint8_t sensorPin, volatile uint8_t &interruptCounter) 
 void EdgeCounter::setup() {
   if (setupCompleted) return;
 
-  pinMode(sensorPin, INPUT);
+  pinMode(sensorPin, INPUT_PULLUP);
   interruptCounter = 0;
   enableInterruptFast(sensorPin, CHANGE);
   if (digitalRead(sensorPin)) state.setup(State::light);
@@ -31,6 +31,10 @@ void EdgeCounter::reset() {
   disableInterrupt(sensorPin);
   interruptCounter = 0;
   enableInterruptFast(sensorPin, CHANGE);
+}
+
+uint8_t EdgeCounter::get() {
+  return interruptCounter;
 }
 
 uint8_t EdgeCounter::getAndReset() {

@@ -170,49 +170,59 @@ void Discrete<Limits, EdgeCounter>::updateMotorPosition(bool setup) {
 }
 
 template<class Limits, class EdgeCounter>
-int Discrete<Limits, EdgeCounter>::inferMotorPosition(bool &error) {
+int Discrete<Limits, EdgeCounter>::inferMotorPosition(bool &error, bool setup) {
   using Components::States::Motor;
   using Components::States::Limits;
 
   error = false;
   switch (limitsTracker.state.current()) {
     case Limits::left:
+      if (position.current() != 0 && !setup) {
+            Log.error(F("Left limit was hit at position %d..." CR), position.current());
+      }
       onLimitPressed(Limits::left);
       return 0;
     case Limits::right:
       onLimitPressed(Limits::right);
+      if (position.current() != numTotalEdges && !setup) {
+            Log.error(F("Right limit was hit at position %d..." CR), position.current());
+      }
       return numTotalEdges;
     case Limits::none: // update position with counter
       switch (motor.state.current()) {
         case Motor::neutral:
-        //case Motor::braking:
           if (edgeCounter.getAndReset()) {
-            Log.warning(F("Relocalization required because of motion while the motor was stopped." CR));
+            Log.error(F("Relocalization required because of motion while the motor was stopped." CR));
             error = true;
           }
           return position.current();
         default:
-          int newPosition;
-          uint8_t edgesCounted = edgeCounter.getAndReset();
+          int newPosition = position.current();
+          uint8_t edgesCounted = edgeCounter.get();
+          if (edgesCounted == 0) return newPosition;
+          edgesCounted = edgeCounter.getAndReset();
+          if (edgesCounted > 1) {
+            Log.warning(F("Counted %d edges since the last step!" CR), edgesCounted);
+          }
           if (motor.resumeDirection() == FORWARD) {
-            newPosition = position.current() + edgesCounted;
+            newPosition += edgesCounted;
             forwardsEdgesSinceLastLimit += edgesCounted;
-            if (newPosition == numTotalEdges) {
-              Log.trace(F("Relocalizing to right limit switch..." CR));
+            if (newPosition >= numTotalEdges + 1) {
+              Log.error(F("Relocalizing to right limit switch at estimated position %d..." CR), newPosition);
               error = true;
             }
           } else { // motor.resumeDirection() == BACKWARD
-            newPosition = position.current() - edgesCounted;
+            newPosition -= edgesCounted;
             backwardsEdgesSinceLastLimit += edgesCounted;
-            if (newPosition == 0) {
-              Log.trace(F("Relocalizing to left limit switch..." CR));
+            if (newPosition <= -1) {
+              Log.error(F("Relocalizing to left limit switch at estimated position %d..." CR), newPosition);
               error = true;
             }
           }
           return newPosition;
       }
   }
-  Log.warning(F("Relocalization required with invalid limits state." CR));
+  Log.error(F("Relocalization required with invalid limits state." CR));
   error = true;
   return position.current();
 }

@@ -1,4 +1,4 @@
-#define DISABLE_LOGGING
+//#define DISABLE_LOGGING
 #include <ArduinoLog.h>
 
 #define SENSOR_PIN4
@@ -22,7 +22,7 @@ CalibrationRig<Actuator> calibrationRig(shared, actuator, A0, A1);
 
 void setup() {
   calibrationRig.setup();
-  actuator.positionCalibrator.expectedNumEdges = 20;
+  actuator.positionCalibrator.expectedNumEdges = 40;
   actuator.motor.speed = 255;
   randomSeed(analogRead(0));
   calibrationRig.printHeader();
