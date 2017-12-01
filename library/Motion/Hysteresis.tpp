@@ -58,13 +58,21 @@ template <class PositionTracker>
 void Hysteresis<PositionTracker>::updateAdjusting() {
   if (targetPosition.justChanged()) {
     state.update(State::targeting);
-    return;
   }
-  if (positionTracker.position.current() < targetPosition.current()) {
-    motor.forwards();
-  } else if (positionTracker.position.current() > targetPosition.current()) {
-    motor.backwards();
-  } else { // positionTracker.position.current() == targetPosition
+  if ((motor.state.current() == Components::Motor::State::braking) ||
+      (motor.state.current() == Components::Motor::State::neutral)) {
+    if (positionTracker.position.current() < targetPosition.current()) {
+      motor.forwards();
+    } else if (positionTracker.position.current() > targetPosition.current()) {
+      motor.backwards();
+    } else { // positionTracker.position.current() == targetPosition
+      state.update(State::maintaining);
+    }
+    return;
+  } else if ((motor.state.current() == Components::Motor::State::forwards &&
+        positionTracker.position.current() >= targetPosition.current()) ||
+      (motor.state.current() == Components::Motor::State::backwards &&
+        positionTracker.position.current() <= targetPosition.current())) {
     state.update(State::maintaining);
   }
 }

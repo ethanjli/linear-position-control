@@ -208,14 +208,14 @@ int Discrete<Limits, EdgeCounter>::inferMotorPosition(bool &error, bool setup) {
             newPosition += edgesCounted;
             forwardsEdgesSinceLastLimit += edgesCounted;
             if (newPosition >= numTotalEdges + 1) {
-              Log.error(F("Relocalizing to right limit switch at estimated position %d..." CR), newPosition);
+              Log.warning(F("Relocalizing to right limit switch at estimated position %d..." CR), newPosition);
               error = true;
             }
           } else { // motor.resumeDirection() == BACKWARD
             newPosition -= edgesCounted;
             backwardsEdgesSinceLastLimit += edgesCounted;
             if (newPosition <= -1) {
-              Log.error(F("Relocalizing to left limit switch at estimated position %d..." CR), newPosition);
+              Log.warning(F("Relocalizing to left limit switch at estimated position %d..." CR), newPosition);
               error = true;
             }
           }
