@@ -177,17 +177,17 @@ void CalibrationRig<EncapsulatedLinearActuator>::update() {
 
 template<class EncapsulatedLinearActuator>
 int CalibrationRig<EncapsulatedLinearActuator>::mapToEdgeCount(int position) const {
-  return actuator.positionTracker.mapPositionFrom(position, 0, numPositions - 1);
+  return actuator.positionTracker.mapPositionFrom(position, minPosition, maxPosition);
 }
 
 template<class EncapsulatedLinearActuator>
 int CalibrationRig<EncapsulatedLinearActuator>::mapToPosition(int edgeCount) const {
-  return actuator.positionTracker.mapPositionTo(edgeCount, 0, numPositions - 1);
+  return actuator.positionTracker.mapPositionTo(edgeCount, minPosition, maxPosition);
 }
 
 template<class EncapsulatedLinearActuator>
-void CalibrationRig<EncapsulatedLinearActuator>::setNewTargetPosition() {
-  targetPosition = random(numPositions);
+void CalibrationRig<EncapsulatedLinearActuator>::startNewEpisode() {
+  targetPosition = random(minPosition, maxPosition + 1);
   actuator.motionController.targetPosition.update(mapToEdgeCount(targetPosition));
   targetingTimer = 0;
   targetingTimerMicroseconds = 0;
@@ -196,8 +196,8 @@ void CalibrationRig<EncapsulatedLinearActuator>::setNewTargetPosition() {
 }
 
 template<class EncapsulatedLinearActuator>
-void CalibrationRig<EncapsulatedLinearActuator>::setLocalizationPosition() {
-  targetPosition = (numPositions - 1) * random(2);
+void CalibrationRig<EncapsulatedLinearActuator>::startPreEpisodeLocalization() {
+  targetPosition = random(2) ? minPosition : maxPosition;
   actuator.motionController.targetPosition.update(mapToEdgeCount(targetPosition));
   targeting = false;
 }
