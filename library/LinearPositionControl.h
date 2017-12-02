@@ -134,8 +134,8 @@ class CalibrationRig {
     Components::AnalogSensor potentiometer;
     StateVariable<State> &state;
 
-    const int minPosition = 37;
-    const int maxPosition = 992;
+    const int minPosition = 64;
+    const int maxPosition = 956;
 
     int targetPosition = -1;
     elapsedMillis targetingTimer;

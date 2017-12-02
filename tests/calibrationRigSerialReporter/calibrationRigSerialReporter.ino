@@ -23,7 +23,7 @@ CalibrationRig<Actuator> calibrationRig(shared, actuator, A0);
 void setup() {
   calibrationRig.setup();
   actuator.positionCalibrator.expectedNumEdges = 40;
-  actuator.motor.speed = 200;
+  actuator.motor.speed = 150;
   //randomSeed(analogRead(0));
   randomSeed(0);
   calibrationRig.printHeader();

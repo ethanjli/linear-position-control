@@ -6,7 +6,7 @@ import serial
 
 FEATURES_FILENAME = 'calibrationRig.csv'
 EXCLUSIONS_FILENAME = 'exclusions.txt'
-NUM_EPISODES = 50
+NUM_EPISODES = None
 
 class InputSerialLineStream():
     def __init__(self):
