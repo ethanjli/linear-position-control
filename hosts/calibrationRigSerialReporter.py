@@ -47,9 +47,9 @@ def main():
                         print('Starting episode {}...'.format(current_episode))
                 f = open('calibrationRig.csv', 'a')
             elif current_episode is not None and line.startswith('E: '):
-                print('Error on episode {}: {}'.format(current_episode, line[2:]))
+                print('Error on episode {}: {}'.format(current_episode, line[3:]))
             elif current_episode is not None and line.startswith('W: '):
-                print('Warning on episode {}: {}'.format(current_episode, line[2:]))
+                print('Warning on episode {}: {}'.format(current_episode, line[3:]))
             elif current_episode is None:
                 print('Initialization message: {}'.format(line))
             else:

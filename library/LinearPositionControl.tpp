@@ -165,7 +165,7 @@ CalibrationRig<EncapsulatedLinearActuator>::CalibrationRig(
 
 template<class EncapsulatedLinearActuator>
 void CalibrationRig<EncapsulatedLinearActuator>::setup() {
-  Log.begin(LOG_LEVEL_WARNING, &Serial);
+  Log.begin(LOG_LEVEL_ERROR, &Serial);
   Serial.begin(115200);
   actuator.setup();
   potentiometer.setup();

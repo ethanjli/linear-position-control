@@ -158,7 +158,7 @@ void Discrete<Limits, EdgeCounter>::updateMotorPosition(bool setup) {
   using Components::States::Limits;
 
   bool error;
-  int motorPosition = inferMotorPosition(error);
+  int motorPosition = inferMotorPosition(error, setup);
   if (error) state.update(State::unlocalized);
 
   if (setup) {
