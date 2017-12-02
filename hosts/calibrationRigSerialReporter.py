@@ -4,7 +4,46 @@ import sys
 
 import serial
 
-FILENAME = 'calibrationRig.csv'
+FEATURES_FILENAME = 'calibrationRig.csv'
+EXCLUSIONS_FILENAME = 'exclusions.txt'
+NUM_EPISODES = 50
+
+class InputSerialLineStream():
+    def __init__(self):
+        self.ser = None
+
+    def connect(self, port='/dev/ttyACM0', baudrate=115200):
+        print('Please connect the device now...')
+        time.sleep(2.0)
+        while True:
+            try:
+                self.ser = serial.Serial(port, baudrate)
+                break
+            except serial.serialutil.SerialException:
+                print('Device not found. Trying again in 1 second...')
+                time.sleep(1.0)
+        print('Connected!')
+
+    def get_line(self):
+        return str(self.ser.readline(), 'ascii').rstrip()
+
+class OutputFileLineStream():
+    def __init__(self, filename):
+        self.f = None
+        self.filename = filename
+        self.lines = 0
+
+    def start(self):
+        self.f = open(self.filename, 'w')
+
+    def append(self, line):
+        print(line, file=self.f)
+        self.f.close()
+        self.f = open(self.filename, 'a')
+        self.lines += 1
+
+    def close(self):
+        self.f.close()
 
 def get_episode_id(line):
     episode_id = line[1:].split(',')[0]
@@ -13,50 +52,99 @@ def get_episode_id(line):
     else:
         return int(episode_id)
 
-def main():
-    print('Please connect the calibration rig now...')
-    time.sleep(2.0)
-    while True:
+class Reporter():
+    def __init__(self):
+        self.arduino = InputSerialLineStream()
+        self.features = OutputFileLineStream(FEATURES_FILENAME)
+        self.excluded_episodes = OutputFileLineStream(EXCLUSIONS_FILENAME)
+
+        self.num_fields_expected = None
+        self.current_episode = None
+        self.continue_running = True
+
+    def run(self):
+        self.arduino.connect()
+        self.features.start()
+        self.excluded_episodes.start()
         try:
-            ser = serial.Serial('/dev/ttyACM0', 115200)
-            break
-        except serial.serialutil.SerialException:
-            print('Arduino not found. Trying again in 1 second...')
-            time.sleep(1.0)
-
-    print('Connected!')
-
-    f = open('calibrationRig.csv', 'w')
-
-    try:
-        num_fields_expected = None
-        current_episode = None
-        while True:
-            line = str(ser.readline(), 'ascii').rstrip()
-            num_fields = line.count(',')
-            if num_fields_expected is None:
-                num_fields_expected = num_fields
-                print('Number of fields in output:', num_fields_expected)
-            if line.startswith('[') and line.endswith(']') and num_fields == num_fields_expected:
-                print(line[1:-1], file=f)
-                f.close()
-                new_episode = get_episode_id(line)
-                if (new_episode != current_episode) and (new_episode is not None):
-                    current_episode = new_episode
-                    if current_episode % 10 == 0:
-                        print('Starting episode {}...'.format(current_episode))
-                f = open('calibrationRig.csv', 'a')
-            elif current_episode is not None and line.startswith('E: '):
-                print('Error on episode {}: {}'.format(current_episode, line[3:]))
-            elif current_episode is not None and line.startswith('W: '):
-                print('Warning on episode {}: {}'.format(current_episode, line[3:]))
-            elif current_episode is None:
-                print('Initialization message: {}'.format(line))
-            else:
-                print('Malformed line:', line)
-    except KeyboardInterrupt:
+            while self.continue_running:
+                line = self.arduino.get_line()
+                if self.handle_episode_line(line):
+                    continue
+                if self.handle_episode_error(line):
+                    continue
+                if self.handle_episode_warning(line):
+                    continue
+                if self.handle_initialization_message(line):
+                    continue
+                self.handle_malformed_line(line)
+        except KeyboardInterrupt:
+            pass
         print('Quitting...')
-        f.close()
+        self.features.close()
+        self.excluded_episodes.close()
+
+    def report_stats(self):
+        print('Completed episode {}...'.format(self.current_episode))
+        print('  {} lines written to output so far.'.format(self.features.lines))
+        print('  {:.2f}% of all episodes have been excluded so far.'.format(
+            self.excluded_episodes.lines * 100 / self.current_episode
+        ))
+        if NUM_EPISODES is not None:
+            print('  Progress out of {} total episodes: {:.2f}%'.format(
+                NUM_EPISODES, self.current_episode * 100 / NUM_EPISODES
+            ))
+
+    def handle_episode_line(self, line):
+        num_fields = line.count(',')
+        if self.num_fields_expected is None:
+            self.num_fields_expected = num_fields
+            print('Number of fields in output:', self.num_fields_expected)
+        if (line.startswith('[') and line.endswith(']') and
+                num_fields == self.num_fields_expected):
+            new_episode = get_episode_id(line)
+            if (new_episode != self.current_episode) and (new_episode is not None):
+                if (self.current_episode is not None) and (self.current_episode % 10 == 0):
+                    self.report_stats()
+                self.current_episode = new_episode
+            if not (NUM_EPISODES is None or self.current_episode is None or
+                    self.current_episode <= NUM_EPISODES):
+                self.continue_running = False
+                return True
+            self.features.append(line[1:-1])
+            return True
+        return False
+
+    def handle_episode_error(self, line):
+        if self.current_episode is not None and line.startswith('E: '):
+            print('Error in episode {}: {}'.format(self.current_episode, line[3:]))
+            self.excluded_episodes.append(self.current_episode)
+            return True
+        return False
+
+    def handle_episode_warning(self, line):
+        if self.current_episode is not None and line.startswith('W: '):
+            print('Warning in episode {}: {}'.format(self.current_episode, line[3:]))
+            self.excluded_episodes.append(self.current_episode)
+            return True
+        return False
+
+    def handle_initialization_message(self, line):
+        if self.current_episode is None:
+            print('Initialization message: {}'.format(line))
+            return True
+        return False
+
+    def handle_malformed_line(self, line):
+        print('Malformed line in episode {} or {}: {}'.format(
+            self.current_episode, self.current_episode + 1, line
+        ))
+        self.excluded_episodes.append(self.current_episode)
+        self.excluded_episodes.append(self.current_episode + 1)
+
+def main():
+    reporter = Reporter()
+    reporter.run()
 
 
 if __name__ == '__main__':

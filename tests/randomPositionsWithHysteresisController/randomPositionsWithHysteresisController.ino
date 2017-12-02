@@ -40,9 +40,10 @@ void loop() {
   actuator.update();
 #ifdef DISABLE_LOGGING
 #ifndef DISABLE_PLOT
-  Serial.print(analogRead(A1));
-  Serial.print(',');
-  Serial.println(1023 * digitalRead(A1));
+  //if (actuator.positionTracker.position.justChanged()) {
+    Serial.print("0,40,");
+    Serial.println(actuator.positionTracker.position.current());
+  //}
 #endif
 #endif
   if (actuator.state.current() != Actuator::State::operating) return;

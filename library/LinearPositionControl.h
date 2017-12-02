@@ -124,8 +124,7 @@ class CalibrationRig {
     CalibrationRig(
         SharedComponents &shared,
         EncapsulatedLinearActuator &actuator,
-        uint8_t potentiometerPin,
-        uint8_t opticalSensorAnalogPin
+        uint8_t potentiometerPin
     );
 
     using State = typename EncapsulatedLinearActuator::State;
@@ -133,7 +132,6 @@ class CalibrationRig {
     SharedComponents &shared;
     EncapsulatedLinearActuator &actuator;
     Components::AnalogSensor potentiometer;
-    Components::AnalogSensor opticalSensorAnalog;
     StateVariable<State> &state;
 
     const int numPositions = 1024;
@@ -141,7 +139,7 @@ class CalibrationRig {
     int targetPosition = -1;
     elapsedMillis targetingTimer;
     elapsedMicros targetingTimerMicroseconds;
-    int targetID = -1;
+    int episodeID = -1;
     bool targeting = true;
 
     void setup();
@@ -150,8 +148,8 @@ class CalibrationRig {
     int mapToEdgeCount(int position) const;
     int mapToPosition(int edgeCount) const;
 
-    void setNewTargetPosition();
-    void setLocalizationPosition();
+    void startNewEpisode();
+    void startPreEpisodeLocalization();
     void printHeader() const;
     void printState() const;
 };
