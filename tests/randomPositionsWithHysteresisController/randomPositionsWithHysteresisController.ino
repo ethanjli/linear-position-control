@@ -1,4 +1,4 @@
-//#define DISABLE_LOGGING
+#define DISABLE_LOGGING
 //#define DISABLE_PLOT
 #include <ArduinoLog.h>
 
@@ -31,8 +31,8 @@ void setup() {
 #endif  
 #endif
   actuator.setup();
-  actuator.positionCalibrator.expectedNumEdges = 32;
-  actuator.motor.speed = 127;
+  actuator.positionCalibrator.expectedNumEdges = 40;
+  actuator.motor.speed = 255;
   randomSeed(analogRead(0));
 }
 
@@ -48,7 +48,7 @@ void loop() {
 #endif
   if (actuator.state.current() != Actuator::State::operating) return;
   if (actuator.motionController.state.current() != Actuator::MotionController::State::maintaining) return;
-  if (actuator.motionController.state.currentDuration() < 2000) return;
+  if (actuator.motionController.state.currentDuration() < 250) return;
   int newTargetPosition = actuator.positionTracker.mapPositionFrom(random(numCuvettes), numCuvettes - 1);
   actuator.motionController.targetPosition.update(newTargetPosition);
 }

@@ -6,9 +6,10 @@ import serial
 
 FEATURES_FILENAME = 'calibrationRig.csv'
 EXCLUSIONS_FILENAME = 'exclusions.txt'
-NUM_EPISODES = None
+#NUM_EPISODES = 24000 # traindev
+NUM_EPISODES = 4000 # test
 
-class InputSerialLineStream():
+class SerialLineStream():
     def __init__(self):
         self.ser = None
 
@@ -20,12 +21,14 @@ class InputSerialLineStream():
                 self.ser = serial.Serial(port, baudrate)
                 break
             except serial.serialutil.SerialException:
-                print('Device not found. Trying again in 1 second...')
-                time.sleep(1.0)
+                time.sleep(0.2)
         print('Connected!')
 
     def get_line(self):
         return str(self.ser.readline(), 'ascii').rstrip()
+
+    def write_byte(self, byte, length=1, byte_order='big', signed=False):
+        self.ser.write(byte.to_bytes(length, byte_order, signed=signed))
 
 class OutputFileLineStream():
     def __init__(self, filename):
@@ -54,7 +57,7 @@ def get_episode_id(line):
 
 class Reporter():
     def __init__(self):
-        self.arduino = InputSerialLineStream()
+        self.arduino = SerialLineStream()
         self.features = OutputFileLineStream(FEATURES_FILENAME)
         self.excluded_episodes = OutputFileLineStream(EXCLUSIONS_FILENAME)
 
@@ -69,6 +72,8 @@ class Reporter():
         try:
             while self.continue_running:
                 line = self.arduino.get_line()
+                if self.handle_handshake_line(line):
+                    continue
                 if self.handle_episode_line(line):
                     continue
                 if self.handle_episode_error(line):
@@ -94,6 +99,12 @@ class Reporter():
             print('  Progress out of {} total episodes: {:.2f}%'.format(
                 NUM_EPISODES, self.current_episode * 100 / NUM_EPISODES
             ))
+
+    def handle_handshake_line(self, line):
+        if line == '~':
+            self.arduino.write_byte(0)
+            return True
+        return False
 
     def handle_episode_line(self, line):
         num_fields = line.count(',')

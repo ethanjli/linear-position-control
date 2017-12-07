@@ -20,12 +20,19 @@ using Actuator = MultiplexedLinearActuator<Components::EdgeCounter, Tracking::Po
 Actuator actuator(shared, M2, 4, 12);
 CalibrationRig<Actuator> calibrationRig(shared, actuator, A0);
 
+const int minSpeed = 120;
+const int maxSpeed = 240;
+const int numSpeeds = 12;
+const int speedIncrement = (maxSpeed - minSpeed) / numSpeeds;
+
 void setup() {
   calibrationRig.setup();
   actuator.positionCalibrator.expectedNumEdges = 40;
   actuator.motor.speed = 150;
   //randomSeed(analogRead(0));
-  randomSeed(0);
+  randomSeed(0); // traindev
+  //randomSeed(1); // test
+  calibrationRig.waitForSerialHandshake();
   calibrationRig.printHeader();
 }
 
@@ -38,6 +45,7 @@ void loop() {
   if (calibrationRig.targeting) {
     calibrationRig.startPreEpisodeLocalization();
   } else {
+    //actuator.motor.speed = minSpeed + speedIncrement * random(numSpeeds);
     calibrationRig.startNewEpisode();
   }
 }

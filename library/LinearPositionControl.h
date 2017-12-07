@@ -151,6 +151,7 @@ class CalibrationRig {
 
     void startNewEpisode();
     void startPreEpisodeLocalization();
+    void waitForSerialHandshake() const;
     void printHeader() const;
     void printState() const;
 };
