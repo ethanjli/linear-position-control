@@ -1,4 +1,5 @@
 import time
+import collections
 
 import serial
 
@@ -22,6 +23,9 @@ class SerialLineStream(object):
     def write_byte(self, byte, length=1, byte_order='big', signed=False):
         self.ser.write(byte.to_bytes(length, byte_order, signed=signed))
 
+    def close(self):
+        self.ser.close()
+
 class OutputFileLineStream(object):
     def __init__(self, filename):
         self.f = None
@@ -44,11 +48,11 @@ class LineParser(object):
     def __init__(self):
         self.fields = None
 
-    def as_csv(self, line):
+    def line_as_csv(self, line):
         return line[1:-1]
 
     def split(self, line):
-        return tuple(self.as_csv(line).split(','))
+        return tuple(self.line_as_csv(line).split(','))
 
     def count_fields(self, line):
         return line.count(',') + 1
@@ -65,11 +69,14 @@ class LineParser(object):
         return len(self.fields)
 
     def parse_line(self, line):
-        return dict(zip(self.fields, (int(field) for field in self.split(line))))
+        return collections.OrderedDict(zip(
+            self.fields, (int(field) for field in self.split(line))
+        ))
 
 class Reporter(object):
     def __init__(self, features_filename='calibrationRig.csv',
-                 exclusions_filename='exclusions.txt', num_episodes=None):
+                 exclusions_filename='exclusions.txt',
+                 num_episodes=None, episode_report_interval=10):
         self.arduino = SerialLineStream()
         self.features = OutputFileLineStream(features_filename)
         self.excluded_episodes = OutputFileLineStream(exclusions_filename)
@@ -78,6 +85,7 @@ class Reporter(object):
         self.num_fields_expected = None
         self.num_episodes = num_episodes
         self.current_episode = None
+        self.episode_report_interval = episode_report_interval
         self.continue_running = True
 
     def setup(self):
@@ -90,6 +98,8 @@ class Reporter(object):
             while self.continue_running:
                 line = self.arduino.get_line()
                 if self.handle_handshake_line(line):
+                    continue
+                if self.handle_header_line(line):
                     continue
                 if self.handle_episode_line(line):
                     continue
@@ -124,24 +134,27 @@ class Reporter(object):
             return True
         return False
 
-    def handle_episode_line(self, line):
+    def handle_header_line(self, line):
         if self.parser.fields is None:
             self.parser.set_fields(line)
             print('Number of fields in output:', self.parser.num_fields)
-            self.features.append(self.parser.as_csv(line))
+            self.features.append(self.parser.line_as_csv(line))
             return True
+        return False
+
+    def handle_episode_line(self, line):
         if self.parser.valid_line(line):
             parsed = self.parser.parse_line(line)
             new_episode = parsed['episodeID']
             if (new_episode != self.current_episode) and (new_episode is not None):
-                if (self.current_episode is not None) and (self.current_episode % 10 == 0):
+                if (self.current_episode is not None and
+                        self.current_episode % self.episode_report_interval == 0):
                     self.report_stats()
                 self.current_episode = new_episode
-            if not (self.num_episodes is None or self.current_episode is None or
-                    self.current_episode <= self.num_episodes):
+            if not (self.current_episode is None or self.current_episode <= self.num_episodes):
                 self.continue_running = False
                 return True
-            self.features.append(self.parser.as_csv(line))
+            self.features.append(self.parser.line_as_csv(line))
             return True
         return False
 
