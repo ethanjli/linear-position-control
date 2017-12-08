@@ -210,6 +210,7 @@ void CalibrationRig<EncapsulatedLinearActuator>::waitForSerialHandshake() const 
     delay(200);
   }
   Serial.read();
+  delay(200);
 }
 
 template<class EncapsulatedLinearActuator>
@@ -222,12 +223,12 @@ void CalibrationRig<EncapsulatedLinearActuator>::printHeader() const {
   Serial.print(F("targetingTimeMicroseconds,"));
   // Target
   Serial.print(F("targetPosition,"));
-  Serial.print(F("targetEdgesFromLeft,"));
+  //Serial.print(F("targetEdgesFromLeft,"));
   // Ground truth
   Serial.print(F("groundTruthPosition,"));
   // Baseline prediction
   Serial.print(F("estimatedPosition,"));
-  Serial.print(F("estimatedEdgesFromLeft,"));
+  //Serial.print(F("estimatedEdgesFromLeft,"));
   // Limits features
   Serial.print(F("lastLimit,"));
   //Serial.print(F("timeSinceLastLimit,"));
@@ -267,16 +268,16 @@ void CalibrationRig<EncapsulatedLinearActuator>::printState(bool targetingOnly) 
   // Target
   Serial.print(targetPosition);
   Serial.print(',');
-  Serial.print(mapToEdgeCount(targetPosition));
-  Serial.print(',');
+  //Serial.print(mapToEdgeCount(targetPosition));
+  //Serial.print(',');
   // Ground truth
   Serial.print(potentiometer.state.current());
   Serial.print(',');
   // Baseline prediction
   Serial.print(mapToPosition(actuator.positionTracker.position.current()));
   Serial.print(',');
-  Serial.print(actuator.positionTracker.position.current());
-  Serial.print(',');
+  //Serial.print(actuator.positionTracker.position.current());
+  //Serial.print(',');
   // Limits features
   switch (actuator.limitsTracker.lastLimit.current()) {
     case Components::States::Limits::left:

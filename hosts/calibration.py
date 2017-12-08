@@ -75,6 +75,9 @@ class Reporter(object):
                 self.handle_malformed_line(line)
         except KeyboardInterrupt:
             pass
+        self.teardown()
+
+    def teardown(self):
         print('Quitting...')
         self.features.close()
         self.excluded_episodes.close()
@@ -120,7 +123,7 @@ class Reporter(object):
             if self.report_episode is not None and self.report_episode > self.num_episodes:
                 self.continue_running = False
                 return True
-            self.features.append(self.parser.parsed_as_csv(parsed))
+            self.features.append_as_csv(parsed.values())
             return True
         return False
 
@@ -157,8 +160,11 @@ class Reporter(object):
         self.excluded_episodes.append(self.report_episode + 1)
 
 class EpisodicController(Reporter):
-    def __init__(self, **kwargs):
+    def __init__(self, scores_filename='scores.csv', **kwargs):
         super().__init__(**kwargs)
+        self.scores = iostreams.OutputFileLineStream(scores_filename)
+
+        # Constants
         self.speeds = [120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240]
         self.actions = [
             0, 120, -120, 130, -130, 140, -140, 150, -150, 160, -160, 170, -170,
@@ -172,10 +178,22 @@ class EpisodicController(Reporter):
         self.current_episode = -1
         self.target_position = None
         self.episode_start = None
+        self.score = 0
 
         # Pre-episode localization
         self.pre_episode_localization_direction = None
         self.pre_episode_localization_speed = 150
+
+    def setup(self):
+        super().setup()
+        self.scores.start()
+        self.scores.append_as_csv(
+            'episodeID', 'targetPosition', 'finalGroundTruthPosition', 'score'
+        )
+
+    def teardown(self):
+        super().teardown()
+        self.scores.close()
 
     def process_parsed(self, parsed):
         if self.target_position is None:  # episode just completed
@@ -195,11 +213,16 @@ class EpisodicController(Reporter):
                               self.pre_episode_localization_speed)
             return None
         self.write_action(self.choose_action(parsed))
-        # TODO: compute reward
+        self.update_score(parsed)
         if self.episode_complete(parsed):
+            self.scores.append_as_csv(
+                self.current_episode, self.target_position, parsed['groundTruthPosition'],
+                self.score
+            )
             self.target_position = None
         parsed['episodeID'] = self.current_episode
         parsed['targetingTimeMicroseconds'] = self.episode_time.microseconds
+        parsed['targetPosition'] = self.target_position
         if self.current_episode > 0:
             return parsed
         else:
@@ -210,6 +233,7 @@ class EpisodicController(Reporter):
     def start_new_episode(self, parsed):
         self.current_episode += 1
         self.target_position = random.randint(*self.position_range)
+        self.score = 0
         self.episode_start = datetime.datetime.utcnow()
         self.on_episode_start(parsed)
 
@@ -242,6 +266,14 @@ class EpisodicController(Reporter):
 
     def write_action(self, action):
         self.arduino.write_byte(self.encode_action(action))
+
+    # Score management
+
+    def update_score(self, parsed):
+        self.score += self.reward(parsed)
+
+    def reward(self, parsed):
+        return -(parsed['groundTruthPosition'] - self.target_position) ** 2
 
     # Utilities
 

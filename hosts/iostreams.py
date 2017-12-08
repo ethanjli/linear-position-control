@@ -46,6 +46,10 @@ class OutputFileLineStream(object):
         self.f = open(self.filename, 'a')
         self.lines += 1
 
+    def append_as_csv(self, *args):
+        line = ','.join(str(field) for field in args)
+        self.append(line)
+
     def close(self):
         self.f.close()
 
