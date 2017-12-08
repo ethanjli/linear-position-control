@@ -205,10 +205,11 @@ void CalibrationRig<EncapsulatedLinearActuator>::startPreEpisodeLocalization() {
 template<class EncapsulatedLinearActuator>
 void CalibrationRig<EncapsulatedLinearActuator>::waitForSerialHandshake() const {
   while (!Serial) {;}
-  while (Serial.available() <= 0) {
+  while (Serial.available() < 1) {
     Serial.println('~');
     delay(200);
   }
+  Serial.read();
 }
 
 template<class EncapsulatedLinearActuator>
