@@ -51,6 +51,9 @@ class LineParser(object):
     def line_as_csv(self, line):
         return line[1:-1]
 
+    def parsed_as_csv(self, parsed):
+        return ','.join(str(value) for value in parsed.values())
+
     def split(self, line):
         return tuple(self.line_as_csv(line).split(','))
 
@@ -145,18 +148,22 @@ class Reporter(object):
     def handle_episode_line(self, line):
         if self.parser.valid_line(line):
             parsed = self.parser.parse_line(line)
+            parsed = self.process_episode_parsed(parsed)
             new_episode = parsed['episodeID']
             if (new_episode != self.current_episode) and (new_episode is not None):
                 if (self.current_episode is not None and
                         self.current_episode % self.episode_report_interval == 0):
                     self.report_stats()
                 self.current_episode = new_episode
-            if not (self.current_episode is None or self.current_episode <= self.num_episodes):
+            if self.current_episode is not None and self.current_episode > self.num_episodes:
                 self.continue_running = False
                 return True
-            self.features.append(self.parser.line_as_csv(line))
+            self.features.append(self.parser.parsed_as_csv(parsed))
             return True
         return False
+
+    def process_episode_parsed(self, parsed):
+        return parsed
 
     def handle_episode_error(self, line):
         if self.current_episode is not None and line.startswith('E: '):
@@ -185,4 +192,10 @@ class Reporter(object):
         self.excluded_episodes.append(self.current_episode)
         self.excluded_episodes.append(self.current_episode + 1)
 
+class EpisodicController(Reporter):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    def process_episode_parsed(self, parsed):
+        return parsed
 
