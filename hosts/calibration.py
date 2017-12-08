@@ -159,7 +159,93 @@ class Reporter(object):
 class EpisodicController(Reporter):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.speeds = [120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240]
+        self.actions = [
+            0, 120, -120, 130, -130, 140, -140, 150, -150, 160, -160, 170, -170,
+            180, -180, 190, -190, 200, -200, 210, -210, 220, -220, 230, -230, 240, -240
+        ]
+        self.action_codes = {action: index for (index, action) in enumerate(self.actions)}
+        self.position_range = (64, 955)
+        self.episode_time_limit = 1  # seconds
 
-    def process_episode_parsed(self, parsed):
-        return parsed
+        # Current episode
+        self.current_episode = -1
+        self.target_position = None
+        self.episode_start = None
+
+        # Pre-episode localization
+        self.pre_episode_localization_direction = None
+        self.pre_episode_localization_speed = 150
+
+    def process_parsed(self, parsed):
+        if self.target_position is None:  # episode just completed
+            if self.current_episode == -1:  # device startup localization to clear all timers
+                self.start_pre_episode_localization(direction=-1)
+            else:  # normal pre-episode localization
+                self.start_pre_episode_localization()
+            return None
+        elif self.target_position == -3:  # pre-episode localization completed
+            self.start_new_episode(parsed)
+            self.write_action(0)
+            return None
+        elif self.target_position < 0:  # pre-episode localization
+            if self.pre_episode_localization_complete(parsed):
+                self.target_position -= 1
+            self.write_action(self.pre_episode_localization_direction *
+                              self.pre_episode_localization_speed)
+            return None
+        self.write_action(self.choose_action(parsed))
+        # TODO: compute reward
+        if self.episode_complete(parsed):
+            self.target_position = None
+        parsed['episodeID'] = self.current_episode
+        parsed['targetingTimeMicroseconds'] = self.episode_time.microseconds
+        if self.current_episode > 0:
+            return parsed
+        else:
+            return None
+
+    # Episode management
+
+    def start_new_episode(self, parsed):
+        self.current_episode += 1
+        self.target_position = random.randint(*self.position_range)
+        self.episode_start = datetime.datetime.utcnow()
+        self.on_episode_start(parsed)
+
+    def start_pre_episode_localization(self, direction=None):
+        if direction is None:
+            direction = random.choice((-1, 1))
+        self.target_position = -1
+        self.pre_episode_localization_direction = direction
+        self.write_action(direction * self.pre_episode_localization_speed)
+
+    def pre_episode_localization_complete(self, parsed):
+        return ((self.pre_episode_localization_direction == -1 and parsed['atLeftLimit']) or
+                (self.pre_episode_localization_direction == 1 and parsed['atRightLimit']))
+
+    def episode_complete(self, parsed):
+        if self.episode_time.seconds > self.episode_time_limit:
+            return True
+        return False
+
+    def on_episode_start(self, parsed):
+        pass
+
+    # Action management
+
+    def choose_action(self, parsed):
+        return 0
+
+    def encode_action(self, action):
+        return self.action_codes[action]
+
+    def write_action(self, action):
+        self.arduino.write_byte(self.encode_action(action))
+
+    # Utilities
+
+    @property
+    def episode_time(self):
+        return datetime.datetime.utcnow() - self.episode_start
 

@@ -29,7 +29,8 @@ void setup() {
 
 void loop() {
   calibrationRig.update();
-  if (actuator.state.current() != Actuator::State::operating) return;
-  calibrationRig.printState(false);
-  actuator.motionController.updateFromSerial();
+  if (actuator.state.current() == Actuator::State::operating) {
+    calibrationRig.printState(false);
+    actuator.motionController.updateFromSerial();
+  }
 }
