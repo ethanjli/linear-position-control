@@ -220,10 +220,11 @@ class EpisodicController(Reporter):
         parsed['targetingTimeMicroseconds'] = self.episode_time.microseconds
         parsed['targetPosition'] = self.target_position
         if self.episode_complete(parsed):
-            self.scores.append_as_csv(
-                self.current_episode, self.target_position, parsed['groundTruthPosition'],
-                self.score
-            )
+            if self.current_episode > 0:
+                self.scores.append_as_csv(
+                    self.current_episode, self.target_position, parsed['groundTruthPosition'],
+                    self.score
+                )
             self.target_position = None
         if self.current_episode > 0:
             return parsed
