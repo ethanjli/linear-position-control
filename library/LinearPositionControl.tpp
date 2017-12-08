@@ -252,8 +252,8 @@ void CalibrationRig<EncapsulatedLinearActuator>::printHeader() const {
 }
 
 template<class EncapsulatedLinearActuator>
-void CalibrationRig<EncapsulatedLinearActuator>::printState() const {
-  if (targetPosition == -1) return;
+void CalibrationRig<EncapsulatedLinearActuator>::printState(bool targetingOnly) const {
+  if (targetingOnly && targetPosition == -1) return;
 
   Serial.print('[');
   // ID
