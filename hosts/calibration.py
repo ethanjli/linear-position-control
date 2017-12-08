@@ -202,15 +202,17 @@ class EpisodicController(Reporter):
             else:  # normal pre-episode localization
                 self.start_pre_episode_localization()
             return None
-        elif self.target_position == -3:  # pre-episode localization completed
+        elif self.target_position == -5:  # pre-episode localization completed
             self.start_new_episode(parsed)
             self.write_action(0)
             return None
         elif self.target_position < 0:  # pre-episode localization
             if self.pre_episode_localization_complete(parsed):
                 self.target_position -= 1
-            self.write_action(self.pre_episode_localization_direction *
-                              self.pre_episode_localization_speed)
+                self.write_action(0)
+            else:
+                self.write_action(self.pre_episode_localization_direction *
+                                  self.pre_episode_localization_speed)
             return None
         self.write_action(self.choose_action(parsed))
         self.update_score(parsed)
