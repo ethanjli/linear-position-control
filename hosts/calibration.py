@@ -123,7 +123,7 @@ class Reporter(object):
             if self.report_episode is not None and self.report_episode > self.num_episodes:
                 self.continue_running = False
                 return True
-            self.features.append_as_csv(parsed.values())
+            self.features.append_as_csv(*parsed.values())
             return True
         return False
 
