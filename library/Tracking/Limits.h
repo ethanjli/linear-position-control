@@ -27,8 +27,6 @@ class AbsoluteLimits {
     Components::Motor &motor;
     Limits &limits;
 
-    int inferMotorPosition();
-
     Components::MotorDirection limitSwitchPressDirection;
 };
 

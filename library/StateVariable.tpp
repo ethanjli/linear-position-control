@@ -17,9 +17,9 @@ void StateVariable<State>::setup(State initialState, bool force) {
 }
 
 template <class State>
-void StateVariable<State>::update(State nextState) {
+void StateVariable<State>::update(State nextState, bool force) {
   previousState = currentState;
-  if (currentState != nextState) {
+  if (force || currentState != nextState) {
     previousDistinctState = currentState;
     previousDistinctTimer = currentTimer;
     previousDistinctTimerMicros = currentTimerMicros;

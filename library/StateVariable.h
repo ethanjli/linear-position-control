@@ -9,7 +9,7 @@ template <class State>
 class StateVariable {
   public:
     void setup(State initialState, bool force = false);
-    void update(State nextState);
+    void update(State nextState, bool force = false);
 
     State current() const;
     State previous() const;

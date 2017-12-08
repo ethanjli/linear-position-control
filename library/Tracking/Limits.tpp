@@ -43,10 +43,10 @@ void AbsoluteLimits<Limits>::update() {
   if (limits.state.previous() == State::none) limitSwitchPressDirection = motor.resumeDirection();
   if (limitSwitchPressDirection == FORWARD) {
     state.update(State::right);
-    lastLimit.update(State::right);
+    lastLimit.update(State::right, true);
   } else { // limitSwitchPressDirection == BACKWARD
     state.update(State::left);
-    lastLimit.update(State::left);
+    lastLimit.update(State::left, true);
   }
 }
 
