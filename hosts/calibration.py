@@ -216,15 +216,15 @@ class EpisodicController(Reporter):
             return None
         self.write_action(self.choose_action(parsed))
         self.update_score(parsed)
+        parsed['episodeID'] = self.current_episode
+        parsed['targetingTimeMicroseconds'] = self.episode_time.microseconds
+        parsed['targetPosition'] = self.target_position
         if self.episode_complete(parsed):
             self.scores.append_as_csv(
                 self.current_episode, self.target_position, parsed['groundTruthPosition'],
                 self.score
             )
             self.target_position = None
-        parsed['episodeID'] = self.current_episode
-        parsed['targetingTimeMicroseconds'] = self.episode_time.microseconds
-        parsed['targetPosition'] = self.target_position
         if self.current_episode > 0:
             return parsed
         else:
