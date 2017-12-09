@@ -1,6 +1,8 @@
 import datetime
 import bisect
 
+import numpy as np
+
 import calibration
 
 def find_closest(numbers, number):
@@ -36,12 +38,13 @@ class Baseline(calibration.EpisodicController):
         else:
             self.action = 0
 
-class Oracle(calibration.EpisodicController):
+class PD(calibration.EpisodicController):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
         # Constants
-        self.k_p = 6
-        self.k_d = 20
+        self.k_p = None
+        self.k_d = None
 
         # Control terms
         self.error = None
@@ -51,8 +54,11 @@ class Oracle(calibration.EpisodicController):
         self.d_t = None
         self.action = None
 
+    def estimate_position(self, parsed):
+        pass
+
     def choose_action(self, parsed):
-        self.error = self.target_position - parsed['groundTruthPosition']
+        self.error = self.target_position - self.estimate_position(parsed)
         action = self.k_p * self.error
         if self.previous_error is not None:
             self.d_error = self.error - self.previous_error
@@ -64,7 +70,6 @@ class Oracle(calibration.EpisodicController):
         self.time = datetime.datetime.utcnow()
         action = self.nearest_action(action)
         self.action = action
-        print(self.target_position, self.error, action)
         return self.action
 
     def on_episode_start(self, parsed):
@@ -79,4 +84,29 @@ class Oracle(calibration.EpisodicController):
             return 0
         speed = find_closest(self.speeds, speed)
         return sign * speed
+
+class Oracle(PD):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.k_p = 6
+        self.k_d = 20
+
+    def estimate_position(self, parsed):
+        return parsed['groundTruthPosition']
+
+class LinearRegression(PD):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.k_p = 2
+        self.k_d = 2.5
+        self.terms = [
+            'lastLimit', 'backwardsEdgesSinceLastLimit', 'forwardsEdgesSinceLastLimit',
+            'atRightLimit', 'motorDirection', 'atLeftLimit', 'opticalSensor'
+        ]
+        self.coefs = [451.4526, -22.8686, 22.6784, -12.3514, -3.6129, -3.2660, -0.3014]
+        self.intercept = 515.8647
+
+    def estimate_position(self, parsed):
+        terms = [parsed[term] for term in self.terms]
+        return self.intercept + np.dot(self.coefs, terms)
 
