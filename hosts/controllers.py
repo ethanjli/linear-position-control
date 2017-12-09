@@ -94,6 +94,13 @@ class Oracle(PD):
     def estimate_position(self, parsed):
         return parsed['groundTruthPosition']
 
+class SlowOracle(Oracle):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.k_p = 2
+        self.k_d = 2
+        self.speeds = [120, 130, 140, 150, 160, 170, 180, 190, 200]
+
 class LinearRegression(PD):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
