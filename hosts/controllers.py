@@ -98,13 +98,14 @@ class LinearRegression(PD):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.k_p = 2
-        self.k_d = 2.5
+        self.k_d = 2
         self.terms = [
             'lastLimit', 'backwardsEdgesSinceLastLimit', 'forwardsEdgesSinceLastLimit',
             'atRightLimit', 'motorDirection', 'atLeftLimit', 'opticalSensor'
         ]
         self.coefs = [451.4526, -22.8686, 22.6784, -12.3514, -3.6129, -3.2660, -0.3014]
         self.intercept = 515.8647
+        self.speeds = [120, 130, 140, 150, 160, 170, 180, 190, 200]
 
     def estimate_position(self, parsed):
         terms = [parsed[term] for term in self.terms]
