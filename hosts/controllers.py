@@ -5,6 +5,7 @@ import numpy as np
 import controlpy as cp
 
 import calibration
+from util import TrainedRLPolicy
 
 def find_closest(numbers, number):
     pos = bisect.bisect_left(numbers, number)
@@ -177,7 +178,7 @@ class SlowOraclePD(OraclePD):
         self.k_d = 2
         self.speeds = [120, 130, 140, 150, 160, 170, 180, 190, 200]
 
-class LinearRegression(PD):
+class LinearRegressionPD(PD):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.k_p = 2
@@ -201,4 +202,43 @@ class SlowOracleLQG(LQG):
 
     def estimate_position(self, parsed):
         return parsed['groundTruthPosition']
+
+class LinearRegressionLQG(LQG):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.terms = [
+            'lastLimit', 'backwardsEdgesSinceLastLimit', 'forwardsEdgesSinceLastLimit',
+            'atRightLimit', 'motorDirection', 'atLeftLimit', 'opticalSensor'
+        ]
+        self.coefs = [451.4526, -22.8686, 22.6784, -12.3514, -3.6129, -3.2660, -0.3014]
+        self.intercept = 515.8647
+        self.speeds = [120, 130, 140, 150, 160, 170, 180, 190, 200]
+        self.Q_kalman = np.array([
+            [16, 0],
+            [0, 0.1]
+        ])
+        self.R_kalman = 400 * np.eye(1)
+        self.compute_kalman_gain()
+        self.motor_gain = 9
+
+    def estimate_position(self, parsed):
+        terms = [parsed[term] for term in self.terms]
+        return self.intercept + np.dot(self.coefs, terms)
+
+class LinearQ(calibration.EpisodicController):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.terms = [
+            'lastLimit', 'timeSinceLastLimitMicroseconds', 'edgesBetweenLimits',
+            'atLeftLimit', 'atRightLimit',
+            'timeSinceLastEdgeMicroseconds', 'timeBetweenLastEdgesMicroseconds',
+            'forwardsEdgesSinceLastLimit', 'backwardsEdgesSinceLastLimit',
+            'opticalSensor', 'motorDirection', 'motorDuty'
+        ]
+        self.policy = TrainedRLPolicy('results_dqn_target/dqn.hl_16.lr_0.1.model.pt')
+
+    def choose_action(self, parsed):
+        terms = np.array([parsed[term] for term in self.terms])
+        action = self.policy(terms) - 1
+        return action * 150
 
