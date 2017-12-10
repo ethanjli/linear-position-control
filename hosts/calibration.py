@@ -165,10 +165,14 @@ class EpisodicController(Reporter):
         self.scores = iostreams.OutputFileLineStream(scores_filename)
 
         # Constants
-        self.speeds = [120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240]
+        self.speeds = [
+            90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220,
+            230, 240, 250
+        ]
         self.actions = [
-            0, 120, -120, 130, -130, 140, -140, 150, -150, 160, -160, 170, -170,
-            180, -180, 190, -190, 200, -200, 210, -210, 220, -220, 230, -230, 240, -240
+            0, 90, -90, 100, -100, 110, -110, 120, -120, 130, -130, 140, -140,
+            150, -150, 160, -160, 170, -170, 180, -180, 190, -190, 200, -200,
+            210, -210, 220, -220, 230, -230, 240, -240, 250, -250
         ]
         self.action_codes = {action: index for (index, action) in enumerate(self.actions)}
         self.position_range = (64, 955)
