@@ -2,6 +2,7 @@
 #include <ArduinoLog.h>
 
 #define SENSOR_PIN4
+#define SENSOR_PIN8
 #define SENSOR_PIN12
 #include <LinearPositionControl.h>
 #include <OpticalSensor.h>
@@ -16,8 +17,8 @@ SharedComponents shared;
 
 // Hardware Abstraction Layer
 
-using Actuator = MultiplexedLinearActuator<Components::EdgeCounter, Tracking::Position::Discrete, Motion::SerialControl>;
-Actuator actuator(shared, M2, 4, 12);
+using Actuator = UnmultiplexedLinearActuator<Components::EdgeCounter, Tracking::Position::Discrete, Motion::SerialControl>;
+Actuator actuator(shared, M2, 4, 8, 12);
 CalibrationRig<Actuator> calibrationRig(shared, actuator, A0);
 
 void setup() {

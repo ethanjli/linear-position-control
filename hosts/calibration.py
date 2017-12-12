@@ -237,9 +237,12 @@ class EpisodicController(Reporter):
 
     # Episode management
 
+    def choose_new_target_position(self, parsed):
+        return random.randint(*self.position_range)
+
     def start_new_episode(self, parsed):
         self.current_episode += 1
-        self.target_position = random.randint(*self.position_range)
+        self.target_position = self.choose_new_target_position(parsed)
         self.score = 0
         self.episode_start = datetime.datetime.utcnow()
         self.on_episode_start(parsed)

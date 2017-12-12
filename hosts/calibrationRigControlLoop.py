@@ -16,9 +16,11 @@ def main():
     # Controller = controllers.OraclePD
     # Controller = controllers.SlowOraclePD
     # Controller = controllers.LinearRegressionPD
+    # Controller = controllers.LinearRegressionKalmanPD
     # Controller = controllers.SlowOracleLQG
     # Controller = controllers.LinearRegressionLQG
-    Controller = controllers.LinearQ
+    # Controller = controllers.LinearQ
+    Controller = controllers.Demo
     controller = Controller(num_episodes=NUM_EPISODES)
     controller.setup()
     controller.run()
