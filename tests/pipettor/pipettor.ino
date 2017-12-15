@@ -1,70 +1,59 @@
 //#define DISABLE_LOGGING
 #include <ArduinoLog.h>
 
-#include <PID_v1.h>
-
 #include <AnalogSensor.h>
-#include <LinearPositionControl.h>
+#include <Motors.h>
+#include <PIDControl.h>
 
 using namespace LinearPositionControl;
 
-// Parameters
+// Hardware Parameters
 
 const uint8_t potentiometerPin = A0;
-const uint8_t motorPort = M2;
+const MotorPort motorPort = M2;
 
 const int minPosition = 11;
 const int maxPosition = 999;
 
+// Controller Parameters
+
 const double pidKp = 8;
-const double pidKd = 0.1;
-const double pidKi = 0.1;
+const double pidKd = 0.1; // friction compensation
+const double pidKi = 0.1; // improved accuracy
 const int pidSampleTime = 20;
 
-const int feedforward = 7;
-const int brakeThreshold = 80;
+const int feedforward = 7; // gravity compensation
+const int brakeThreshold = 80; // prevent high-pitch motor whine when the motor is stuck due to friction anyways
 
 // Singletons
 
-SharedComponents shared;
+Components::Motors motors;
 
 // Globals
 
-double pidSetpoint = 100;
-double pidInput, pidOutput;
-
-PID pid(&pidInput, &pidOutput, &pidSetpoint, pidKp, pidKd, pidKi, P_ON_E, DIRECT);
-
 Components::AnalogSensor potentiometer(potentiometerPin);
-Components::Motor motor(shared.motors, motorPort);
+DiscretePID pid(
+  potentiometer.state, pidKp, pidKd, pidKi,
+  -255 - feedforward, 255 - feedforward, pidSampleTime
+);
+Components::Motor motor(motors, motorPort);
 
 void setup() {
   Serial.begin(115200);
 #ifndef DISABLE_LOGGING
   Log.begin(LOG_LEVEL_VERBOSE, &Serial);
 #endif
-  shared.setup();
+  motors.setup();
   motor.swapDirections();
   potentiometer.setup();
-  pidInput = potentiometer.state.current();
-  pid.SetMode(AUTOMATIC);
-  pid.SetOutputLimits(-255 - feedforward, 255 - feedforward);
-  pid.SetSampleTime(pidSampleTime);
+  pid.setup();
 }
 
 void loop() {
   potentiometer.update();
-  pidInput = potentiometer.state.current();
-  pid.Compute();
-  int motorSpeed = feedforward + (int) pidOutput;
+  pid.update();
+  int motorSpeed = feedforward + pid.output.current();
   if (abs(motorSpeed) < brakeThreshold) motorSpeed = 0;
   motor.run(motorSpeed);
-  Serial.print(minPosition);
-  Serial.print(",");
-  Serial.print(maxPosition);
-  Serial.print(",");
-  Serial.print(pidSetpoint);
-  Serial.print(",");
-  Serial.print(potentiometer.state.current());
-  Serial.println();
+  Serial.println(pid.getInput());
 }
