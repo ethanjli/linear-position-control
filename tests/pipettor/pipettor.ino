@@ -4,6 +4,7 @@
 #include <AnalogSensor.h>
 #include <Motors.h>
 #include <PIDControl.h>
+#include <SerialIO.h>
 
 using namespace LinearPositionControl;
 
@@ -25,6 +26,8 @@ const int pidSampleTime = 20;
 const int feedforward = 7; // gravity compensation
 const int brakeThreshold = 80; // prevent high-pitch motor whine when the motor is stuck due to friction anyways
 
+const unsigned long completionDelay = 100; // delay after motor stops moving before declaring completion of movement
+
 // Singletons
 
 Components::Motors motors;
@@ -34,9 +37,13 @@ Components::Motors motors;
 Components::AnalogSensor potentiometer(potentiometerPin);
 DiscretePID pid(
   potentiometer.state, pidKp, pidKd, pidKi,
-  -255 - feedforward, 255 - feedforward, pidSampleTime
+  -255 - feedforward, 255 - feedforward, pidSampleTime,
+  minPosition, maxPosition
 );
+Components::MotorSpeedAdjuster speedAdjuster(pid.output, feedforward, brakeThreshold);
 Components::Motor motor(motors, motorPort);
+IntParser setpointParser;
+bool reportedCompletion = false;
 
 void setup() {
   Serial.begin(115200);
@@ -47,13 +54,22 @@ void setup() {
   motor.swapDirections();
   potentiometer.setup();
   pid.setup();
+  setpointParser.setup();
+  waitForSerialHandshake();
 }
 
 void loop() {
   potentiometer.update();
   pid.update();
-  int motorSpeed = feedforward + pid.output.current();
-  if (abs(motorSpeed) < brakeThreshold) motorSpeed = 0;
-  motor.run(motorSpeed);
-  Serial.println(pid.getInput());
+  speedAdjuster.update();
+  motor.run(speedAdjuster.output.current());
+  setpointParser.update();
+  pid.setSetpoint(setpointParser.result.current());
+  if (pid.setpoint.justChanged()) reportedCompletion = false;
+  if (pid.setpoint.settled(completionDelay) && speedAdjuster.output.settledAt(0, completionDelay) && !reportedCompletion) {
+    Serial.print('[');
+    Serial.print(pid.getInput());
+    Serial.println(']');
+    reportedCompletion = true;
+  }
 }
