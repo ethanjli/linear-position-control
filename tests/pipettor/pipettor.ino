@@ -19,8 +19,10 @@ const int maxPosition = 999;
 const double pidKp = 8;
 const double pidKd = 0.1;
 const double pidKi = 0.1;
-const int feedforward = 0;
 const int pidSampleTime = 20;
+
+const int feedforward = 7;
+const int brakeThreshold = 80;
 
 // Singletons
 
@@ -28,10 +30,10 @@ SharedComponents shared;
 
 // Globals
 
-double pidSetpoint = 900;
+double pidSetpoint = 100;
 double pidInput, pidOutput;
 
-PID pid(&pidInput, &pidOutput, &pidSetpoint, pidKp, pidKd, pidKi, P_ON_E, REVERSE);
+PID pid(&pidInput, &pidOutput, &pidSetpoint, pidKp, pidKd, pidKi, P_ON_E, DIRECT);
 
 Components::AnalogSensor potentiometer(potentiometerPin);
 Components::Motor motor(shared.motors, motorPort);
@@ -42,6 +44,7 @@ void setup() {
   Log.begin(LOG_LEVEL_VERBOSE, &Serial);
 #endif
   shared.setup();
+  motor.swapDirections();
   potentiometer.setup();
   pidInput = potentiometer.state.current();
   pid.SetMode(AUTOMATIC);
@@ -53,7 +56,9 @@ void loop() {
   potentiometer.update();
   pidInput = potentiometer.state.current();
   pid.Compute();
-  motor.run(feedforward + (int) pidOutput);
+  int motorSpeed = feedforward + (int) pidOutput;
+  if (abs(motorSpeed) < brakeThreshold) motorSpeed = 0;
+  motor.run(motorSpeed);
   Serial.print(minPosition);
   Serial.print(",");
   Serial.print(maxPosition);
