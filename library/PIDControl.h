@@ -21,8 +21,9 @@ class PIDController {
   public:
     PIDController(
         StateVariable<InputType> &inputStateVariable, double kp, double kd, double ki,
-        OutputType minOutput = 0, OutputType maxOutput = 255,
-        int sampleTime = 100, int outputMode = PIDModes::directOutput,
+        OutputType minOutput = 0, OutputType maxOutput = 255, int sampleTime = 100,
+        InputType minInput = 0, InputType maxInput = 0,
+        int outputMode = PIDModes::directOutput,
         int proportionalityMode = PIDModes::errorProportionality
     );
 
@@ -30,6 +31,7 @@ class PIDController {
     void update();
 
     StateVariable<OutputType> output;
+    StateVariable<InputType> setpoint;
 
     void setKp(double newKp);
     void setKd(double newKd);
@@ -61,7 +63,10 @@ class PIDController {
 
     StateVariable<InputType> &input;
     PID pid;
-    InputType rawInput;
+
+    InputType rawInput = 0;
+    InputType minInput;
+    InputType maxInput;
 };
 
 using DiscretePID = PIDController<int, int>;

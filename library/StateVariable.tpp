@@ -74,6 +74,16 @@ inline bool StateVariable<State>::justChanged() const {
   return currentState != previousState;
 }
 
+template <class State>
+inline bool StateVariable<State>::settled(unsigned long settleThreshold) const {
+  return currentTimer >= settleThreshold;
+}
+
+template <class State>
+inline bool StateVariable<State>::settledAt(State state, unsigned long settleThreshold) const {
+  return currentState == state && currentTimer >= settleThreshold;
+}
+
 }
 
 #endif

@@ -8,12 +8,13 @@ namespace LinearPositionControl {
 template <class InputType, class OutputType>
 PIDController<InputType, OutputType>::PIDController(
     StateVariable<InputType> &inputStateVariable, double kp, double kd, double ki,
-    OutputType minOutput, OutputType maxOutput,
-    int sampleTime, int outputMode, int proportionalityMode
+    OutputType minOutput, OutputType maxOutput, int sampleTime,
+    InputType minInput, InputType maxInput, int outputMode, int proportionalityMode
 ) :
   kp(kp), kd(kd), ki(ki), minOutput(minOutput), maxOutput(maxOutput),
   sampleTime(sampleTime), input(inputStateVariable),
-  pid(&pidInput, &pidOutput, &pidSetpoint, kp, kd, ki, proportionalityMode, outputMode) {}
+  pid(&pidInput, &pidOutput, &pidSetpoint, kp, kd, ki, proportionalityMode, outputMode),
+  minInput(minInput), maxInput(maxInput) {}
 
 template <class InputType, class OutputType>
 void PIDController<InputType, OutputType>::setup() {
@@ -84,6 +85,8 @@ void PIDController<InputType, OutputType>::disable() {
 
 template <class InputType, class OutputType>
 void PIDController<InputType, OutputType>::setSetpoint(InputType newSetpoint) {
+  if (minInput < maxInput) newSetpoint = constrain(newSetpoint, minInput, maxInput);
+  setpoint.update(newSetpoint);
   pidSetpoint = newSetpoint;
   enable();
 }

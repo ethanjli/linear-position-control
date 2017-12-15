@@ -133,5 +133,23 @@ void Motor::updateLastDirection() {
   else if (state.current() == State::backwards) lastDirection = BACKWARD;
 }
 
+// MotorSpeedAdjuster
+
+MotorSpeedAdjuster::MotorSpeedAdjuster(
+    StateVariable<int> &inputStateVariable, int speedBias, int brakeThreshold
+) :
+  input(inputStateVariable), speedBias(speedBias), brakeThreshold(brakeThreshold) {}
+
+void MotorSpeedAdjuster::setup() {
+  output.setup(0);
+}
+
+void MotorSpeedAdjuster::update() {
+  int adjusted = input.current();
+  adjusted += speedBias;
+  if (abs(adjusted) < brakeThreshold) adjusted = 0;
+  output.update(adjusted);
+}
+
 } }
 

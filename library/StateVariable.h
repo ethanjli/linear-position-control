@@ -22,6 +22,8 @@ class StateVariable {
 
     bool justEntered(State state) const;
     bool justChanged() const;
+    bool settled(unsigned long settleThreshold) const;
+    bool settledAt(State state, unsigned long settleThreshold) const;
 
   private:
     bool setupCompleted = false;

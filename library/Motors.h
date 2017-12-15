@@ -85,6 +85,24 @@ class Motor {
     void updateLastDirection();
 };
 
+class MotorSpeedAdjuster {
+  public:
+    MotorSpeedAdjuster(
+        StateVariable<int> &inputStateVariable, int speedBias, int brakeThreshold
+    );
+
+    void setup();
+    void update();
+
+    StateVariable<int> output;
+
+    int speedBias;
+    int brakeThreshold;
+
+  private:
+    StateVariable<int> &input;
+};
+
 } }
 
 #endif
