@@ -1,0 +1,19 @@
+[2017-12-15 13:42:34] Experiment ffn.hl_12_100_100_1.lr_0.01.wd_10 logging started.
+[2017-12-15 13:42:34] 
+                       *** Starting Experiment ffn.hl_12_100_100_1.lr_0.01.wd_10 ***
+                      
+[2017-12-15 13:42:34] Hyper parameters
+                      [               batch_size] 512  
+                      [           dataset_prefix] 20171209.1220  
+                      [                 dump_dir] results_ff  
+                      [               early_stop] 40  
+                      [            hidden_layers] [12, 100, 100, 1]  
+                      [                input_dim] 12  
+                      [                  loss_fn] MSELoss ()  
+                      [                 lr_decay] 0.5  
+                      [            lr_decay_freq] 5  
+                      [                  lr_init] 0.01  
+                      [               num_epochs] 15  
+                      [                 use_cuda] True  
+                      [             weight_decay] 10  
+[2017-12-15 13:42:34] Experiment ffn.hl_12_100_100_1.lr_0.01.wd_10 logging ended.

@@ -1,0 +1,27 @@
+[2017-12-14 15:28:05] Experiment lstm.hs_50.nl_2.lr_0.1.wd_0.001.rl_linear logging started.
+[2017-12-14 15:28:05] 
+                       *** Starting Experiment lstm.hs_50.nl_2.lr_0.1.wd_0.001.rl_linear ***
+                      
+[2017-12-14 15:28:05] Hyper parameters
+                      [               batch_size] 64  
+                      [           dataset_prefix] 20171209.1220  
+                      [                 dump_dir] results_rnn_early  
+                      [               early_stop] 40  
+                      [              hidden_size] 50  
+                      [                input_dim] 12  
+                      [                  loss_fn] MSELoss ()  
+                      [                 lr_decay] 0.5  
+                      [            lr_decay_freq] 15  
+                      [                  lr_init] 0.1  
+                      [               num_epochs] 300  
+                      [               num_layers] 2  
+                      [        regression_layers] None  
+                      [                 use_cuda] True  
+                      [             weight_decay] 0.001  
+[2017-12-14 15:28:27] Model architecture
+                      SequentialRegression (
+                        (lstm): LSTM(12, 50, num_layers=2, batch_first=True)
+                        (final): Linear (50 -> 1)
+                      )
+[2017-12-14 15:28:27]  *** Training on GPU ***
+[2017-12-14 15:28:30] Experiment lstm.hs_50.nl_2.lr_0.1.wd_0.001.rl_linear logging ended.

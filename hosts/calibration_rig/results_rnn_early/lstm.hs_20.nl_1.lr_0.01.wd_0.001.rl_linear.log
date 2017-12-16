@@ -1,0 +1,429 @@
+[2017-12-14 15:35:51] Experiment lstm.hs_20.nl_1.lr_0.01.wd_0.001.rl_linear logging started.
+[2017-12-14 15:35:51] 
+                       *** Starting Experiment lstm.hs_20.nl_1.lr_0.01.wd_0.001.rl_linear ***
+                      
+[2017-12-14 15:35:51] Hyper parameters
+                      [               batch_size] 64  
+                      [           dataset_prefix] 20171209.1220  
+                      [                 dump_dir] results_rnn_early  
+                      [               early_stop] 40  
+                      [              hidden_size] 20  
+                      [                input_dim] 12  
+                      [                  loss_fn] MSELoss ()  
+                      [                 lr_decay] 0.5  
+                      [            lr_decay_freq] 15  
+                      [                  lr_init] 0.01  
+                      [               num_epochs] 300  
+                      [               num_layers] 1  
+                      [        regression_layers] None  
+                      [                 use_cuda] True  
+                      [             weight_decay] 0.001  
+[2017-12-14 15:35:55] Model architecture
+                      SequentialRegression (
+                        (lstm): LSTM(12, 20, batch_first=True)
+                        (final): Linear (20 -> 1)
+                      )
+[2017-12-14 15:35:55]  *** Training on GPU ***
+[2017-12-14 15:36:57] Epoch 0001 mean train/dev loss: 328051.3476 / 323998.7812
+[2017-12-14 15:36:57] Checkpointing model...
+[2017-12-14 15:36:57] Model Checkpointing finished.
+[2017-12-14 15:37:59] Epoch 0002 mean train/dev loss: 315612.2605 / 312725.2812
+[2017-12-14 15:37:59] Checkpointing model...
+[2017-12-14 15:37:59] Model Checkpointing finished.
+[2017-12-14 15:39:02] Epoch 0003 mean train/dev loss: 304730.1575 / 302450.5938
+[2017-12-14 15:39:02] Checkpointing model...
+[2017-12-14 15:39:02] Model Checkpointing finished.
+[2017-12-14 15:40:03] Epoch 0004 mean train/dev loss: 295147.6948 / 292684.5000
+[2017-12-14 15:40:03] Checkpointing model...
+[2017-12-14 15:40:03] Model Checkpointing finished.
+[2017-12-14 15:41:06] Epoch 0005 mean train/dev loss: 285222.8785 / 283347.7500
+[2017-12-14 15:41:06] Checkpointing model...
+[2017-12-14 15:41:06] Model Checkpointing finished.
+[2017-12-14 15:42:06] Epoch 0006 mean train/dev loss: 275866.7545 / 274402.3438
+[2017-12-14 15:43:10] Epoch 0007 mean train/dev loss: 267330.0316 / 265765.4688
+[2017-12-14 15:44:12] Epoch 0008 mean train/dev loss: 258583.7787 / 257417.7344
+[2017-12-14 15:45:15] Epoch 0009 mean train/dev loss: 251219.3240 / 249384.0781
+[2017-12-14 15:46:17] Epoch 0010 mean train/dev loss: 243052.0561 / 241596.3750
+[2017-12-14 15:46:17] Checkpointing model...
+[2017-12-14 15:46:18] Model Checkpointing finished.
+[2017-12-14 15:47:19] Epoch 0011 mean train/dev loss: 235083.9104 / 234013.6406
+[2017-12-14 15:48:19] Epoch 0012 mean train/dev loss: 227524.0944 / 226737.2500
+[2017-12-14 15:49:22] Epoch 0013 mean train/dev loss: 220812.6633 / 219773.5000
+[2017-12-14 15:50:27] Epoch 0014 mean train/dev loss: 213871.7028 / 212902.2969
+[2017-12-14 15:51:31] Epoch 0015 mean train/dev loss: 206826.3399 / 206358.0156
+[2017-12-14 15:51:31] Learning rate decayed by 0.5000
+[2017-12-14 15:51:31] Checkpointing model...
+[2017-12-14 15:51:31] Model Checkpointing finished.
+[2017-12-14 15:52:34] Epoch 0016 mean train/dev loss: 201642.8594 / 203133.7031
+[2017-12-14 15:53:35] Epoch 0017 mean train/dev loss: 199137.1240 / 199984.0938
+[2017-12-14 15:54:39] Epoch 0018 mean train/dev loss: 195969.0912 / 196843.3594
+[2017-12-14 15:55:43] Epoch 0019 mean train/dev loss: 192523.3935 / 193737.9844
+[2017-12-14 15:56:47] Epoch 0020 mean train/dev loss: 190025.6400 / 190587.4375
+[2017-12-14 15:56:47] Checkpointing model...
+[2017-12-14 15:56:47] Model Checkpointing finished.
+[2017-12-14 15:57:47] Epoch 0021 mean train/dev loss: 185906.4962 / 187510.6250
+[2017-12-14 15:58:47] Epoch 0022 mean train/dev loss: 183287.7127 / 184516.4062
+[2017-12-14 15:59:50] Epoch 0023 mean train/dev loss: 180139.9828 / 181547.5156
+[2017-12-14 16:00:51] Epoch 0024 mean train/dev loss: 177328.5778 / 178627.1719
+[2017-12-14 16:01:53] Epoch 0025 mean train/dev loss: 174374.0542 / 175762.8594
+[2017-12-14 16:01:53] Checkpointing model...
+[2017-12-14 16:01:53] Model Checkpointing finished.
+[2017-12-14 16:02:56] Epoch 0026 mean train/dev loss: 171852.2927 / 172918.1562
+[2017-12-14 16:03:57] Epoch 0027 mean train/dev loss: 169151.7106 / 170154.1094
+[2017-12-14 16:04:58] Epoch 0028 mean train/dev loss: 165969.0973 / 167311.6250
+[2017-12-14 16:06:00] Epoch 0029 mean train/dev loss: 163341.1666 / 164519.9219
+[2017-12-14 16:07:02] Epoch 0030 mean train/dev loss: 160599.6416 / 161727.7969
+[2017-12-14 16:07:02] Learning rate decayed by 0.5000
+[2017-12-14 16:07:02] Checkpointing model...
+[2017-12-14 16:07:02] Model Checkpointing finished.
+[2017-12-14 16:08:04] Epoch 0031 mean train/dev loss: 158836.9606 / 160365.1875
+[2017-12-14 16:09:08] Epoch 0032 mean train/dev loss: 157221.3015 / 159020.9062
+[2017-12-14 16:10:10] Epoch 0033 mean train/dev loss: 155590.7152 / 157679.4844
+[2017-12-14 16:11:12] Epoch 0034 mean train/dev loss: 154282.5756 / 156348.7188
+[2017-12-14 16:12:13] Epoch 0035 mean train/dev loss: 152725.9560 / 155036.7500
+[2017-12-14 16:12:13] Checkpointing model...
+[2017-12-14 16:12:13] Model Checkpointing finished.
+[2017-12-14 16:13:13] Epoch 0036 mean train/dev loss: 151391.2085 / 153698.4219
+[2017-12-14 16:14:15] Epoch 0037 mean train/dev loss: 150420.3616 / 152363.2031
+[2017-12-14 16:15:16] Epoch 0038 mean train/dev loss: 149028.1727 / 151082.3125
+[2017-12-14 16:16:19] Epoch 0039 mean train/dev loss: 147991.5926 / 149741.5312
+[2017-12-14 16:17:20] Epoch 0040 mean train/dev loss: 146598.7009 / 148438.5312
+[2017-12-14 16:17:20] Checkpointing model...
+[2017-12-14 16:17:21] Model Checkpointing finished.
+[2017-12-14 16:18:21] Epoch 0041 mean train/dev loss: 144973.7608 / 147147.7812
+[2017-12-14 16:19:21] Epoch 0042 mean train/dev loss: 143860.5429 / 145873.2188
+[2017-12-14 16:20:24] Epoch 0043 mean train/dev loss: 142488.2985 / 144583.6094
+[2017-12-14 16:21:26] Epoch 0044 mean train/dev loss: 141158.2682 / 143310.5938
+[2017-12-14 16:22:23] Epoch 0045 mean train/dev loss: 139735.8992 / 142052.7656
+[2017-12-14 16:22:23] Learning rate decayed by 0.5000
+[2017-12-14 16:22:23] Checkpointing model...
+[2017-12-14 16:22:23] Model Checkpointing finished.
+[2017-12-14 16:23:25] Epoch 0046 mean train/dev loss: 138974.3871 / 141415.1719
+[2017-12-14 16:24:27] Epoch 0047 mean train/dev loss: 138484.1409 / 140795.5000
+[2017-12-14 16:25:29] Epoch 0048 mean train/dev loss: 137639.2986 / 140160.9531
+[2017-12-14 16:26:33] Epoch 0049 mean train/dev loss: 137315.7982 / 139531.3750
+[2017-12-14 16:27:35] Epoch 0050 mean train/dev loss: 136602.9495 / 138900.1875
+[2017-12-14 16:27:35] Checkpointing model...
+[2017-12-14 16:27:35] Model Checkpointing finished.
+[2017-12-14 16:28:40] Epoch 0051 mean train/dev loss: 135833.6676 / 138268.0938
+[2017-12-14 16:29:41] Epoch 0052 mean train/dev loss: 135322.0104 / 137634.5312
+[2017-12-14 16:30:44] Epoch 0053 mean train/dev loss: 134750.6304 / 137009.0000
+[2017-12-14 16:31:47] Epoch 0054 mean train/dev loss: 134196.3648 / 136343.7812
+[2017-12-14 16:32:48] Epoch 0055 mean train/dev loss: 133317.9483 / 135710.3438
+[2017-12-14 16:32:48] Checkpointing model...
+[2017-12-14 16:32:48] Model Checkpointing finished.
+[2017-12-14 16:33:51] Epoch 0056 mean train/dev loss: 132581.4579 / 135075.7344
+[2017-12-14 16:34:55] Epoch 0057 mean train/dev loss: 131917.4434 / 134446.7656
+[2017-12-14 16:35:57] Epoch 0058 mean train/dev loss: 131442.3763 / 133812.3438
+[2017-12-14 16:36:57] Epoch 0059 mean train/dev loss: 130820.6425 / 133185.0000
+[2017-12-14 16:38:00] Epoch 0060 mean train/dev loss: 130647.4598 / 132558.3281
+[2017-12-14 16:38:00] Learning rate decayed by 0.5000
+[2017-12-14 16:38:00] Checkpointing model...
+[2017-12-14 16:38:01] Model Checkpointing finished.
+[2017-12-14 16:39:03] Epoch 0061 mean train/dev loss: 129872.2658 / 132242.7344
+[2017-12-14 16:40:05] Epoch 0062 mean train/dev loss: 129507.5107 / 131928.3438
+[2017-12-14 16:41:07] Epoch 0063 mean train/dev loss: 129175.2471 / 131612.7656
+[2017-12-14 16:42:08] Epoch 0064 mean train/dev loss: 128961.0647 / 131296.7188
+[2017-12-14 16:43:11] Epoch 0065 mean train/dev loss: 128506.2714 / 130983.0859
+[2017-12-14 16:43:11] Checkpointing model...
+[2017-12-14 16:43:11] Model Checkpointing finished.
+[2017-12-14 16:44:14] Epoch 0066 mean train/dev loss: 128399.2887 / 130652.5859
+[2017-12-14 16:45:17] Epoch 0067 mean train/dev loss: 127936.8827 / 130329.0938
+[2017-12-14 16:46:18] Epoch 0068 mean train/dev loss: 127339.0454 / 129996.7656
+[2017-12-14 16:47:19] Epoch 0069 mean train/dev loss: 127567.7843 / 129667.6172
+[2017-12-14 16:48:21] Epoch 0070 mean train/dev loss: 126910.1188 / 129347.7344
+[2017-12-14 16:48:21] Checkpointing model...
+[2017-12-14 16:48:22] Model Checkpointing finished.
+[2017-12-14 16:49:25] Epoch 0071 mean train/dev loss: 126357.8658 / 129023.6484
+[2017-12-14 16:50:28] Epoch 0072 mean train/dev loss: 126075.4947 / 128705.7734
+[2017-12-14 16:51:30] Epoch 0073 mean train/dev loss: 125997.7371 / 128384.3281
+[2017-12-14 16:52:32] Epoch 0074 mean train/dev loss: 125363.1641 / 128063.4531
+[2017-12-14 16:53:33] Epoch 0075 mean train/dev loss: 125166.9949 / 127744.6406
+[2017-12-14 16:53:33] Learning rate decayed by 0.5000
+[2017-12-14 16:53:33] Checkpointing model...
+[2017-12-14 16:53:33] Model Checkpointing finished.
+[2017-12-14 16:54:36] Epoch 0076 mean train/dev loss: 124791.8603 / 127585.6719
+[2017-12-14 16:55:37] Epoch 0077 mean train/dev loss: 124988.4058 / 127425.1406
+[2017-12-14 16:56:39] Epoch 0078 mean train/dev loss: 124607.6311 / 127267.2266
+[2017-12-14 16:57:38] Epoch 0079 mean train/dev loss: 124474.5301 / 127105.1953
+[2017-12-14 16:58:41] Epoch 0080 mean train/dev loss: 124376.3430 / 126945.6484
+[2017-12-14 16:58:41] Checkpointing model...
+[2017-12-14 16:58:41] Model Checkpointing finished.
+[2017-12-14 16:59:42] Epoch 0081 mean train/dev loss: 124307.1979 / 126785.3594
+[2017-12-14 17:00:42] Epoch 0082 mean train/dev loss: 124241.9576 / 126625.2344
+[2017-12-14 17:01:47] Epoch 0083 mean train/dev loss: 124120.1636 / 126466.4375
+[2017-12-14 17:02:47] Epoch 0084 mean train/dev loss: 123965.4880 / 126302.7812
+[2017-12-14 17:03:47] Epoch 0085 mean train/dev loss: 124060.8069 / 126138.5000
+[2017-12-14 17:03:47] Checkpointing model...
+[2017-12-14 17:03:47] Model Checkpointing finished.
+[2017-12-14 17:04:49] Epoch 0086 mean train/dev loss: 123427.0587 / 125978.2422
+[2017-12-14 17:05:50] Epoch 0087 mean train/dev loss: 123390.7671 / 125818.2266
+[2017-12-14 17:06:53] Epoch 0088 mean train/dev loss: 123433.2473 / 125655.5000
+[2017-12-14 17:07:55] Epoch 0089 mean train/dev loss: 122998.2521 / 125494.2422
+[2017-12-14 17:08:56] Epoch 0090 mean train/dev loss: 122651.1307 / 125337.7891
+[2017-12-14 17:08:56] Learning rate decayed by 0.5000
+[2017-12-14 17:08:56] Checkpointing model...
+[2017-12-14 17:08:56] Model Checkpointing finished.
+[2017-12-14 17:09:58] Epoch 0091 mean train/dev loss: 122451.9613 / 125257.2344
+[2017-12-14 17:11:03] Epoch 0092 mean train/dev loss: 122606.2446 / 125175.2422
+[2017-12-14 17:12:04] Epoch 0093 mean train/dev loss: 122105.3997 / 125095.2422
+[2017-12-14 17:13:04] Epoch 0094 mean train/dev loss: 122448.4381 / 125016.2734
+[2017-12-14 17:14:05] Epoch 0095 mean train/dev loss: 122144.8522 / 124935.6797
+[2017-12-14 17:14:05] Checkpointing model...
+[2017-12-14 17:14:06] Model Checkpointing finished.
+[2017-12-14 17:15:05] Epoch 0096 mean train/dev loss: 122391.1298 / 124853.8906
+[2017-12-14 17:16:05] Epoch 0097 mean train/dev loss: 122338.6083 / 124774.2969
+[2017-12-14 17:17:06] Epoch 0098 mean train/dev loss: 121983.8147 / 124692.9922
+[2017-12-14 17:18:05] Epoch 0099 mean train/dev loss: 122041.9880 / 124612.3750
+[2017-12-14 17:19:04] Epoch 0100 mean train/dev loss: 121964.6606 / 124532.4453
+[2017-12-14 17:19:04] Checkpointing model...
+[2017-12-14 17:19:04] Model Checkpointing finished.
+[2017-12-14 17:20:04] Epoch 0101 mean train/dev loss: 122033.8618 / 124456.9453
+[2017-12-14 17:21:04] Epoch 0102 mean train/dev loss: 121803.3171 / 124376.9062
+[2017-12-14 17:22:04] Epoch 0103 mean train/dev loss: 122086.0413 / 124292.8359
+[2017-12-14 17:23:07] Epoch 0104 mean train/dev loss: 121686.3194 / 124210.8516
+[2017-12-14 17:24:09] Epoch 0105 mean train/dev loss: 121533.2382 / 124130.0547
+[2017-12-14 17:24:09] Learning rate decayed by 0.5000
+[2017-12-14 17:24:09] Checkpointing model...
+[2017-12-14 17:24:09] Model Checkpointing finished.
+[2017-12-14 17:25:07] Epoch 0106 mean train/dev loss: 121664.0277 / 124088.6094
+[2017-12-14 17:26:12] Epoch 0107 mean train/dev loss: 121574.5282 / 124048.6016
+[2017-12-14 17:27:13] Epoch 0108 mean train/dev loss: 121235.3815 / 124006.0156
+[2017-12-14 17:28:12] Epoch 0109 mean train/dev loss: 121371.0475 / 123966.9219
+[2017-12-14 17:29:15] Epoch 0110 mean train/dev loss: 121173.3820 / 123926.7109
+[2017-12-14 17:29:15] Checkpointing model...
+[2017-12-14 17:29:15] Model Checkpointing finished.
+[2017-12-14 17:30:17] Epoch 0111 mean train/dev loss: 121257.5499 / 123885.0781
+[2017-12-14 17:31:21] Epoch 0112 mean train/dev loss: 121264.7454 / 123844.9922
+[2017-12-14 17:32:20] Epoch 0113 mean train/dev loss: 121074.1460 / 123803.8516
+[2017-12-14 17:33:21] Epoch 0114 mean train/dev loss: 121148.3632 / 123764.6094
+[2017-12-14 17:34:24] Epoch 0115 mean train/dev loss: 121180.0533 / 123724.3203
+[2017-12-14 17:34:24] Checkpointing model...
+[2017-12-14 17:34:24] Model Checkpointing finished.
+[2017-12-14 17:35:27] Epoch 0116 mean train/dev loss: 121399.3685 / 123682.8516
+[2017-12-14 17:36:28] Epoch 0117 mean train/dev loss: 120924.9168 / 123641.8906
+[2017-12-14 17:37:28] Epoch 0118 mean train/dev loss: 121022.8476 / 123602.0312
+[2017-12-14 17:38:31] Epoch 0119 mean train/dev loss: 120973.3807 / 123559.9688
+[2017-12-14 17:39:35] Epoch 0120 mean train/dev loss: 121173.5454 / 123520.4609
+[2017-12-14 17:39:35] Learning rate decayed by 0.5000
+[2017-12-14 17:39:35] Checkpointing model...
+[2017-12-14 17:39:36] Model Checkpointing finished.
+[2017-12-14 17:40:39] Epoch 0121 mean train/dev loss: 120929.7017 / 123500.1641
+[2017-12-14 17:41:39] Epoch 0122 mean train/dev loss: 120876.9152 / 123478.7969
+[2017-12-14 17:42:43] Epoch 0123 mean train/dev loss: 121044.8098 / 123455.7500
+[2017-12-14 17:43:44] Epoch 0124 mean train/dev loss: 120840.1661 / 123435.6406
+[2017-12-14 17:44:47] Epoch 0125 mean train/dev loss: 120931.9141 / 123414.6953
+[2017-12-14 17:44:47] Checkpointing model...
+[2017-12-14 17:44:47] Model Checkpointing finished.
+[2017-12-14 17:45:52] Epoch 0126 mean train/dev loss: 120928.8227 / 123394.9219
+[2017-12-14 17:46:57] Epoch 0127 mean train/dev loss: 120837.0231 / 123373.9609
+[2017-12-14 17:47:58] Epoch 0128 mean train/dev loss: 120590.9703 / 123354.4375
+[2017-12-14 17:49:01] Epoch 0129 mean train/dev loss: 120614.0874 / 123333.2578
+[2017-12-14 17:50:03] Epoch 0130 mean train/dev loss: 120523.3034 / 123312.9297
+[2017-12-14 17:50:03] Checkpointing model...
+[2017-12-14 17:50:03] Model Checkpointing finished.
+[2017-12-14 17:51:04] Epoch 0131 mean train/dev loss: 120552.7148 / 123292.6562
+[2017-12-14 17:52:06] Epoch 0132 mean train/dev loss: 120764.9968 / 123271.9688
+[2017-12-14 17:53:04] Epoch 0133 mean train/dev loss: 120821.9506 / 123251.5938
+[2017-12-14 17:54:04] Epoch 0134 mean train/dev loss: 120685.0040 / 123231.8906
+[2017-12-14 17:55:04] Epoch 0135 mean train/dev loss: 120198.2642 / 123210.8672
+[2017-12-14 17:55:04] Learning rate decayed by 0.5000
+[2017-12-14 17:55:04] Checkpointing model...
+[2017-12-14 17:55:04] Model Checkpointing finished.
+[2017-12-14 17:56:06] Epoch 0136 mean train/dev loss: 120648.2666 / 123200.5859
+[2017-12-14 17:57:05] Epoch 0137 mean train/dev loss: 120788.2090 / 123190.4531
+[2017-12-14 17:58:02] Epoch 0138 mean train/dev loss: 120593.8261 / 123180.1875
+[2017-12-14 17:59:03] Epoch 0139 mean train/dev loss: 120185.7967 / 123169.8828
+[2017-12-14 18:00:01] Epoch 0140 mean train/dev loss: 120480.5177 / 123159.8281
+[2017-12-14 18:00:01] Checkpointing model...
+[2017-12-14 18:00:02] Model Checkpointing finished.
+[2017-12-14 18:01:03] Epoch 0141 mean train/dev loss: 120374.9190 / 123149.6328
+[2017-12-14 18:02:02] Epoch 0142 mean train/dev loss: 120615.2221 / 123139.4453
+[2017-12-14 18:03:03] Epoch 0143 mean train/dev loss: 120400.2031 / 123129.1641
+[2017-12-14 18:04:02] Epoch 0144 mean train/dev loss: 120460.1535 / 123119.0703
+[2017-12-14 18:05:05] Epoch 0145 mean train/dev loss: 120386.8445 / 123108.6797
+[2017-12-14 18:05:05] Checkpointing model...
+[2017-12-14 18:05:05] Model Checkpointing finished.
+[2017-12-14 18:06:05] Epoch 0146 mean train/dev loss: 120316.7479 / 123097.5547
+[2017-12-14 18:07:04] Epoch 0147 mean train/dev loss: 120456.2824 / 123087.7500
+[2017-12-14 18:08:05] Epoch 0148 mean train/dev loss: 120420.2020 / 123077.6484
+[2017-12-14 18:09:06] Epoch 0149 mean train/dev loss: 120382.0665 / 123067.3906
+[2017-12-14 18:10:06] Epoch 0150 mean train/dev loss: 120334.6674 / 123057.3438
+[2017-12-14 18:10:06] Learning rate decayed by 0.5000
+[2017-12-14 18:10:06] Checkpointing model...
+[2017-12-14 18:10:07] Model Checkpointing finished.
+[2017-12-14 18:11:07] Epoch 0151 mean train/dev loss: 120282.4963 / 123052.3828
+[2017-12-14 18:12:07] Epoch 0152 mean train/dev loss: 120340.1987 / 123047.3359
+[2017-12-14 18:13:09] Epoch 0153 mean train/dev loss: 120501.0078 / 123042.3203
+[2017-12-14 18:14:10] Epoch 0154 mean train/dev loss: 120570.3809 / 123037.2734
+[2017-12-14 18:15:10] Epoch 0155 mean train/dev loss: 120341.0515 / 123032.2109
+[2017-12-14 18:15:10] Checkpointing model...
+[2017-12-14 18:15:10] Model Checkpointing finished.
+[2017-12-14 18:16:09] Epoch 0156 mean train/dev loss: 120344.4577 / 123027.1719
+[2017-12-14 18:17:09] Epoch 0157 mean train/dev loss: 120267.4959 / 123022.1484
+[2017-12-14 18:18:10] Epoch 0158 mean train/dev loss: 120296.7202 / 123017.0234
+[2017-12-14 18:19:12] Epoch 0159 mean train/dev loss: 120590.3350 / 123011.9922
+[2017-12-14 18:20:15] Epoch 0160 mean train/dev loss: 120462.0402 / 123006.8516
+[2017-12-14 18:20:15] Checkpointing model...
+[2017-12-14 18:20:15] Model Checkpointing finished.
+[2017-12-14 18:21:15] Epoch 0161 mean train/dev loss: 120657.1505 / 123002.2812
+[2017-12-14 18:22:16] Epoch 0162 mean train/dev loss: 120331.6212 / 122997.3750
+[2017-12-14 18:23:15] Epoch 0163 mean train/dev loss: 120122.0158 / 122992.1406
+[2017-12-14 18:24:16] Epoch 0164 mean train/dev loss: 120448.9383 / 122986.9688
+[2017-12-14 18:25:19] Epoch 0165 mean train/dev loss: 120284.0792 / 122981.8750
+[2017-12-14 18:25:19] Learning rate decayed by 0.5000
+[2017-12-14 18:25:19] Checkpointing model...
+[2017-12-14 18:25:19] Model Checkpointing finished.
+[2017-12-14 18:26:21] Epoch 0166 mean train/dev loss: 120545.7385 / 122979.3750
+[2017-12-14 18:27:24] Epoch 0167 mean train/dev loss: 120145.2934 / 122976.8828
+[2017-12-14 18:28:26] Epoch 0168 mean train/dev loss: 120254.7706 / 122974.3828
+[2017-12-14 18:29:29] Epoch 0169 mean train/dev loss: 120279.4526 / 122971.8906
+[2017-12-14 18:30:33] Epoch 0170 mean train/dev loss: 119903.3929 / 122969.3672
+[2017-12-14 18:30:33] Checkpointing model...
+[2017-12-14 18:30:33] Model Checkpointing finished.
+[2017-12-14 18:31:36] Epoch 0171 mean train/dev loss: 119810.2533 / 122966.9141
+[2017-12-14 18:32:41] Epoch 0172 mean train/dev loss: 120343.2339 / 122964.3906
+[2017-12-14 18:33:43] Epoch 0173 mean train/dev loss: 120465.2887 / 122961.8672
+[2017-12-14 18:34:46] Epoch 0174 mean train/dev loss: 120331.5461 / 122959.4141
+[2017-12-14 18:35:47] Epoch 0175 mean train/dev loss: 120346.3245 / 122956.9219
+[2017-12-14 18:35:47] Checkpointing model...
+[2017-12-14 18:35:47] Model Checkpointing finished.
+[2017-12-14 18:36:51] Epoch 0176 mean train/dev loss: 120303.7739 / 122954.4219
+[2017-12-14 18:37:51] Epoch 0177 mean train/dev loss: 120401.0193 / 122951.9531
+[2017-12-14 18:38:54] Epoch 0178 mean train/dev loss: 120180.9715 / 122949.4297
+[2017-12-14 18:39:57] Epoch 0179 mean train/dev loss: 120420.6572 / 122946.9375
+[2017-12-14 18:40:58] Epoch 0180 mean train/dev loss: 120042.1060 / 122944.4453
+[2017-12-14 18:40:58] Learning rate decayed by 0.5000
+[2017-12-14 18:40:58] Checkpointing model...
+[2017-12-14 18:40:58] Model Checkpointing finished.
+[2017-12-14 18:41:57] Epoch 0181 mean train/dev loss: 120154.8194 / 122943.1719
+[2017-12-14 18:42:57] Epoch 0182 mean train/dev loss: 120286.4593 / 122941.7812
+[2017-12-14 18:43:57] Epoch 0183 mean train/dev loss: 120313.5035 / 122940.3125
+[2017-12-14 18:45:01] Epoch 0184 mean train/dev loss: 120184.3871 / 122938.8750
+[2017-12-14 18:46:02] Epoch 0185 mean train/dev loss: 120304.3540 / 122937.5000
+[2017-12-14 18:46:02] Checkpointing model...
+[2017-12-14 18:46:02] Model Checkpointing finished.
+[2017-12-14 18:47:02] Epoch 0186 mean train/dev loss: 120151.1178 / 122936.0859
+[2017-12-14 18:48:03] Epoch 0187 mean train/dev loss: 120329.8353 / 122934.6797
+[2017-12-14 18:49:07] Epoch 0188 mean train/dev loss: 120134.5008 / 122933.2344
+[2017-12-14 18:50:09] Epoch 0189 mean train/dev loss: 120290.4801 / 122931.8281
+[2017-12-14 18:51:09] Epoch 0190 mean train/dev loss: 120318.2503 / 122930.4219
+[2017-12-14 18:51:09] Checkpointing model...
+[2017-12-14 18:51:09] Model Checkpointing finished.
+[2017-12-14 18:52:11] Epoch 0191 mean train/dev loss: 120085.4396 / 122929.1016
+[2017-12-14 18:53:10] Epoch 0192 mean train/dev loss: 120402.8551 / 122927.7109
+[2017-12-14 18:54:13] Epoch 0193 mean train/dev loss: 120306.2400 / 122926.2812
+[2017-12-14 18:55:14] Epoch 0194 mean train/dev loss: 120393.9420 / 122924.7969
+[2017-12-14 18:56:14] Epoch 0195 mean train/dev loss: 120293.7484 / 122923.3594
+[2017-12-14 18:56:14] Learning rate decayed by 0.5000
+[2017-12-14 18:56:14] Checkpointing model...
+[2017-12-14 18:56:14] Model Checkpointing finished.
+[2017-12-14 18:57:15] Epoch 0196 mean train/dev loss: 120420.4689 / 122922.8594
+[2017-12-14 18:58:14] Epoch 0197 mean train/dev loss: 120468.1108 / 122922.3516
+[2017-12-14 18:59:14] Epoch 0198 mean train/dev loss: 120344.6942 / 122921.8906
+[2017-12-14 19:00:18] Epoch 0199 mean train/dev loss: 120468.2717 / 122921.8516
+[2017-12-14 19:01:22] Epoch 0200 mean train/dev loss: 120391.9673 / 122921.3984
+[2017-12-14 19:01:22] Checkpointing model...
+[2017-12-14 19:01:22] Model Checkpointing finished.
+[2017-12-14 19:02:23] Epoch 0201 mean train/dev loss: 120108.6708 / 122921.3281
+[2017-12-14 19:03:23] Epoch 0202 mean train/dev loss: 120249.3756 / 122920.8828
+[2017-12-14 19:04:25] Epoch 0203 mean train/dev loss: 120301.9479 / 122920.4141
+[2017-12-14 19:05:29] Epoch 0204 mean train/dev loss: 120228.4284 / 122919.9219
+[2017-12-14 19:06:30] Epoch 0205 mean train/dev loss: 120206.5580 / 122919.4766
+[2017-12-14 19:06:30] Checkpointing model...
+[2017-12-14 19:06:30] Model Checkpointing finished.
+[2017-12-14 19:07:32] Epoch 0206 mean train/dev loss: 120290.1642 / 122918.9531
+[2017-12-14 19:08:35] Epoch 0207 mean train/dev loss: 120114.4672 / 122918.4688
+[2017-12-14 19:09:34] Epoch 0208 mean train/dev loss: 120277.1288 / 122917.9375
+[2017-12-14 19:10:38] Epoch 0209 mean train/dev loss: 120148.2556 / 122917.4688
+[2017-12-14 19:11:42] Epoch 0210 mean train/dev loss: 120386.8881 / 122916.9688
+[2017-12-14 19:11:42] Learning rate decayed by 0.5000
+[2017-12-14 19:11:42] Checkpointing model...
+[2017-12-14 19:11:42] Model Checkpointing finished.
+[2017-12-14 19:12:47] Epoch 0211 mean train/dev loss: 120483.7562 / 122916.4609
+[2017-12-14 19:13:48] Epoch 0212 mean train/dev loss: 120347.0400 / 122915.9609
+[2017-12-14 19:14:48] Epoch 0213 mean train/dev loss: 120225.2372 / 122915.4531
+[2017-12-14 19:15:57] Epoch 0214 mean train/dev loss: 119982.7701 / 122914.9375
+[2017-12-14 19:17:03] Epoch 0215 mean train/dev loss: 120338.6998 / 122914.4453
+[2017-12-14 19:17:03] Checkpointing model...
+[2017-12-14 19:17:04] Model Checkpointing finished.
+[2017-12-14 19:18:09] Epoch 0216 mean train/dev loss: 120331.9630 / 122913.9375
+[2017-12-14 19:19:17] Epoch 0217 mean train/dev loss: 120296.0446 / 122913.4375
+[2017-12-14 19:20:24] Epoch 0218 mean train/dev loss: 120147.8327 / 122912.9141
+[2017-12-14 19:21:30] Epoch 0219 mean train/dev loss: 120557.6052 / 122912.4219
+[2017-12-14 19:22:38] Epoch 0220 mean train/dev loss: 119955.9882 / 122911.9375
+[2017-12-14 19:22:38] Checkpointing model...
+[2017-12-14 19:22:38] Model Checkpointing finished.
+[2017-12-14 19:23:44] Epoch 0221 mean train/dev loss: 120091.9356 / 122911.4297
+[2017-12-14 19:24:50] Epoch 0222 mean train/dev loss: 120417.9871 / 122910.9531
+[2017-12-14 19:25:57] Epoch 0223 mean train/dev loss: 120163.0400 / 122910.4219
+[2017-12-14 19:27:05] Epoch 0224 mean train/dev loss: 120398.3455 / 122909.9453
+[2017-12-14 19:28:10] Epoch 0225 mean train/dev loss: 120408.9978 / 122909.4141
+[2017-12-14 19:28:10] Learning rate decayed by 0.5000
+[2017-12-14 19:28:10] Checkpointing model...
+[2017-12-14 19:28:11] Model Checkpointing finished.
+[2017-12-14 19:29:20] Epoch 0226 mean train/dev loss: 120397.0402 / 122909.4141
+[2017-12-14 19:30:27] Epoch 0227 mean train/dev loss: 120131.4059 / 122909.4141
+[2017-12-14 19:31:32] Epoch 0228 mean train/dev loss: 120273.9700 / 122909.4141
+[2017-12-14 19:32:37] Epoch 0229 mean train/dev loss: 120475.7162 / 122909.4141
+[2017-12-14 19:33:39] Epoch 0230 mean train/dev loss: 120352.1081 / 122909.4219
+[2017-12-14 19:33:39] Checkpointing model...
+[2017-12-14 19:33:39] Model Checkpointing finished.
+[2017-12-14 19:34:43] Epoch 0231 mean train/dev loss: 120423.0658 / 122909.4219
+[2017-12-14 19:35:47] Epoch 0232 mean train/dev loss: 120055.3672 / 122909.4219
+[2017-12-14 19:36:49] Epoch 0233 mean train/dev loss: 120301.2411 / 122909.4141
+[2017-12-14 19:37:52] Epoch 0234 mean train/dev loss: 120201.2905 / 122909.4219
+[2017-12-14 19:38:55] Epoch 0235 mean train/dev loss: 120081.9731 / 122909.4219
+[2017-12-14 19:38:55] Checkpointing model...
+[2017-12-14 19:38:55] Model Checkpointing finished.
+[2017-12-14 19:39:54] Epoch 0236 mean train/dev loss: 119909.9217 / 122909.4219
+[2017-12-14 19:40:57] Epoch 0237 mean train/dev loss: 120297.4629 / 122909.4219
+[2017-12-14 19:41:59] Epoch 0238 mean train/dev loss: 120056.1566 / 122909.4219
+[2017-12-14 19:42:59] Epoch 0239 mean train/dev loss: 120432.0939 / 122909.4219
+[2017-12-14 19:43:59] Epoch 0240 mean train/dev loss: 120285.5021 / 122909.4219
+[2017-12-14 19:43:59] Learning rate decayed by 0.5000
+[2017-12-14 19:43:59] Checkpointing model...
+[2017-12-14 19:43:59] Model Checkpointing finished.
+[2017-12-14 19:45:00] Epoch 0241 mean train/dev loss: 120579.7231 / 122909.4219
+[2017-12-14 19:46:03] Epoch 0242 mean train/dev loss: 120396.3356 / 122909.4219
+[2017-12-14 19:47:05] Epoch 0243 mean train/dev loss: 120282.9424 / 122909.4219
+[2017-12-14 19:48:08] Epoch 0244 mean train/dev loss: 120392.6972 / 122909.4219
+[2017-12-14 19:49:09] Epoch 0245 mean train/dev loss: 120358.5459 / 122909.4219
+[2017-12-14 19:49:09] Checkpointing model...
+[2017-12-14 19:49:09] Model Checkpointing finished.
+[2017-12-14 19:50:14] Epoch 0246 mean train/dev loss: 120259.7913 / 122909.4219
+[2017-12-14 19:51:16] Epoch 0247 mean train/dev loss: 120282.6409 / 122909.4219
+[2017-12-14 19:52:20] Epoch 0248 mean train/dev loss: 120320.9273 / 122909.4219
+[2017-12-14 19:53:22] Epoch 0249 mean train/dev loss: 120101.6861 / 122909.4375
+[2017-12-14 19:54:24] Epoch 0250 mean train/dev loss: 120382.7717 / 122909.4375
+[2017-12-14 19:54:24] Checkpointing model...
+[2017-12-14 19:54:24] Model Checkpointing finished.
+[2017-12-14 19:55:26] Epoch 0251 mean train/dev loss: 120174.2841 / 122909.4375
+[2017-12-14 19:56:30] Epoch 0252 mean train/dev loss: 120241.7006 / 122909.4375
+[2017-12-14 19:57:32] Epoch 0253 mean train/dev loss: 120166.6438 / 122909.4375
+[2017-12-14 19:58:35] Epoch 0254 mean train/dev loss: 120747.0738 / 122909.4375
+[2017-12-14 19:59:38] Epoch 0255 mean train/dev loss: 120622.3388 / 122909.4375
+[2017-12-14 19:59:38] Learning rate decayed by 0.5000
+[2017-12-14 19:59:38] Checkpointing model...
+[2017-12-14 19:59:38] Model Checkpointing finished.
+[2017-12-14 20:00:39] Epoch 0256 mean train/dev loss: 120031.5115 / 122909.4375
+[2017-12-14 20:01:42] Epoch 0257 mean train/dev loss: 120077.3964 / 122909.4375
+[2017-12-14 20:02:45] Epoch 0258 mean train/dev loss: 120328.1317 / 122909.4375
+[2017-12-14 20:03:46] Epoch 0259 mean train/dev loss: 120183.3568 / 122909.4375
+[2017-12-14 20:04:49] Epoch 0260 mean train/dev loss: 120387.5005 / 122909.4375
+[2017-12-14 20:04:49] Checkpointing model...
+[2017-12-14 20:04:49] Model Checkpointing finished.
+[2017-12-14 20:05:53] Epoch 0261 mean train/dev loss: 120003.3238 / 122909.4375
+[2017-12-14 20:06:54] Epoch 0262 mean train/dev loss: 120199.4455 / 122909.4375
+[2017-12-14 20:07:54] Epoch 0263 mean train/dev loss: 120306.0654 / 122909.4375
+[2017-12-14 20:08:56] Epoch 0264 mean train/dev loss: 120370.6017 / 122909.4375
+[2017-12-14 20:09:59] Epoch 0265 mean train/dev loss: 120340.5832 / 122909.4375
+[2017-12-14 20:09:59] Checkpointing model...
+[2017-12-14 20:09:59] Model Checkpointing finished.
+[2017-12-14 20:11:03] Epoch 0266 mean train/dev loss: 120140.7557 / 122909.4375
+[2017-12-14 20:11:03] Early stopping training because validation loss did not improve for 40 epochs!
+[2017-12-14 20:11:03] 
+                       *** Training finished *** 
+[2017-12-14 20:11:09] Dev MSE: 122909.4375
+[2017-12-14 20:12:00] Training MSE: 120283.6797
+[2017-12-14 20:12:01] Experiment lstm.hs_20.nl_1.lr_0.01.wd_0.001.rl_linear logging ended.
