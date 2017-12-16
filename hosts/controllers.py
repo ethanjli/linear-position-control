@@ -5,7 +5,7 @@ import numpy as np
 import controlpy as cp
 
 import calibration
-from util import TrainedRLPolicy
+import util
 
 def find_closest(numbers, number):
     pos = bisect.bisect_left(numbers, number)
@@ -34,9 +34,9 @@ class Baseline(calibration.EpisodicController):
 
     def on_episode_start(self, parsed):
         if parsed['estimatedPosition'] < self.target_position:
-            self.action = 150
+            self.action = 240
         elif parsed['estimatedPosition'] > self.target_position:
-            self.action = -150
+            self.action = -240
         else:
             self.action = 0
 
@@ -213,7 +213,7 @@ class KalmanPD(PD):
         self.action = 0
         super().on_episode_start(parsed)
 
-class OraclePD(PD):
+class FastOraclePD(PD):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.k_p = 6
@@ -222,11 +222,11 @@ class OraclePD(PD):
     def estimate_position(self, parsed):
         return parsed['groundTruthPosition']
 
-class SlowOraclePD(OraclePD):
+class SlowOraclePD(FastOraclePD):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.k_p = 2
-        self.k_d = 2
+        self.k_p = 3
+        self.k_d = 10
         self.speeds = [90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200]
 
 class LinearRegressionPD(PD):
@@ -245,6 +245,48 @@ class LinearRegressionPD(PD):
     def estimate_position(self, parsed):
         terms = [parsed[term] for term in self.terms]
         return self.intercept + np.dot(self.coefs, terms)
+
+class FFNNPD(PD):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.k_p = 2
+        self.k_d = 2
+        self.terms = [
+            'lastLimit', 'timeSinceLastLimitMicroseconds', 'edgesBetweenLimits',
+            'atLeftLimit', 'atRightLimit',
+            'timeSinceLastEdgeMicroseconds', 'timeBetweenLastEdgesMicroseconds',
+            'forwardsEdgesSinceLastLimit', 'backwardsEdgesSinceLastLimit',
+            'opticalSensor', 'motorDirection', 'motorDuty'
+        ]
+        self.speeds = [120, 130, 140, 150, 160, 170, 180, 190, 200]
+        self.estimator = util.PositionEstimator(util.TOP_FFN_MODELS[0])
+
+    def estimate_position(self, parsed):
+        terms = [parsed[term] for term in self.terms]
+        return self.estimator(terms)
+
+class RNNPD(PD):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.k_p = 2
+        self.k_d = 2
+        self.terms = [
+            'lastLimit', 'timeSinceLastLimitMicroseconds', 'edgesBetweenLimits',
+            'atLeftLimit', 'atRightLimit',
+            'timeSinceLastEdgeMicroseconds', 'timeBetweenLastEdgesMicroseconds',
+            'forwardsEdgesSinceLastLimit', 'backwardsEdgesSinceLastLimit',
+            'opticalSensor', 'motorDirection', 'motorDuty'
+        ]
+        self.speeds = [120, 130, 140, 150, 160, 170, 180, 190, 200]
+        self.estimator = util.PositionEstimator(util.TOP_RNN_MODELS[0])
+
+    def estimate_position(self, parsed):
+        terms = [parsed[term] for term in self.terms]
+        return self.estimator(terms)
+
+    def on_episode_start(self, parsed):
+        super().on_episode_start(parsed)
+        self.estimator.reset_rnn_states()
 
 class SlowOracleLQG(LQG):
     def __init__(self, **kwargs):
@@ -286,7 +328,7 @@ class LinearQ(calibration.EpisodicController):
             'forwardsEdgesSinceLastLimit', 'backwardsEdgesSinceLastLimit',
             'opticalSensor', 'motorDirection', 'motorDuty'
         ]
-        self.policy = TrainedRLPolicy('results_dqn_target/dqn.hl_16.lr_0.1.model.pt')
+        self.policy = util.TrainedRLPolicy('results_dqn_target/dqn.hl_16.lr_0.1.model.pt')
 
     def choose_action(self, parsed):
         terms = np.array([parsed[term] for term in self.terms])
