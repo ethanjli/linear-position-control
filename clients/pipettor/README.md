@@ -8,7 +8,7 @@ This sketch controls the pipettor module subsystem. The OnShape CAD design for t
 
 ## Wiring
 
-This sketch is configured to drive the motor on port M2 of the Adafruit Motor Shield. The red wire for the motor is assumed to be in the terminal block hole closer to GND on the Motor Shield than the blue wire for the motor. The red wire for the motor should be closer to the slide potentiometer than the blue wire. If the wires are switched, then the `motor.swapDirections();` line in the `setup()` function of the Arduino sketch will need to be commented out. A future iteration of the embedded software hardware abstraction layer will automatically detect motor polarity and swap motor directions when necessary.
+This sketch is configured to drive the motor on port M2 of the Adafruit Motor Shield. The red wire for the motor is assumed to be in the terminal block hole closer to GND on the Motor Shield than the blue wire for the motor. The red wire for the motor should be closer to the slide potentiometer than the blue wire. If the wires are switched, you will need to change the `motorReversedPolarity` constant to be `false`. A future iteration of the embedded software hardware abstraction layer will automatically detect motor polarity and swap motor directions when necessary.
 
 The sketch uses pin A0 for output line of the slide potentiometer (pin 2 on the potentiometer); pin 1 of the potentiometer should connect to GND, while pin 3 of the potentiometer should connect to 5V. Pin 3 of the potentiometer should be closer to the syringe.
 
@@ -33,5 +33,5 @@ When the Arduino is first connected to a computer as a client over USB, it repea
 
 ## Control
 
-Position control is done by PID control. Note that control parameters are tuned for operation with a monoject tuberculin syringe and may be vary across motors and syringes.
+Position control is done by PID control. Note that control parameters are tuned for operation with a monoject tuberculin syringe and may be vary across motors and syringes. Note that the potentiometer position readings at the limits of motion are hard-coded by the `minPosition` and `maxPosition` constants.
 

@@ -12,6 +12,7 @@ using namespace LinearPositionControl;
 
 const uint8_t potentiometerPin = A0;
 const MotorPort motorPort = M2;
+const bool motorReversedPolarity = true;
 
 const int minPosition = 11;
 const int maxPosition = 999;
@@ -51,7 +52,7 @@ void setup() {
   Log.begin(LOG_LEVEL_VERBOSE, &Serial);
 #endif
   motors.setup();
-  motor.swapDirections();
+  if (motorReversedPolarity) motor.swapDirections();
   potentiometer.setup();
   pid.setup();
   setpointParser.setup();

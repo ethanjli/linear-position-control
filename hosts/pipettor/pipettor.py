@@ -33,20 +33,23 @@ class Pipettor(object):
         self.arduino.connect()
         self.arduino.wait_for_handshake()
 
-    def run(self):
+    def start(self):
         try:
             while self.running:
-                line = self.arduino.get_line()
-                if self.handle_pipettor_line(line):
-                    continue
-                if self.handle_error(line):
-                    continue
-                if self.handle_warning(line):
-                    continue
-                self.handle_malformed_line(line)
+                self.run()
         except KeyboardInterrupt:
             pass
         self.teardown()
+
+    def run(self):
+        line = self.arduino.get_line()
+        if self.handle_pipettor_line(line):
+            return
+        if self.handle_error(line):
+            return
+        if self.handle_warning(line):
+            return
+        self.handle_malformed_line(line)
 
     def teardown(self):
         print()
@@ -113,10 +116,14 @@ class UserTargeting(Targeting):
         need_input = True
         while need_input:
             try:
-                user_input = float(input(
-                    'Please specify the next position to go to (between {} mL and {} mL): '
+                user_input = input(
+                    'Please specify the next position to go to between {} mL and {} mL: '
                     .format(self.pipettor.bottom_mark, self.pipettor.top_mark)
-                ))
+                )
+                if user_input.lower().endswith('ml'):
+                    user_input = user_input[:-2]
+                user_input = user_input.strip()
+                user_input = float(user_input)
                 if (user_input < self.pipettor.bottom_mark or
                         user_input > self.pipettor.top_mark):
                     raise ValueError
@@ -135,7 +142,7 @@ def main():
     targeting = UserTargeting(pipettor)
     pipettor.listeners.append(targeting)
     pipettor.setup()
-    pipettor.run()
+    pipettor.start()
 
 
 if __name__ == '__main__':
