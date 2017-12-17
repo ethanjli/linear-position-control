@@ -1,5 +1,6 @@
 import random
 import time
+import argparse
 
 import serialio
 
@@ -34,6 +35,7 @@ class Pipettor(object):
 
     def setup(self):
         self.arduino.setup()
+        print()
 
     def start(self):
         self.running = True
@@ -67,7 +69,7 @@ class Pipettor(object):
     def handle_pipettor_line(self, line):
         if self.parser.valid_line(line):
             parsed = self.parser.parse_line(line)
-            print('Stabilized at the {:.3f} mL mark!'.format(self.to_mL_mark(parsed)))
+            print('Stabilized at the {:.2f} mL mark!'.format(self.to_mL_mark(parsed)))
             for listener in self.listeners:
                 listener.on_stabilized_position(parsed, self.to_mL_mark(parsed))
             return True
@@ -112,14 +114,16 @@ class Targeting(object):
         self.pipettor = pipettor
         self.pipettor.listeners.append(self)
 
+    def on_stabilized_position(self, position_unitless, position_mL_mark):
+        pass
+
 class RandomTargeting(Targeting):
     def on_stabilized_position(self, position_unitless, position_mL_mark):
         time.sleep(0.8)
-        self.pipettor.set_target_position(random.randint(
-            self.pipettor.top_position, self.pipettor.bottom_position
-        ))
+        new_target = random.randint(self.pipettor.top_position, self.pipettor.bottom_position)
+        self.pipettor.set_target_position(new_target)
 
-class UserTargeting(Targeting):
+class InteractiveTargeting(Targeting):
     def on_stabilized_position(self, position_unitless, position_mL_mark):
         need_input = True
         while need_input:
@@ -128,13 +132,7 @@ class UserTargeting(Targeting):
                     'Please specify the next position to go to between {} mL and {} mL: '
                     .format(self.pipettor.bottom_mark, self.pipettor.top_mark)
                 )
-                if user_input.lower().endswith('ml'):
-                    user_input = user_input[:-2]
-                user_input = user_input.strip()
-                user_input = float(user_input)
-                if (user_input < self.pipettor.bottom_mark or
-                        user_input > self.pipettor.top_mark):
-                    raise ValueError
+                user_input = self.parse_input(user_input)
                 need_input = False
             except ValueError:
                 print('Invalid input: {}'.format(user_input))
@@ -144,14 +142,37 @@ class UserTargeting(Targeting):
                 return
         self.pipettor.set_target_mark(user_input)
 
-def main():
+    def parse_input(self, user_input):
+        if user_input.lower().endswith('ml'):
+            user_input = user_input[:-2]
+        user_input = user_input.strip()
+        user_input = float(user_input)
+        if (user_input < self.pipettor.bottom_mark or
+                user_input > self.pipettor.top_mark):
+            raise ValueError
+        return user_input
+
+def main(mode):
     pipettor = Pipettor()
-    # targeting = RandomTargeting(pipettor)
-    targeting = UserTargeting(pipettor)
+    if mode == 'random':
+        TargetingStrategy = RandomTargeting
+    else:
+        TargetingStrategy = InteractiveTargeting
+    targeting = TargetingStrategy(pipettor)
     pipettor.setup()
     pipettor.start()
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(
+        description='Control the pipettor module from the command line.'
+    )
+    parser.add_argument(
+        'mode', choices=['random', 'interactive'], nargs='?', default='interactive',
+        help=('Control mode. random generates target positions at random, while '
+              'interactive waits for the user to enter a new target position every '
+              'time the pipettor has reached its current target position.')
+    )
+    args = parser.parse_args()
+    main(args.mode)
 
