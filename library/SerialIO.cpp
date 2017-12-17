@@ -30,8 +30,9 @@ void IntParser::update() {
     received.update(current);
     if (current == endDelimiter || current == startDelimiter) {
       if (current == endDelimiter) {
-        if (negative) result.update(-1 * receivedNumber);
-        else result.update(receivedNumber);
+        if (negative) result.update(-1 * receivedNumber, true);
+        else result.update(receivedNumber, true);
+        justUpdated = true;
       }
       receivedNumber = 0;
       negative = false;

@@ -12,6 +12,7 @@ class IntParser {
     IntParser(char startDelimiter = '[', char endDelimiter = ']');
 
     StateVariable<int> result;
+    bool justUpdated = false;
 
     void setup();
     void update();

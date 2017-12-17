@@ -65,7 +65,10 @@ void loop() {
   motor.run(speedAdjuster.output.current());
   setpointParser.update();
   pid.setSetpoint(setpointParser.result.current());
-  if (pid.setpoint.justChanged()) reportedCompletion = false;
+  if (setpointParser.justUpdated) {
+    reportedCompletion = false;
+    setpointParser.justUpdated = false;
+  }
   if (pid.setpoint.settled(completionDelay) && speedAdjuster.output.settledAt(0, completionDelay) && !reportedCompletion) {
     Serial.print('[');
     Serial.print(pid.getInput());
