@@ -34,6 +34,10 @@ class Arduino(object):
                 return
             time.sleep(poll_interval / 1000)
 
+    def setup(self):
+        self.connect()
+        self.wait_for_handshake()
+
     # Teardown
 
     def close(self):
@@ -76,4 +80,45 @@ class Arduino(object):
     def stop(self):
         self.running = False
         self.thread.join(timeout=0.2)
+
+class Console(object):
+    def __init__(self, arduino=None):
+        if arduino is None:
+            arduino = Arduino()
+        self.arduino = arduino
+        self.arduino.listeners.append(self)
+        self.running = True
+
+    def setup(self):
+        self.arduino.setup()
+
+    def start(self):
+        try:
+            while self.running:
+                self.run()
+        except KeyboardInterrupt:
+            pass
+        self.teardown()
+
+    def run(self):
+        self.arduino.write_line(input())
+
+    def on_read_line(self, line):
+        print(line)
+
+    def teardown(self):
+        print()
+        print('Quitting...')
+        self.arduino.reset()
+
+def main():
+    arduino = Arduino()
+    console = Console(arduino)
+    console.setup()
+    arduino.start()
+    console.start()
+    arduino.stop()
+
+if __name__ == '__main__':
+    main()
 

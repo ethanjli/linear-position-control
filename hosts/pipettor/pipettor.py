@@ -33,8 +33,7 @@ class Pipettor(object):
         self.bottom_mark = 0.03  # mL mark
 
     def setup(self):
-        self.arduino.connect()
-        self.arduino.wait_for_handshake()
+        self.arduino.setup()
 
     def start(self):
         self.running = True
