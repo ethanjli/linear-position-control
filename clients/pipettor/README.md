@@ -33,5 +33,5 @@ When the Arduino is first connected to a computer as a client over USB, it repea
 
 ## Control
 
-Position control is done by PID control. Note that control parameters are tuned for operation with a monoject tuberculin syringe and may be vary across motors and syringes. Note that the potentiometer position readings at the limits of motion are hard-coded by the `minPosition` and `maxPosition` constants.
+Position control is done by PID control. Note that control parameters are tuned for operation with a monoject tuberculin syringe and may vary across motors and syringes. Control parameters have not yet been perfectly tuned. Note also that the potentiometer position readings at the limits of motion are hard-coded by the `minPosition` and `maxPosition` constants.
 

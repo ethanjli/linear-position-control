@@ -1,6 +1,6 @@
 # pipettor
 
-These scripts provide user interfaces for high-level control of the pipettor module.
+These scripts provide programming interfaces and user interfaces for high-level control of the pipettor module.
 
 ## Hardware and Firmware
 
@@ -8,7 +8,7 @@ These scripts are intended to run with a pipettor module running the pipettor sk
 
 ## Dependencies
 
-All scripts are tested only on Python 3. To run any these scripts, the `pyserial` module must be installed.
+All scripts are tested only on Python 3. To run any of these scripts, the `pyserial` module must be installed.
 
 ## Modules and Scripts
 
@@ -18,7 +18,7 @@ This module provides an `Arduino` class which makes it easy to communicate with 
 
 ### pipettor
 
-This module provides a `Pipettor` class which makes it easy to send position target commands to the pipettor and listen for events from the pipettor, namely events emitted when the module has initially reached and stabilized at its target position. This module also provides a `Targeting` interface class for easy use of a `Pipettor` object, and a `RandomTargeting` class which demonstrates how to implement the `Targeting` interface to listen for events.
+This module provides a `Pipettor` class which makes it easy to send position target commands to the pipettor and listen for events from the pipettor, namely events emitted when the module has initially reached and stabilized at its target position. This module also provides a `Targeting` interface class for easy programming with the `Pipettor` object, and a `RandomTargeting` class which demonstrates how to implement the `Targeting` interface to listen for events.
 
 The `RandomTargeting` class chooses random target positions; when the pipettor has reached the current target position, the `RandomTargeting` object will wait for 800 ms, choose a new random target position, and send it to the pipettor. This class can be tested by running this module as a script with `random` as the command line argument (e.g. `python3 pipettor.py random`); to quit the script, use `Ctrl+C`.
 
@@ -26,7 +26,7 @@ The `InteractiveTargeting` class interactively asks the user to choose target po
 
 ### pipettor_gui
 
-This module provides a Tkinter graphical interface for the user to choose target positions. The interface features a **Target Position** slider to choose a target position for the pipettor; when the user has chosen a target position, they can press the **Go and Hold** button to send this new target position to the pipettor. Alternately, the user can toggle the **Follow Continuously** button; when button is this active, the pipettor moves in real time as the user drags the **Target Position** slider. The interface has a status bar at the bottom to show messages about what the pipettor is doing. This module should be run as a script (e.g. `python3 pipettor_gui.py`); to quit the script, close the window or press the **Quit** button.
+This module provides a Tkinter graphical user interface for the user to choose target positions. The interface features a **Target Position** slider to choose a target position for the pipettor; when the user has chosen a target position, they can press the **Go and Hold** button to send this new target position to the pipettor. Alternately, the user can toggle the **Follow Continuously** button; when button is this active, the pipettor moves in real time as the user drags the **Target Position** slider. The interface has a status bar at the bottom to show messages about what the pipettor is doing. This module should be run as a script (e.g. `python3 pipettor_gui.py`); to quit the script, close the window or press the **Quit** button.
 
 ### batch_demo
 
