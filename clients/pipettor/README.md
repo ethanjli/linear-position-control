@@ -12,11 +12,24 @@ This sketch is configured to drive the motor on port M2 of the Adafruit Motor Sh
 
 The sketch uses pin A0 for output line of the slide potentiometer (pin 2 on the potentiometer); pin 1 of the potentiometer should connect to GND, while pin 3 of the potentiometer should connect to 5V. Pin 3 of the potentiometer should be closer to the syringe.
 
+## Library Dependencies
+
+To compile this sketch, the following libraries must be installed:
+
+* Adafruit Motor Shield V2 Library
+* Arduino Log
+* Arduino PID Library
+* elapsedMillis
+
+You can install these libraries from the zip files in the `dependencies` directory.
+
+Additionally, you must copy the `library` directory into the Arduino libraries (and you may want to rename it to something like `linear-position-control`).
+
 ## Serial Protocol
 
 This sketch supports easy usage over the Arduino Serial Monitor. More user-friendly control can be used with the various host programs in `hosts/pipettor`.
 
-When the Arduino is first connected to a computer as a client over USB, it repeatedly sends the handshake character `~` until it receives a response (any response ending in a newline `\n` will do) from the host. The pipettor then moves to the highest possible position (configured by default in the sketch as `minPosition = 11`) and, when it has initially reached and stabilized at that position (defined as having stayed there for at least `brakethreshold = 100` milliseconds), reports its current position over serial in the format `[number]`, for example `[8]`. At any time, the user can send a message in the format `[number]` to command the pipettor to move to the desired position. The pipettor will then move to the nearest position within the allowed range (set by the `minPosition` and `maxPosition` constants) and, when it has initially reached and stabilized at that position, report its current position over serial. The Arduino client will ignore any messages not of the format `[number]`.
+When the Arduino is first connected to a computer as a client over USB, it repeatedly sends the handshake character `~` until it receives a response (any response ending in a newline `\n` will do) from the host. The pipettor then moves to the highest possible position (configured by default in the sketch as `minPosition = 11`) and, when it has initially reached and stabilized at that position (defined as having stayed there for at least `brakethreshold = 100` milliseconds), reports its current position over serial in the format `[number]` (as its own line), for example `[8]`. At any time, the user can send a message in the format `[number]` to command the pipettor to move to the desired position. The pipettor will then move to the nearest position within the allowed range (set by the `minPosition` and `maxPosition` constants) and, when it has initially reached and stabilized at that position, report its current position over serial. The Arduino client will ignore any messages not of the format `[number]`.
 
 ## Control
 
