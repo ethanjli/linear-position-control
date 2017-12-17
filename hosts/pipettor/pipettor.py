@@ -18,11 +18,14 @@ class LineParser(object):
 
 
 class Pipettor(object):
-    def __init__(self):
-        self.arduino = serialio.Arduino()
+    def __init__(self, arduino=None):
+        if arduino is None:
+            arduino = serialio.Arduino()
+        self.arduino = arduino
+        self.arduino.listeners.append(self)
         self.parser = LineParser()
         self.listeners = []
-        self.running = True
+        self.running = False
 
         self.top_position = 11  # unitless
         self.top_mark = 0.95  # mL mark
@@ -34,6 +37,7 @@ class Pipettor(object):
         self.arduino.wait_for_handshake()
 
     def start(self):
+        self.running = True
         try:
             while self.running:
                 self.run()
@@ -43,6 +47,9 @@ class Pipettor(object):
 
     def run(self):
         line = self.arduino.get_line()
+        self.on_read_line(line)
+
+    def on_read_line(self, line):
         if self.handle_pipettor_line(line):
             return
         if self.handle_error(line):
@@ -101,8 +108,10 @@ class Pipettor(object):
         print('Ignoring unexpected line: {}'.format(line))
 
 class Targeting(object):
-    def __init__(self, pipettor):
+    def __init__(self, pipettor, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.pipettor = pipettor
+        self.pipettor.listeners.append(self)
 
 class RandomTargeting(Targeting):
     def on_stabilized_position(self, position_unitless, position_mL_mark):
@@ -140,7 +149,6 @@ def main():
     pipettor = Pipettor()
     # targeting = RandomTargeting(pipettor)
     targeting = UserTargeting(pipettor)
-    pipettor.listeners.append(targeting)
     pipettor.setup()
     pipettor.start()
 

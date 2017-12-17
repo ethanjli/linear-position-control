@@ -1,10 +1,19 @@
 import time
+import threading
 
 import serial
 
 class Arduino(object):
     def __init__(self):
         self.ser = None
+        self.listeners = []
+
+        self.running = False
+        self.thread = threading.Thread(
+            name='Arduino serial communications', target=self.read_lines, daemon=True
+        )
+
+    # Setup
 
     def connect(self, port='/dev/ttyACM0', baudrate=115200):
         print('Please connect the device now...')
@@ -25,8 +34,30 @@ class Arduino(object):
                 return
             time.sleep(poll_interval / 1000)
 
+    # Teardown
+
+    def close(self):
+        self.ser.close()
+
+    def reset(self):
+        if self.ser.isOpen():
+            self.ser.close()
+        self.ser.open()
+        self.ser.close()
+
+    # RX
+
     def get_line(self):
         return str(self.ser.readline(), 'ascii').rstrip()
+
+    def read_lines(self):
+        self.running = True
+        while self.running:
+            line = self.get_line()
+            for listener in self.listeners:
+                listener.on_read_line(line)
+
+    # TX
 
     def write_number(self, byte, length=1, byte_order='big', signed=False):
         self.ser.write(byte.to_bytes(length, byte_order, signed=signed))
@@ -37,12 +68,12 @@ class Arduino(object):
     def write_string(self, string):
         self.ser.write(string.encode('utf-8'))
 
-    def close(self):
-        self.ser.close()
+    # Threading
 
-    def reset(self):
-        if self.ser.isOpen():
-            self.ser.close()
-        self.ser.open()
-        self.ser.close()
+    def start(self):
+        self.thread.start()
+
+    def stop(self):
+        self.running = False
+        self.thread.join(timeout=0.2)
 
