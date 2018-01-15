@@ -13,6 +13,7 @@
 #include "Calibration/Direction.h"
 #include "Calibration/Position.h"
 #include "Tracking/Limits.h"
+#include "PIDControl.h"
 #include "LinearActuator.h"
 
 namespace LinearPositionControl {
@@ -113,6 +114,26 @@ class MultiplexedLinearActuator {
     MotionController motionController;
     Actuator actuator;
     StateVariable<State> &state;
+
+    void setup();
+    void update();
+};
+
+class AbsoluteLinearActuator {
+  public:
+    AbsoluteLinearActuator(
+        SharedComponents &shared, MotorPort motorPort,
+        uint8_t potentiometerPin, int minPosition, int maxPosition,
+        double pidKp, double pidKd, double pidKi, int pidSampleTime,
+        bool swapMotorPolarity, int feedforward, int brakeThreshold
+    );
+
+    SharedComponents &shared;
+    Components::Motor motor;
+    Components::AnalogSensor potentiometer;
+    DiscretePID pid;
+    Components::MotorSpeedAdjuster speedAdjuster;
+    const bool swapMotorPolarity;
 
     void setup();
     void update();

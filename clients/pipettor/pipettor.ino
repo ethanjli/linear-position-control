@@ -1,48 +1,27 @@
 //#define DISABLE_LOGGING
 #include <ArduinoLog.h>
 
-#include <AnalogSensor.h>
-#include <Motors.h>
-#include <PIDControl.h>
+#include <LinearPositionControl.h>
 #include <SerialIO.h>
 
 using namespace LinearPositionControl;
 
 // Hardware Parameters
 
-const uint8_t potentiometerPin = A0;
-const MotorPort motorPort = M2;
-const bool motorReversedPolarity = true;
-
-const int minPosition = 11;
-const int maxPosition = 999;
-
-// Controller Parameters
-
-const double pidKp = 8;
-const double pidKd = 0.1; // friction compensation
-const double pidKi = 0.1; // improved accuracy
-const int pidSampleTime = 20;
-
-const int feedforward = 7; // gravity compensation
-const int brakeThreshold = 80; // prevent high-pitch motor whine when the motor is stuck due to friction anyways
-
 const unsigned long completionDelay = 100; // delay after motor stops moving before declaring completion of movement
 
 // Singletons
 
-Components::Motors motors;
+SharedComponents shared;
 
 // Globals
 
-Components::AnalogSensor potentiometer(potentiometerPin);
-DiscretePID pid(
-  potentiometer.state, pidKp, pidKd, pidKi,
-  -255 - feedforward, 255 - feedforward, pidSampleTime,
-  minPosition, maxPosition
+AbsoluteLinearActuator actuator(
+  shared, M1, A0, 11, 999,
+  8, 0.1, 0.1, 20,
+  false, 7, 80
 );
-Components::MotorSpeedAdjuster speedAdjuster(pid.output, feedforward, brakeThreshold);
-Components::Motor motor(motors, motorPort);
+
 IntParser setpointParser;
 bool reportedCompletion = false;
 
@@ -51,28 +30,22 @@ void setup() {
 #ifndef DISABLE_LOGGING
   Log.begin(LOG_LEVEL_VERBOSE, &Serial);
 #endif
-  motors.setup();
-  if (motorReversedPolarity) motor.swapDirections();
-  potentiometer.setup();
-  pid.setup();
+  actuator.setup();
   setpointParser.setup();
   waitForSerialHandshake();
 }
 
 void loop() {
-  potentiometer.update();
-  pid.update();
-  speedAdjuster.update();
-  motor.run(speedAdjuster.output.current());
+  actuator.update();
   setpointParser.update();
-  pid.setSetpoint(setpointParser.result.current());
+  actuator.pid.setSetpoint(setpointParser.result.current());
   if (setpointParser.justUpdated) {
     reportedCompletion = false;
     setpointParser.justUpdated = false;
   }
-  if (pid.setpoint.settled(completionDelay) && speedAdjuster.output.settledAt(0, completionDelay) && !reportedCompletion) {
+  if (actuator.pid.setpoint.settled(completionDelay) && actuator.speedAdjuster.output.settledAt(0, completionDelay) && !reportedCompletion) {
     Serial.print('[');
-    Serial.print(pid.getInput());
+    Serial.print(actuator.pid.getInput());
     Serial.println(']');
     reportedCompletion = true;
   }
