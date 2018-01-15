@@ -149,41 +149,6 @@ void MultiplexedLinearActuator<
   actuator.update();
 }
 
-// AbsoluteLinearActuator
-
-AbsoluteLinearActuator::AbsoluteLinearActuator(
-    SharedComponents &shared, MotorPort motorPort,
-    uint8_t potentiometerPin, int minPosition, int maxPosition,
-    double pidKp, double pidKd, double pidKi, int pidSampleTime,
-    bool swapMotorPolarity, int feedforward, int brakeThreshold
-) :
-  shared(shared),
-  motor(shared.motors, motorPort),
-  potentiometer(potentiometerPin),
-  pid(
-    potentiometer.state, pidKp, pidKd, pidKi,
-    -255 - feedforward, 255 - feedforward, pidSampleTime,
-    minPosition, maxPosition
-  ),
-  speedAdjuster(pid.output, feedforward, brakeThreshold),
-  swapMotorPolarity(swapMotorPolarity)
-{
-}
-
-void AbsoluteLinearActuator::setup() {
-  shared.motors.setup();
-  if (swapMotorPolarity) motor.swapDirections();
-  potentiometer.setup();
-  pid.setup();
-}
-
-void AbsoluteLinearActuator::update() {
-  potentiometer.update();
-  pid.update();
-  speedAdjuster.update();
-  motor.run(speedAdjuster.output.current());
-}
-
 // CalibrationRig
 
 template<class EncapsulatedLinearActuator>

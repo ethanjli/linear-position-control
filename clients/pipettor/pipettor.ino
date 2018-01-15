@@ -1,7 +1,7 @@
 //#define DISABLE_LOGGING
 #include <ArduinoLog.h>
 
-#include <LinearPositionControl.h>
+#include <AbsoluteLinearPositionControl.h>
 #include <SerialIO.h>
 
 using namespace LinearPositionControl;
@@ -12,12 +12,12 @@ const unsigned long completionDelay = 100; // delay after motor stops moving bef
 
 // Singletons
 
-SharedComponents shared;
+Components::Motors motors;
 
 // Globals
 
 AbsoluteLinearActuator actuator(
-  shared, M1, A0, 11, 999,
+  motors, M1, A0, 11, 999,
   8, 0.1, 0.1, 20,
   false, 7, 80
 );
