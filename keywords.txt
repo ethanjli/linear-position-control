@@ -1,0 +1,25 @@
+#######################################
+# Syntax Coloring Map For ExampleLibrary
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+LinearPositionControl KEYWORD1
+AbsoluteLinearActuator KEYWORD1
+Motors KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+waitForSerialHandshake	KEYWORD2
+
+#######################################
+# Instances (KEYWORD2)
+#######################################
+
+#######################################
+# Constants (LITERAL1)
+####################################### 

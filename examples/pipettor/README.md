@@ -20,10 +20,9 @@ To compile this sketch, the following libraries must be installed:
 * Arduino Log
 * Arduino PID Library
 * elapsedMillis
+* Linear Position Control
 
-You can install these libraries from the zip files in the `dependencies` directory.
-
-Additionally, you must copy the `library` directory into the Arduino libraries (and you may want to rename it to something like `linear-position-control`).
+You should install these libraries from the Arduino IDE's Library Manager.
 
 ## Serial Protocol
 
