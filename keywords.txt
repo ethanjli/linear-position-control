@@ -6,9 +6,9 @@
 # Datatypes (KEYWORD1)
 #######################################
 
-LinearPositionControl KEYWORD1
-AbsoluteLinearActuator KEYWORD1
-Motors KEYWORD1
+LinearPositionControl	KEYWORD1
+AbsoluteLinearActuator	KEYWORD1
+Motors	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
