@@ -70,6 +70,7 @@ class PIDController {
 };
 
 using DiscretePID = PIDController<int, int>;
+using ContinuousPID = PIDController<float, int>;
 
 }
 
