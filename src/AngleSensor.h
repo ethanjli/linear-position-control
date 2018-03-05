@@ -9,7 +9,7 @@ namespace LinearPositionControl { namespace Components {
 
 class AngleSensor {
   public:
-    AngleSensor(Tlv493d &sensor = magnetic3dSensor);
+    AngleSensor(Tlv493d &sensor = magnetic3dSensor, bool accumulate = true);
 
     void setup();
     void update();
@@ -18,8 +18,12 @@ class AngleSensor {
 
   private:
     bool setupCompleted = false;
+    bool accumulate;
 
     Tlv493d &sensor;
+    StateVariable<float> rawAngle;
+
+    float overflowDeltaThreshold = 315; // degrees
 };
 
 } }

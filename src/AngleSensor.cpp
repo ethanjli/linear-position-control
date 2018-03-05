@@ -2,8 +2,8 @@
 
 namespace LinearPositionControl { namespace Components {
 
-AngleSensor::AngleSensor(Tlv493d &sensor) :
-  sensor(sensor)
+AngleSensor::AngleSensor(Tlv493d &sensor, bool accumulate) :
+  sensor(sensor), accumulate(accumulate)
 {
 }
 
@@ -14,14 +14,27 @@ void AngleSensor::setup() {
   sensor.setAccessMode(sensor.MASTERCONTROLLEDMODE);
   sensor.disableTemp();
   sensor.updateData();
-  state.setup(sensor.getAzimuth() * 180 / PI);
+  rawAngle.setup(sensor.getAzimuth() * 180 / PI);
+  state.setup(rawAngle.current());
 
   setupCompleted = true;
 }
 
 void AngleSensor::update() {
-  if (state.currentDuration() > sensor.getMeasurementDelay()) sensor.updateData();
-  state.update(sensor.getAzimuth() * 180 / PI);
+  if (rawAngle.currentDuration() > sensor.getMeasurementDelay()) sensor.updateData();
+  rawAngle.update(sensor.getAzimuth() * 180 / PI);
+
+  if (!accumulate) {
+    state.update(rawAngle.current());
+    return;
+  }
+
+  float delta = rawAngle.current() - rawAngle.previous();
+  if (abs(delta) > overflowDeltaThreshold) {
+    int deltaSign = (0.0f < delta) - (delta < 0.0f);
+    delta -= deltaSign * 360.0f;
+  }
+  state.update(state.current() + delta);
 }
 
 
