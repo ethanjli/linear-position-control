@@ -1,28 +1,25 @@
-#include <Wire.h>
-#include <Adafruit_MotorShield.h>
-#include <MagneticSensor3D.h>
+#include "Motors.h"
+#include "AngleSensor.h"
 
-// Create the motor shield object with the default I2C address
-Adafruit_MotorShield AFMS = Adafruit_MotorShield();
+using namespace LinearPositionControl::Components;
 
-// Select which 'port' M1, M2, M3 or M4. In this case, M1
-Adafruit_DCMotor *myMotor = AFMS.getMotor(3);
+Motors motors;
+Motor motor(motors, M3);
+AngleSensor angleSensor;
 
 void setup() {
   Serial.begin(115200);
   while(!Serial);
-  magnetic3dSensor.begin();
-  magnetic3dSensor.setAccessMode(magnetic3dSensor.MASTERCONTROLLEDMODE);
-  magnetic3dSensor.disableTemp();
-  AFMS.begin();  // create with the default frequency 1.6KHz
-  myMotor->setSpeed(64);
-  myMotor->run(FORWARD);
+  motor.setup();
+  angleSensor.setup();
+  motor.run(64);
 }
 
 void loop() {
-  delay(magnetic3dSensor.getMeasurementDelay());
-  magnetic3dSensor.updateData();
+  angleSensor.update();
 
-  Serial.println(magnetic3dSensor.getAzimuth() * 180 / PI);
+  if (angleSensor.state.justChanged()) {
+    Serial.println(angleSensor.state.current());
+  }
 }
 
