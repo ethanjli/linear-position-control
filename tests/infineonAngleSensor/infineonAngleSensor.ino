@@ -1,5 +1,5 @@
-#include "Motors.h"
-#include "AngleSensor.h"
+#include <Motors.h>
+#include <AngleSensor.h>
 
 using namespace LinearPositionControl::Components;
 
@@ -12,7 +12,7 @@ void setup() {
   while(!Serial);
   motor.setup();
   angleSensor.setup();
-  motor.run(64);
+  motor.run(200);
 }
 
 void loop() {
@@ -20,6 +20,14 @@ void loop() {
 
   if (angleSensor.state.justChanged()) {
     Serial.println(angleSensor.state.current());
+  }
+
+  if (motor.state.currentDuration() > 1075) {
+    if (motor.state.current() != Motor::State::neutral) {
+      motor.neutral();
+    } else {
+      motor.opposite();
+    }
   }
 }
 
