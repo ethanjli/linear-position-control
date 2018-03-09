@@ -5,8 +5,8 @@
 
 using namespace LinearPositionControl;
 
-const int minAngle = 0;
-const int maxAngle = 360 * 2;
+const int minAngle = 0 - 110;
+const int maxAngle = 360 * 2 - 110;
 
 const double pidKp = 8;
 const double pidKd = 0;
