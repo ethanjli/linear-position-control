@@ -136,9 +136,12 @@ void Motor::updateLastDirection() {
 // MotorSpeedAdjuster
 
 MotorSpeedAdjuster::MotorSpeedAdjuster(
-    StateVariable<int> &inputStateVariable, int speedBias, int brakeThreshold
+    StateVariable<int> &inputStateVariable, int speedBias,
+    int brakeLowerThreshold, int brakeUpperThreshold
 ) :
-  input(inputStateVariable), speedBias(speedBias), brakeThreshold(brakeThreshold) {}
+  input(inputStateVariable), speedBias(speedBias),
+  brakeLowerThreshold(brakeLowerThreshold),
+  brakeUpperThreshold(brakeUpperThreshold) {}
 
 void MotorSpeedAdjuster::setup() {
   output.setup(0);
@@ -147,7 +150,7 @@ void MotorSpeedAdjuster::setup() {
 void MotorSpeedAdjuster::update() {
   int adjusted = input.current();
   adjusted += speedBias;
-  if (abs(adjusted) < brakeThreshold) adjusted = 0;
+  if (adjusted > brakeLowerThreshold && adjusted < brakeUpperThreshold) adjusted = 0;
   output.update(adjusted);
 }
 

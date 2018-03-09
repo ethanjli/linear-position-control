@@ -2,7 +2,6 @@
 #define AbsoluteLinearPositionControl_h
 
 #include "Motors.h"
-#include "DebouncedButton.h"
 #include "AnalogSensor.h"
 #include "PIDControl.h"
 
@@ -14,7 +13,9 @@ class AbsoluteLinearActuator {
         Components::Motors &motors, MotorPort motorPort,
         uint8_t potentiometerPin, int minPosition, int maxPosition,
         double pidKp, double pidKd, double pidKi, int pidSampleTime,
-        bool swapMotorPolarity, int feedforward, int brakeThreshold
+        bool swapMotorPolarity, int feedforward,
+        int brakeLowerThreshold, int brakeUpperThreshold,
+        int minDuty = -255, int maxDuty = 255
     );
 
     Components::Motors &motors;

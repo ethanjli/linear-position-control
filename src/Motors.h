@@ -89,6 +89,12 @@ class MotorSpeedAdjuster {
   public:
     MotorSpeedAdjuster(
         StateVariable<int> &inputStateVariable, int speedBias, int brakeThreshold
+    ) : MotorSpeedAdjuster(
+      inputStateVariable, speedBias, -1 * brakeThreshold, brakeThreshold
+    ) {}
+    MotorSpeedAdjuster(
+        StateVariable<int> &inputStateVariable, int speedBias,
+        int brakeLowerThreshold, int brakeUpperThreshold
     );
 
     void setup();
@@ -97,7 +103,8 @@ class MotorSpeedAdjuster {
     StateVariable<int> output;
 
     int speedBias;
-    int brakeThreshold;
+    int brakeLowerThreshold;
+    int brakeUpperThreshold;
 
   private:
     StateVariable<int> &input;
