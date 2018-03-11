@@ -38,5 +38,14 @@ void CumulativeLinearActuator::update() {
   motor.run(speedAdjuster.output.current());
 }
 
+void CumulativeLinearActuator::freeze() {
+  pid.disable();
+  motor.brake();
+}
+
+void CumulativeLinearActuator::unfreeze() {
+  pid.enable();
+}
+
 }
 

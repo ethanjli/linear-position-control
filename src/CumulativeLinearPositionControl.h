@@ -27,6 +27,9 @@ class CumulativeLinearActuator {
 
     void setup();
     void update();
+
+    void freeze();
+    void unfreeze();
 };
 
 }

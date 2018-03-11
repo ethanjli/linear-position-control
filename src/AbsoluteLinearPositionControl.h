@@ -27,6 +27,9 @@ class AbsoluteLinearActuator {
 
     void setup();
     void update();
+
+    void freeze();
+    void unfreeze();
 };
 
 }
