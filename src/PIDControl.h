@@ -37,6 +37,8 @@ class PIDController {
     void setKd(double newKd);
     void setKi(double newKi);
     void setCoefficients(double newKp, double newKd, double newKi);
+    void setMinInput(InputType minLimit);
+    void setMaxInput(InputType maxLimit);
     void setMinOutput(OutputType minLimit);
     void setMaxOutput(OutputType maxLimit);
     void setSampleTime(int time);

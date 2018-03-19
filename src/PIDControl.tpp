@@ -56,6 +56,16 @@ void PIDController<InputType, OutputType>::setKi(double newKi) {
 }
 
 template <class InputType, class OutputType>
+void PIDController<InputType, OutputType>::setMinInput(InputType minLimit) {
+  minInput = minLimit;
+}
+
+template <class InputType, class OutputType>
+void PIDController<InputType, OutputType>::setMaxInput(InputType maxLimit) {
+  maxInput = maxLimit;
+}
+
+template <class InputType, class OutputType>
 void PIDController<InputType, OutputType>::setMinOutput(OutputType minLimit) {
   minOutput = minLimit;
   pid.SetOutputLimits(minOutput, maxOutput);
