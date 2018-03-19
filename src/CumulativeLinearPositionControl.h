@@ -32,6 +32,40 @@ class CumulativeLinearActuator {
     void unfreeze();
 };
 
+namespace Calibration { namespace States {
+  enum class Position : uint8_t {
+    calibrated,
+    uncalibrated,
+    initializing,
+    calibrating
+  };
+}}
+
+class CumulativePositionCalibrator {
+  public:
+    CumulativePositionCalibrator(CumulativeLinearActuator &actuator);
+
+    using State = Calibration::States::Position;
+
+    void setup();
+    void update();
+
+    StateVariable<State> state;
+    const Components::MotorSpeed calibrationSpeed = 255;
+
+  private:
+    bool setupCompleted = false;
+    CumulativeLinearActuator &actuator;
+    StateVariable<int> discretePosition;
+
+    unsigned int limitTimeout = 100;
+
+    void updateUncalibrated();
+    void updateInitializing();
+    void updateCalibrating();
+    void onPositionCalibrated();
+};
+
 }
 
 #endif

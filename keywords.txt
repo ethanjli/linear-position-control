@@ -7,6 +7,7 @@
 #######################################
 
 LinearPositionControl	KEYWORD1
+CumulativePositionCalibrator	KEYWORD1
 Components	KEYWORD1
 Motors	KEYWORD1
 
