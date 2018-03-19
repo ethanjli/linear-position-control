@@ -14,6 +14,8 @@ class AngleSensor {
     void setup();
     void update();
 
+    void setZero();
+
     StateVariable<float> state;
 
   private:

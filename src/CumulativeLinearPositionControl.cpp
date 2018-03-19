@@ -28,6 +28,7 @@ void CumulativeLinearActuator::setup() {
   motors.setup();
   if (swapMotorPolarity) motor.swapDirections();
   angleSensor.setup();
+  angleSensor.setZero();
   pid.setup();
 }
 
