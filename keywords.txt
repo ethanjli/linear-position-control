@@ -1,5 +1,5 @@
 #######################################
-# Syntax Coloring Map For ExampleLibrary
+# Syntax Coloring Map For Linear Position Control
 #######################################
 
 #######################################
@@ -7,14 +7,12 @@
 #######################################
 
 LinearPositionControl	KEYWORD1
-AbsoluteLinearActuator	KEYWORD1
+Components	KEYWORD1
 Motors	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
-
-waitForSerialHandshake	KEYWORD2
 
 #######################################
 # Instances (KEYWORD2)
