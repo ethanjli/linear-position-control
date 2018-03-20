@@ -20,8 +20,16 @@ void AngleSensor::setup() {
   setupCompleted = true;
 }
 
+void AngleSensor::setZero() {
+  state.update(0);
+}
+
 void AngleSensor::update() {
-  if (rawAngle.currentDuration() > sensor.getMeasurementDelay()) sensor.updateData();
+  if (rawAngle.currentDuration() > sensor.getMeasurementDelay()) {
+    sensor.updateData();
+  } else {
+    return;
+  }
   rawAngle.update(sensor.getAzimuth() * 180 / PI);
 
   if (!accumulate) {
