@@ -14,8 +14,9 @@ CumulativeLinearActuator::CumulativeLinearActuator(
 ) :
   motors(motors),
   motor(motors, motorPort),
+  position(angleSensor.state),
   pid(
-    angleSensor.state, pidKp, pidKd, pidKi,
+    position, pidKp, pidKd, pidKi,
     minDuty - feedforward, maxDuty - feedforward, pidSampleTime,
     minPosition, maxPosition
   ),

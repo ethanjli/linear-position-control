@@ -21,6 +21,7 @@ class AbsoluteLinearActuator {
     Components::Motors &motors;
     Components::Motor motor;
     Components::AnalogSensor potentiometer;
+    StateVariable<int> &position;
     DiscretePID pid;
     Components::MotorSpeedAdjuster speedAdjuster;
     const bool swapMotorPolarity;

@@ -15,8 +15,9 @@ AbsoluteLinearActuator::AbsoluteLinearActuator(
   motors(motors),
   motor(motors, motorPort),
   potentiometer(potentiometerPin),
+  position(potentiometer.state),
   pid(
-    potentiometer.state, pidKp, pidKd, pidKi,
+    position, pidKp, pidKd, pidKi,
     minDuty - feedforward, maxDuty - feedforward, pidSampleTime,
     minPosition, maxPosition
   ),
