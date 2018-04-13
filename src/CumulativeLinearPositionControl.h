@@ -31,7 +31,7 @@ class CumulativeLinearActuator {
     void setup();
     void update();
 
-    void freeze();
+    void freeze(bool brake = true);
     void unfreeze();
 };
 

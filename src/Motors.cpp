@@ -148,10 +148,23 @@ void MotorSpeedAdjuster::setup() {
 }
 
 void MotorSpeedAdjuster::update() {
+  if (frozen) {
+    output.update(output.current());
+    return;
+  }
   int adjusted = input.current();
   adjusted += speedBias;
   if (adjusted > brakeLowerThreshold && adjusted < brakeUpperThreshold) adjusted = 0;
   output.update(adjusted);
+}
+
+void MotorSpeedAdjuster::freeze(bool brake) {
+  frozen = true;
+  if (brake) output.update(0);
+}
+
+void MotorSpeedAdjuster::unfreeze() {
+  frozen = false;
 }
 
 } }

@@ -106,8 +106,13 @@ class MotorSpeedAdjuster {
     int brakeLowerThreshold;
     int brakeUpperThreshold;
 
+    void freeze(bool brake = true);
+    void unfreeze();
+
   private:
     StateVariable<int> &input;
+
+    bool frozen = false;
 };
 
 } }

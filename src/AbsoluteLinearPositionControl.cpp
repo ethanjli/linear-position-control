@@ -40,13 +40,14 @@ void AbsoluteLinearActuator::update() {
   motor.run(speedAdjuster.output.current());
 }
 
-void AbsoluteLinearActuator::freeze() {
+void AbsoluteLinearActuator::freeze(bool brake) {
   pid.disable();
-  motor.brake();
+  speedAdjuster.freeze(brake);
 }
 
 void AbsoluteLinearActuator::unfreeze() {
   pid.enable();
+  speedAdjuster.unfreeze();
 }
 
 }
