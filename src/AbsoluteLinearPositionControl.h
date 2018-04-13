@@ -18,11 +18,13 @@ class AbsoluteLinearActuator {
         int minDuty = -255, int maxDuty = 255
     );
 
+    using Position = int;
+
     Components::Motors &motors;
     Components::Motor motor;
     Components::AnalogSensor potentiometer;
-    StateVariable<int> &position;
-    DiscretePID pid;
+    StateVariable<Position> &position;
+    PIDController<Position, int> pid;
     Components::MotorSpeedAdjuster speedAdjuster;
     const bool swapMotorPolarity;
 

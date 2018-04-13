@@ -18,11 +18,13 @@ class CumulativeLinearActuator {
         int minDuty = -255, int maxDuty = 255
     );
 
+    using Position = float;
+
     Components::Motors &motors;
     Components::Motor motor;
     Components::AngleSensor angleSensor;
-    StateVariable<float> &position;
-    ContinuousPID pid;
+    StateVariable<Position> &position;
+    PIDController<Position, int> pid;
     Components::MotorSpeedAdjuster speedAdjuster;
     const bool swapMotorPolarity;
 
