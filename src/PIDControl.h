@@ -52,12 +52,8 @@ class PIDController {
   private:
     bool setupCompleted = false;
 
-    double kp;
-    double kd;
-    double ki;
     double minOutput;
     double maxOutput;
-    int sampleTime;
 
     double pidInput = 0;
     double pidOutput = 0;

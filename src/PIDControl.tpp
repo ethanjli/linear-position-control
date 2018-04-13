@@ -11,17 +11,18 @@ PIDController<InputType, OutputType>::PIDController(
     OutputType minOutput, OutputType maxOutput, int sampleTime,
     InputType minInput, InputType maxInput, int outputMode, int proportionalityMode
 ) :
-  kp(kp), kd(kd), ki(ki), minOutput(minOutput), maxOutput(maxOutput),
-  sampleTime(sampleTime), input(inputStateVariable),
+  minOutput(minOutput), maxOutput(maxOutput),
+  input(inputStateVariable),
   pid(&pidInput, &pidOutput, &pidSetpoint, kp, kd, ki, proportionalityMode, outputMode),
-  minInput(minInput), maxInput(maxInput) {}
+  minInput(minInput), maxInput(maxInput) {
+  pid.SetSampleTime(sampleTime);
+}
 
 template <class InputType, class OutputType>
 void PIDController<InputType, OutputType>::setup() {
   if (setupCompleted) return;
 
   pid.SetOutputLimits(minOutput, maxOutput);
-  pid.SetSampleTime(sampleTime);
   rawInput = input.current();
   pidInput = rawInput;
   output.setup(0);
@@ -39,20 +40,17 @@ void PIDController<InputType, OutputType>::update() {
 
 template <class InputType, class OutputType>
 void PIDController<InputType, OutputType>::setKp(double newKp) {
-  kp = newKp;
-  pid.SetTunings(kp, kd, ki);
+  pid.SetTunings(newKp, pid.GetKi(), pid.GetKd());
 }
 
 template <class InputType, class OutputType>
 void PIDController<InputType, OutputType>::setKd(double newKd) {
-  kd = newKd;
-  pid.SetTunings(kp, kd, ki);
+  pid.SetTunings(pid.GetKp(), pid.GetKi(), newKd);
 }
 
 template <class InputType, class OutputType>
 void PIDController<InputType, OutputType>::setKi(double newKi) {
-  ki = newKi;
-  pid.SetTunings(kp, kd, ki);
+  pid.SetTunings(pid.GetKp(), newKi, pid.GetKd());
 }
 
 template <class InputType, class OutputType>
@@ -79,8 +77,7 @@ void PIDController<InputType, OutputType>::setMaxOutput(OutputType maxLimit) {
 
 template <class InputType, class OutputType>
 void PIDController<InputType, OutputType>::setSampleTime(int time) {
-  sampleTime = time;
-  pid.SetSampleTime(sampleTime);
+  pid.SetSampleTime(time);
 }
 
 template <class InputType, class OutputType>
