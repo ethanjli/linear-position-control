@@ -103,6 +103,41 @@ InputType PIDController<InputType, OutputType>::getInput() const {
   return rawInput;
 }
 
+template <class InputType, class OutputType>
+InputType PIDController<InputType, OutputType>::getMinInput() const {
+  return minInput;
+}
+
+template <class InputType, class OutputType>
+InputType PIDController<InputType, OutputType>::getMaxInput() const {
+  return maxInput;
+}
+
+template <class InputType, class OutputType>
+double PIDController<InputType, OutputType>::getMinOutput() const {
+  return minOutput;
+}
+
+template <class InputType, class OutputType>
+double PIDController<InputType, OutputType>::getMaxOutput() const {
+  return maxOutput;
+}
+
+template <class InputType, class OutputType>
+double PIDController<InputType, OutputType>::getKp() {
+  return pid.GetKp();
+}
+
+template <class InputType, class OutputType>
+double PIDController<InputType, OutputType>::getKd() {
+  return pid.GetKd();
+}
+
+template <class InputType, class OutputType>
+double PIDController<InputType, OutputType>::getKi() {
+  return pid.GetKi();
+}
+
 }
 
 #endif

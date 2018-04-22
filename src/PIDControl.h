@@ -36,7 +36,6 @@ class PIDController {
     void setKp(double newKp);
     void setKd(double newKd);
     void setKi(double newKi);
-    void setCoefficients(double newKp, double newKd, double newKi);
     void setMinInput(InputType minLimit);
     void setMaxInput(InputType maxLimit);
     void setMinOutput(OutputType minLimit);
@@ -47,7 +46,16 @@ class PIDController {
     void disable();
 
     void setSetpoint(InputType newSetpoint);
+    InputType getSetpoint() const;
     InputType getInput() const;
+    InputType getMinInput() const;
+    InputType getMaxInput() const;
+    double getMinOutput() const;
+    double getMaxOutput() const;
+    // These methods aren't const because the Arduino PID library isn't const-correct either :(
+    double getKp();
+    double getKd();
+    double getKi();
 
   private:
     bool setupCompleted = false;
