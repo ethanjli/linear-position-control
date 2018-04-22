@@ -2,7 +2,7 @@
 
 namespace LinearPositionControl { namespace Components {
 
-AngleSensor::AngleSensor(Tlv493d &sensor, bool accumulate) :
+AngleSensor::AngleSensor(uint8_t magnetic3dSensorPort, Tlv493d &sensor, bool accumulate) :
   sensor(sensor), accumulate(accumulate)
 {
 }

@@ -9,7 +9,9 @@ namespace LinearPositionControl { namespace Components {
 
 class AngleSensor {
   public:
-    AngleSensor(Tlv493d &sensor = magnetic3dSensor, bool accumulate = true);
+    // Note: currently magnetic3dSensorPort does nothing, because the MagneticSensor3D.h
+    // header file defines a singleton global named magnetic3dSensor.
+    AngleSensor(uint8_t magnetic3dSensorPort, Tlv493d &sensor = magnetic3dSensor, bool accumulate = true);
 
     void setup();
     void update();

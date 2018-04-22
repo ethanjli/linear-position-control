@@ -7,7 +7,7 @@ namespace LinearPositionControl { namespace Components {
 
 class AnalogSensor {
   public:
-    AnalogSensor(uint8_t sensorPin);
+    AnalogSensor(uint8_t sensorPort);
 
     void setup();
     void update();

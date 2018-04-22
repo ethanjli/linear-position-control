@@ -11,7 +11,7 @@ class CumulativeLinearActuator {
   public:
     CumulativeLinearActuator(
         Components::Motors &motors, MotorPort motorPort,
-        int minPosition, int maxPosition,
+        uint8_t angleSensorPort, int minPosition, int maxPosition,
         double pidKp, double pidKd, double pidKi, int pidSampleTime,
         bool swapMotorPolarity, int feedforward,
         int brakeLowerThreshold, int brakeUpperThreshold,
