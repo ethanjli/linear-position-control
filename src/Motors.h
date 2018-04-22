@@ -16,15 +16,6 @@ namespace LinearPositionControl { namespace Components {
 typedef uint8_t MotorSpeed;
 typedef uint8_t MotorDirection;
 
-namespace States {
-  enum class Motor : uint8_t {
-    braking,
-    neutral,
-    forwards,
-    backwards
-  };
-}
-
 class Motors {
   public:
     Motors();
@@ -47,24 +38,15 @@ class Motor {
   public:
     Motor(Motors &motors, MotorPort motorPort);
 
-    using State = States::Motor;
-
     void setup();
 
-    MotorSpeed speed = 255;
-    StateVariable<State> state;
+    int speed = 255;
 
     void run(int speed);
     void forwards();
     void forwards(MotorSpeed speed);
     void backwards();
     void backwards(MotorSpeed speed);
-
-    void opposite();
-    void opposite(MotorSpeed speed);
-    void resume();
-    void resume(MotorSpeed speed);
-    MotorDirection resumeDirection() const;
 
     void brake();
     void neutral();
@@ -80,9 +62,6 @@ class Motor {
 
     MotorDirection forwardDirection = FORWARD;
     MotorDirection backwardDirection = BACKWARD;
-    MotorDirection lastDirection = FORWARD;
-
-    void updateLastDirection();
 };
 
 class MotorSpeedAdjuster {
