@@ -113,9 +113,8 @@ void MotorSpeedAdjuster::update() {
   output.update(adjusted);
 }
 
-void MotorSpeedAdjuster::freeze(bool brake) {
+void MotorSpeedAdjuster::freeze() {
   frozen = true;
-  if (brake) output.update(0);
 }
 
 void MotorSpeedAdjuster::unfreeze() {

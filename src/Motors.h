@@ -85,7 +85,7 @@ class MotorSpeedAdjuster {
     int brakeLowerThreshold;
     int brakeUpperThreshold;
 
-    void freeze(bool brake = true);
+    void freeze();
     void unfreeze();
 
   private:

@@ -33,6 +33,9 @@ class AbsoluteLinearActuator {
 
     void freeze(bool brake = true);
     void unfreeze();
+
+  private:
+    bool frozen;
 };
 
 }

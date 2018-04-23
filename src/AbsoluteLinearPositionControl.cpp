@@ -37,17 +37,20 @@ void AbsoluteLinearActuator::update() {
   potentiometer.update();
   pid.update();
   speedAdjuster.update();
-  motor.run(speedAdjuster.output.current());
+  if (!frozen) motor.run(speedAdjuster.output.current());
 }
 
 void AbsoluteLinearActuator::freeze(bool brake) {
   pid.disable();
-  speedAdjuster.freeze(brake);
+  speedAdjuster.freeze();
+  if (brake) motor.brake();
+  frozen = true;
 }
 
 void AbsoluteLinearActuator::unfreeze() {
   pid.enable();
   speedAdjuster.unfreeze();
+  frozen = false;
 }
 
 }
