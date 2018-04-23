@@ -24,6 +24,10 @@ void AngleSensor::setZero() {
   state.update(0);
 }
 
+void AngleSensor::setReference(float referencePosition) {
+  state.update(referencePosition);
+}
+
 void AngleSensor::update() {
   if (rawAngle.currentDuration() > sensor.getMeasurementDelay()) {
     sensor.updateData();

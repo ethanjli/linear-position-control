@@ -4,6 +4,7 @@
 #include "Motors.h"
 #include "AngleSensor.h"
 #include "PIDControl.h"
+#include "Smoothing.h"
 
 namespace LinearPositionControl {
 
@@ -44,6 +45,8 @@ namespace Calibration { namespace States {
   };
 }}
 
+// Note: this implementation is not robust at all, and should only be used if
+// memory limitations prohibit the use of smoothing!
 class CumulativePositionCalibrator {
   public:
     CumulativePositionCalibrator(
@@ -59,10 +62,43 @@ class CumulativePositionCalibrator {
     StateVariable<State> state;
     const Components::MotorSpeed calibrationSpeed;
 
+    bool calibrated() const;
+
   private:
     bool setupCompleted = false;
     CumulativeLinearActuator &actuator;
     StateVariable<int> discretePosition;
+
+    unsigned int limitTimeout = 100;
+
+    void updateUncalibrated();
+    void updateInitializing();
+    void updateCalibrating();
+    void onPositionCalibrated();
+};
+
+class SmoothedCumulativePositionCalibrator {
+  public:
+    SmoothedCumulativePositionCalibrator(
+        CumulativeLinearActuator &actuator,
+        ContinuousSmoother &smoother,
+        Components::MotorSpeed calibrationSpeed = 255
+    );
+
+    using State = Calibration::States::Position;
+
+    void setup();
+    void update();
+
+    StateVariable<State> state;
+    const Components::MotorSpeed calibrationSpeed;
+
+    bool calibrated() const;
+
+  private:
+    bool setupCompleted = false;
+    CumulativeLinearActuator &actuator;
+    ContinuousSmoother &smoother;
 
     unsigned int limitTimeout = 100;
 

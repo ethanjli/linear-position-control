@@ -12,7 +12,9 @@ Smoother<InputType, OutputType>::Smoother(
     bool enableSleep, float activityThreshold
 ) :
   analogResolution(analogResolution), activityThreshold(activityThreshold),
-  input(inputStateVariable), smoother(0, enableSleep, snapMultiplier) {}
+  input(inputStateVariable), smoother(0, enableSleep, snapMultiplier),
+  maxInput(analogResolution)
+{}
 
 template <class InputType, class OutputType>
 void Smoother<InputType, OutputType>::setup() {
@@ -45,6 +47,11 @@ void Smoother<InputType, OutputType>::disableSleep() {
 template <class InputType, class OutputType>
 InputType Smoother<InputType, OutputType>::getInput() const {
   return rawInput;
+}
+
+template <class InputType, class OutputType>
+InputType Smoother<InputType, OutputType>::getMaxInput() const {
+  return maxInput;
 }
 
 }

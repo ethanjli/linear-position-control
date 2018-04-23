@@ -25,6 +25,7 @@ class Smoother {
     void disableSleep();
 
     InputType getInput() const;
+    InputType getMaxInput() const;
 
   private:
     bool setupCompleted = false;

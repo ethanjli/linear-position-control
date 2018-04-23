@@ -8,6 +8,7 @@
 
 LinearPositionControl	KEYWORD1
 CumulativePositionCalibrator	KEYWORD1
+SmoothedCumulativePositionCalibrator	KEYWORD1
 Components	KEYWORD1
 Motors	KEYWORD1
 
