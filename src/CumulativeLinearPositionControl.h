@@ -46,7 +46,10 @@ namespace Calibration { namespace States {
 
 class CumulativePositionCalibrator {
   public:
-    CumulativePositionCalibrator(CumulativeLinearActuator &actuator);
+    CumulativePositionCalibrator(
+        CumulativeLinearActuator &actuator,
+        Components::MotorSpeed calibrationSpeed = 255
+    );
 
     using State = Calibration::States::Position;
 
@@ -54,7 +57,7 @@ class CumulativePositionCalibrator {
     void update();
 
     StateVariable<State> state;
-    const Components::MotorSpeed calibrationSpeed = 255;
+    const Components::MotorSpeed calibrationSpeed;
 
   private:
     bool setupCompleted = false;

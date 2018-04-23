@@ -54,9 +54,10 @@ void CumulativeLinearActuator::unfreeze() {
 // CumulativePositionCalibrator
 
 CumulativePositionCalibrator::CumulativePositionCalibrator(
-    CumulativeLinearActuator &actuator
+    CumulativeLinearActuator &actuator,
+    Components::MotorSpeed calibrationSpeed
 ) :
-  actuator(actuator)
+  actuator(actuator), calibrationSpeed(calibrationSpeed)
 {}
 
 void CumulativePositionCalibrator::setup() {
