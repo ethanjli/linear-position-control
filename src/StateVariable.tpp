@@ -11,7 +11,6 @@ void StateVariable<State>::setup(State initialState, bool force) {
 
   currentState = initialState;
   previousState = initialState;
-  previousDistinctState = initialState;
 
   setupCompleted = true;
 }
@@ -20,8 +19,6 @@ template <class State>
 void StateVariable<State>::update(State nextState, bool force) {
   previousState = currentState;
   if (force || currentState != nextState) {
-    previousDistinctState = currentState;
-    previousDistinctTimer = currentTimer;
     currentTimer = 0;
   }
   currentState = nextState;
@@ -38,18 +35,8 @@ inline State StateVariable<State>::previous() const {
 }
 
 template <class State>
-inline State StateVariable<State>::previousDistinct() const {
-  return previousDistinctState;
-}
-
-template <class State>
 inline unsigned long StateVariable<State>::currentDuration() const {
   return currentTimer;
-}
-
-template <class State>
-inline unsigned long StateVariable<State>::previousDistinctDuration() const {
-  return previousDistinctTimer;
 }
 
 template <class State>

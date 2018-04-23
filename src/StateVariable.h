@@ -13,10 +13,8 @@ class StateVariable {
 
     State current() const;
     State previous() const;
-    State previousDistinct() const;
 
     unsigned long currentDuration() const;
-    unsigned long previousDistinctDuration() const;
 
     bool justEntered(State state) const;
     bool justChanged() const;
@@ -28,10 +26,8 @@ class StateVariable {
 
     State currentState;
     State previousState;
-    State previousDistinctState;
 
     elapsedMillis currentTimer;
-    unsigned long previousDistinctTimer;
 };
 
 }
