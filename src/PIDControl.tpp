@@ -93,7 +93,7 @@ void PIDController<InputType, OutputType>::disable() {
 template <class InputType, class OutputType>
 void PIDController<InputType, OutputType>::setSetpoint(InputType newSetpoint) {
   if (minInput < maxInput) newSetpoint = constrain(newSetpoint, minInput, maxInput);
-  setpoint.update(newSetpoint);
+  setpoint.update(newSetpoint, true);
   pidSetpoint = newSetpoint;
   enable();
 }
