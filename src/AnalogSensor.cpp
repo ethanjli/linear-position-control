@@ -3,7 +3,7 @@
 namespace LinearPositionControl { namespace Components {
 
 AnalogSensor::AnalogSensor(uint8_t sensorPort) :
-  sensorPin(sensorPin)
+  sensorPin(sensorPort)
 {
 }
 
