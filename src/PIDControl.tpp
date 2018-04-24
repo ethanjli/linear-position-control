@@ -13,7 +13,7 @@ PIDController<InputType, OutputType>::PIDController(
 ) :
   minOutput(minOutput), maxOutput(maxOutput),
   input(inputStateVariable),
-  pid(&pidInput, &pidOutput, &pidSetpoint, kp, kd, ki, proportionalityMode, outputMode),
+  pid(&pidInput, &pidOutput, &pidSetpoint, kp, ki, kd, proportionalityMode, outputMode),
   minInput(minInput), maxInput(maxInput) {
   pid.SetSampleTime(sampleTime);
 }
