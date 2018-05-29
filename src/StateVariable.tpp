@@ -59,6 +59,43 @@ inline bool StateVariable<State>::settledAt(State state, unsigned long settleThr
   return currentState == state && currentTimer >= settleThreshold;
 }
 
+// SimpleStateVariable
+
+template <class State>
+void SimpleStateVariable<State>::setup(State initialState, bool force) {
+  if (!force && setupCompleted) return;
+
+  currentState = initialState;
+  previousState = initialState;
+
+  setupCompleted = true;
+}
+
+template <class State>
+void SimpleStateVariable<State>::update(State nextState, bool force) {
+  previousState = currentState;
+  currentState = nextState;
+}
+
+template <class State>
+inline State SimpleStateVariable<State>::current() const {
+  return currentState;
+}
+
+template <class State>
+inline State SimpleStateVariable<State>::previous() const {
+  return previousState;
+}
+
+template <class State>
+inline bool SimpleStateVariable<State>::justEntered(State state) const {
+  return currentState == state && previousState != currentState;
+}
+
+template <class State>
+inline bool SimpleStateVariable<State>::justChanged() const {
+  return currentState != previousState;
+}
 }
 
 #endif

@@ -30,6 +30,25 @@ class StateVariable {
     elapsedMillis currentTimer;
 };
 
+template <class State>
+class SimpleStateVariable {
+  public:
+    void setup(State initialState, bool force = false);
+    void update(State nextState, bool force = false);
+
+    State current() const;
+    State previous() const;
+
+    bool justEntered(State state) const;
+    bool justChanged() const;
+
+  private:
+    bool setupCompleted = false;
+
+    State currentState;
+    State previousState;
+};
+
 }
 
 #include "StateVariable.tpp"
