@@ -52,6 +52,34 @@ class LED {
     void onPeriodsFinished();
 };
 
+class SimpleLED {
+  public:
+    SimpleLED(uint8_t ledPin);
+
+    using State = States::LED;
+
+    void setup();
+    void update();
+
+    StateVariable<State> state;
+
+    unsigned int highInterval = 1000;
+    unsigned int lowInterval = 1000;
+    int periods = -1;
+
+    void off();
+    void on();
+    void blink();
+
+  private:
+    bool setupCompleted = false;
+
+    const uint8_t ledPin;
+
+    void updateBlinking();
+    void onPeriodsFinished();
+};
+
 } }
 
 #endif

@@ -91,5 +91,62 @@ void LED::updateBlinking() {
   }
 }
 
+// SimpleLED
+
+SimpleLED::SimpleLED(uint8_t ledPin) :
+  ledPin(ledPin) {
+}
+
+void SimpleLED::setup() {
+  if (setupCompleted) return;
+
+  pinMode(ledPin, OUTPUT);
+  digitalWrite(ledPin, LOW);
+  state.setup(State::off);
+
+  setupCompleted = true;
+}
+
+void SimpleLED::update() {
+  if (state.current() == State::off || state.current() == State::on) return; // nothing to update!
+  if (periods == 0) {
+    off();
+    return;
+  }
+  updateBlinking();
+}
+
+void SimpleLED::off() {
+  digitalWrite(ledPin, LOW);
+  state.update(State::off);
+}
+
+void SimpleLED::on() {
+  digitalWrite(ledPin, HIGH);
+  state.update(State::on);
+}
+
+void SimpleLED::blink() {
+  if (periods == 0) {
+    off();
+  } else {
+    digitalWrite(ledPin, HIGH);
+    state.update(State::blinkingHigh);
+  }
+}
+
+void SimpleLED::updateBlinking() {
+  if (state.current() == State::blinkingHigh && state.currentDuration() < highInterval) return;
+  if (state.current() == State::blinkingLow && state.currentDuration() < lowInterval) return;
+  if (state.current() == State::blinkingLow) {
+    digitalWrite(ledPin, HIGH);
+    state.update(State::blinkingHigh);
+    if (periods > 0) --periods;
+  } else { // state.current() == State::blinkingHigh
+    digitalWrite(ledPin, LOW);
+    state.update(State::blinkingLow);
+  }
+}
+
 } }
 
