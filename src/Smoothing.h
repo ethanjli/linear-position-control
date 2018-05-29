@@ -11,7 +11,7 @@ template <class InputType, class OutputType>
 class Smoother {
   public:
     Smoother(
-        StateVariable<InputType> &inputStateVariable,
+        SimpleStateVariable<InputType> &inputStateVariable,
         float snapMultiplier = 0.01, int analogResolution = 1023,
         bool enableSleep = true, float activityThreshold = 4.0
     );
@@ -33,7 +33,7 @@ class Smoother {
     int analogResolution;
     float activityThreshold;
 
-    StateVariable<InputType> &input;
+    SimpleStateVariable<InputType> &input;
     ResponsiveAnalogRead smoother;
 
     InputType rawInput = 0;

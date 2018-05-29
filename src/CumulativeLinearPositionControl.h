@@ -24,7 +24,7 @@ class CumulativeLinearActuator {
     Components::Motors &motors;
     Components::Motor motor;
     Components::AngleSensor angleSensor;
-    StateVariable<Position> &position;
+    SimpleStateVariable<Position> &position;
     PIDController<Position, int> pid;
     Components::MotorSpeedAdjuster speedAdjuster;
     const bool swapMotorPolarity;

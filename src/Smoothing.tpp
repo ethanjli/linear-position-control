@@ -7,7 +7,7 @@ namespace LinearPositionControl {
 
 template <class InputType, class OutputType>
 Smoother<InputType, OutputType>::Smoother(
-    StateVariable<InputType> &inputStateVariable,
+    SimpleStateVariable<InputType> &inputStateVariable,
     float snapMultiplier, int analogResolution,
     bool enableSleep, float activityThreshold
 ) :

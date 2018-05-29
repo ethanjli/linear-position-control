@@ -7,7 +7,7 @@ namespace LinearPositionControl {
 
 template <class InputType, class OutputType>
 PIDController<InputType, OutputType>::PIDController(
-    StateVariable<InputType> &inputStateVariable, double kp, double kd, double ki,
+    SimpleStateVariable<InputType> &inputStateVariable, double kp, double kd, double ki,
     OutputType minOutput, OutputType maxOutput, int sampleTime,
     InputType minInput, InputType maxInput, int outputMode, int proportionalityMode
 ) :

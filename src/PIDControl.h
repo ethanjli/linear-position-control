@@ -20,7 +20,7 @@ template <class InputType, class OutputType>
 class PIDController {
   public:
     PIDController(
-        StateVariable<InputType> &inputStateVariable, double kp, double kd, double ki,
+        SimpleStateVariable<InputType> &inputStateVariable, double kp, double kd, double ki,
         OutputType minOutput = 0, OutputType maxOutput = 255, int sampleTime = 100,
         InputType minInput = 0, InputType maxInput = 0,
         int outputMode = PIDModes::directOutput,
@@ -30,7 +30,7 @@ class PIDController {
     void setup();
     void update();
 
-    StateVariable<OutputType> output;
+    SimpleStateVariable<OutputType> output;
     StateVariable<InputType> setpoint;
 
     void setKp(double newKp);
@@ -67,7 +67,7 @@ class PIDController {
     double pidOutput = 0;
     double pidSetpoint = 0;
 
-    StateVariable<InputType> &input;
+    SimpleStateVariable<InputType> &input;
     PID pid;
 
     InputType rawInput = 0;

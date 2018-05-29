@@ -12,7 +12,7 @@ class AnalogSensor {
     void setup();
     void update();
 
-    StateVariable<int> state;
+    SimpleStateVariable<int> state;
 
   private:
     bool setupCompleted = false;

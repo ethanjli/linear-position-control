@@ -11,7 +11,7 @@ class IntParser {
   public:
     IntParser(char startDelimiter = '[', char endDelimiter = ']');
 
-    StateVariable<int> result;
+    SimpleStateVariable<int> result;
     bool justUpdated = false;
 
     void setup();
@@ -24,7 +24,7 @@ class IntParser {
     int receivedNumber;
     bool negative = false;
 
-    StateVariable<char> received;
+    SimpleStateVariable<char> received;
 };
 
 }

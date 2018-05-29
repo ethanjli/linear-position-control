@@ -19,7 +19,7 @@ class AngleSensor {
     void setZero();
     void setReference(float referencePosition);
 
-    StateVariable<float> state;
+    SimpleStateVariable<float> state;
 
   private:
     bool setupCompleted = false;

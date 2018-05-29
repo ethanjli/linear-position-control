@@ -91,7 +91,7 @@ bool Motor::directionsSwapped() const {
 // MotorSpeedAdjuster
 
 MotorSpeedAdjuster::MotorSpeedAdjuster(
-    StateVariable<int> &inputStateVariable, int speedBias,
+    SimpleStateVariable<int> &inputStateVariable, int speedBias,
     int brakeLowerThreshold, int brakeUpperThreshold
 ) :
   input(inputStateVariable), speedBias(speedBias),
