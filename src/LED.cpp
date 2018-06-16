@@ -71,8 +71,9 @@ void LED::updateFading() {
   led.update();
   if (led.is_fading()) return;
   if (state.current() == State::fadingLow) {
-    led.fade(highBrightness, highInterval);
     if (periods > 0) --periods;
+    if (periods == 0) off();
+    else led.fade(highBrightness, highInterval);
   } else { // state.current() == State::fadingHigh
     led.fade(lowBrightness, lowInterval);
   }
@@ -82,9 +83,13 @@ void LED::updateBlinking() {
   if (state.current() == State::blinkingHigh && state.currentDuration() < highInterval) return;
   if (state.current() == State::blinkingLow && state.currentDuration() < lowInterval) return;
   if (state.current() == State::blinkingLow) {
+    if (periods > 0) --periods;
+    if (periods == 0) {
+      off();
+      return;
+    }
     led.set_value(highBrightness);
     state.update(State::blinkingHigh);
-    if (periods > 0) --periods;
   } else { // state.current() == State::blinkingHigh
     led.set_value(lowBrightness);
     state.update(State::blinkingLow);
@@ -139,9 +144,13 @@ void SimpleLED::updateBlinking() {
   if (state.current() == State::blinkingHigh && state.currentDuration() < highInterval) return;
   if (state.current() == State::blinkingLow && state.currentDuration() < lowInterval) return;
   if (state.current() == State::blinkingLow) {
+    if (periods > 0) --periods;
+    if (periods == 0) {
+      off();
+      return;
+    }
     digitalWrite(ledPin, HIGH);
     state.update(State::blinkingHigh);
-    if (periods > 0) --periods;
   } else { // state.current() == State::blinkingHigh
     digitalWrite(ledPin, LOW);
     state.update(State::blinkingLow);
