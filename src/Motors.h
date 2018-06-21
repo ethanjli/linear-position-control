@@ -40,7 +40,7 @@ class Motor {
 
     void setup();
 
-    int speed = 255;
+    int speed = 0;
 
     void run(int speed);
     void forwards();
