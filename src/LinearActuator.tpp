@@ -77,7 +77,7 @@ void LinearActuator<
     return;
   }
   limitsTracker.update();
-  if (!(positionCalibrator.state.at(PositionCalibrator::State::calibrated)) {
+  if (!positionCalibrator.state.at(PositionCalibrator::State::calibrated)) {
     state.update(State::calibratingPosition);
     positionCalibrator.update();
     return;

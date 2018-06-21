@@ -121,6 +121,11 @@ double PIDController<InputType, OutputType>::getMaxOutput() const {
 }
 
 template <class InputType, class OutputType>
+int PIDController<InputType, OutputType>::getSampleTime() const {
+  return sampleTime;
+}
+
+template <class InputType, class OutputType>
 double PIDController<InputType, OutputType>::getKp() {
   return pid.GetKp();
 }
