@@ -3,8 +3,8 @@
 
 #include "Components/Motors.h"
 #include "Components/AngleSensor.h"
+#include "Signal/Smoothing.h"
 #include "LinearPosition.h"
-#include "Smoothing.h"
 
 namespace LinearPositionControl { namespace Control {
 
@@ -55,7 +55,7 @@ class SmoothedCumulativePositionCalibrator {
   public:
     SmoothedCumulativePositionCalibrator(
         CumulativeLinearActuator &actuator,
-        ContinuousSmoother &smoother,
+        Signal::ContinuousSmoother &smoother,
         Components::MotorSpeed calibrationSpeed = 255
     );
 
@@ -72,7 +72,7 @@ class SmoothedCumulativePositionCalibrator {
   private:
     bool setupCompleted = false;
     CumulativeLinearActuator &actuator;
-    ContinuousSmoother &smoother;
+    Signal::ContinuousSmoother &smoother;
 
     unsigned int limitTimeout = 100;
 

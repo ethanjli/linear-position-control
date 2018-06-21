@@ -8,6 +8,10 @@
   #include "Components/AngleSensor.h"
 #endif
 
+#ifdef LPC_Components_FastInterrupts
+  #include "Components/FastInterrupts.h"
+#endif
+
 #ifdef LPC_Components_DebouncedButton
   #include "Components/DebouncedButton.h"
 #endif
@@ -36,5 +40,11 @@
 
 #ifdef LPC_Control_CumulativeLinearPosition
   #include "Control/CumulativeLinearPosition.h"
+#endif
+
+// Signal
+
+#ifdef LPC_Signal_Smoothing
+  #include "Signal/Smoothing.h"
 #endif
 

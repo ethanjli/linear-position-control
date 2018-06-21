@@ -1,11 +1,11 @@
-#ifndef Smoothing_h
-#define Smoothing_h
+#ifndef LPC_Signal_Smoothing_h
+#define LPC_Signal_Smoothing_h
 
 #include <ResponsiveAnalogRead.h>
 
 #include "StateVariable.h"
 
-namespace LinearPositionControl {
+namespace LinearPositionControl { namespace Signal {
 
 template <class InputType, class OutputType>
 class Smoother {
@@ -44,7 +44,7 @@ class Smoother {
 using DiscreteSmoother = Smoother<int, int>;
 using ContinuousSmoother = Smoother<float, int>;
 
-}
+} }
 
 #include "Smoothing.tpp"
 

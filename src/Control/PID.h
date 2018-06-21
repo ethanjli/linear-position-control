@@ -47,7 +47,6 @@ class PIDController {
 
     void setSetpoint(InputType newSetpoint);
     InputType getSetpoint() const;
-    InputType getInput() const;
     InputType getMinInput() const;
     InputType getMaxInput() const;
     double getMinOutput() const;

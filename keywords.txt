@@ -9,6 +9,7 @@
 # Namespaces
 LinearPositionControl	KEYWORD1		DATA_TYPE
 Components	KEYWORD1		DATA_TYPE
+Signal	KEYWORD1		DATA_TYPE
 Control	KEYWORD1		DATA_TYPE
 
 # Types defined in Components
@@ -23,15 +24,23 @@ MotorDirection	KEYWORD1		DATA_TYPE
 Motor	KEYWORD1		DATA_TYPE
 MotorSpeedAdjuster	KEYWORD1		DATA_TYPE
 
+# Types defined in Signal
+DiscreteSmoother	KEYWORD1		DATA_TYPE
+ContinuousSmoother	KEYWORD1		DATA_TYPE
+
 # Types defined in Control
-PIDController	KEYWORD1
-DiscretePID	KEYWORD1
-ContinuousPID	KEYWORD1
-LinearActuator	KEYWORD1
-AbsoluteLinearActuator	KEYWORD1
-CumulativeLinearActuator	KEYWORD1
-CumulativePositionCalibrator	KEYWORD1
-SmoothedCumulativePositionCalibrator	KEYWORD1
+PIDController	KEYWORD1		DATA_TYPE
+DiscretePID	KEYWORD1		DATA_TYPE
+ContinuousPID	KEYWORD1		DATA_TYPE
+LinearActuator	KEYWORD1		DATA_TYPE
+AbsoluteLinearActuator	KEYWORD1		DATA_TYPE
+CumulativeLinearActuator	KEYWORD1		DATA_TYPE
+CumulativePositionCalibrator	KEYWORD1		DATA_TYPE
+SmoothedCumulativePositionCalibrator	KEYWORD1		DATA_TYPE
+
+# Types defined in StateVariable.h
+StateVariable	KEYWORD1		DATA_TYPE
+SimpleStateVariable	KEYWORD1		DATA_TYPE
 
 #######################################
 # Methods and Functions
@@ -51,10 +60,27 @@ LPC_Components_AngleSensor	LITERAL1		RESERVED_WORD2
 LPC_Components_DebouncedButton	LITERAL1		RESERVED_WORD2
 LPC_Components_LED	LITERAL1		RESERVED_WORD2
 LPC_Components_Motors	LITERAL1		RESERVED_WORD2
+LPC_Signal_Smoothing	LITERAL1		RESERVED_WORD2
 LPC_Control_PID	LITERAL1		RESERVED_WORD2
 LPC_Control_LinearPosition	LITERAL1		RESERVED_WORD2
 LPC_Control_AbsoluteLinearPosition	LITERAL1		RESERVED_WORD2
 LPC_Control_CumulativeLinearPosition	LITERAL1		RESERVED_WORD2
+
+# Preprocessor defines used in Components/FastInterrupts.h
+LPC_Components_FastInterrupts_All	LITERAL1		RESERVED_WORD2
+LPC_Components_FastInterrupts_Pin0	LITERAL1		RESERVED_WORD2
+LPC_Components_FastInterrupts_Pin1	LITERAL1		RESERVED_WORD2
+LPC_Components_FastInterrupts_Pin2	LITERAL1		RESERVED_WORD2
+LPC_Components_FastInterrupts_Pin3	LITERAL1		RESERVED_WORD2
+LPC_Components_FastInterrupts_Pin4	LITERAL1		RESERVED_WORD2
+LPC_Components_FastInterrupts_Pin5	LITERAL1		RESERVED_WORD2
+LPC_Components_FastInterrupts_Pin6	LITERAL1		RESERVED_WORD2
+LPC_Components_FastInterrupts_Pin7	LITERAL1		RESERVED_WORD2
+LPC_Components_FastInterrupts_Pin8	LITERAL1		RESERVED_WORD2
+LPC_Components_FastInterrupts_Pin9	LITERAL1		RESERVED_WORD2
+LPC_Components_FastInterrupts_Pin10	LITERAL1		RESERVED_WORD2
+LPC_Components_FastInterrupts_Pin11	LITERAL1		RESERVED_WORD2
+LPC_Components_FastInterrupts_Pin12	LITERAL1		RESERVED_WORD2
 
 #######################################
 # Constants

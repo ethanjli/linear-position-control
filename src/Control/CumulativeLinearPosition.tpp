@@ -73,7 +73,7 @@ void CumulativePositionCalibrator::updateCalibrating() {
 
 SmoothedCumulativePositionCalibrator::SmoothedCumulativePositionCalibrator(
     CumulativeLinearActuator &actuator,
-    ContinuousSmoother &smoother,
+    Signal::ContinuousSmoother &smoother,
     Components::MotorSpeed calibrationSpeed
 ) :
   actuator(actuator), smoother(smoother), calibrationSpeed(calibrationSpeed)

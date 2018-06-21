@@ -1,7 +1,7 @@
-#ifndef Smoothing_tpp
-#define Smoothing_tpp
+#ifndef LPC_Signal_Smoothing_tpp
+#define LPC_Signal_Smoothing_tpp
 
-namespace LinearPositionControl {
+namespace LinearPositionControl { namespace Signal {
 
 // Smoother
 
@@ -54,7 +54,7 @@ InputType Smoother<InputType, OutputType>::getMaxInput() const {
   return maxInput;
 }
 
-}
+} }
 
 #endif
 
