@@ -9,10 +9,14 @@ class AnalogSensor {
   public:
     AnalogSensor(uint8_t sensorPort);
 
+    using Position = int;
+
     void setup();
     void update();
 
-    SimpleStateVariable<int> state;
+    void setZero();
+
+    SimpleStateVariable<Position> state;
 
   private:
     bool setupCompleted = false;

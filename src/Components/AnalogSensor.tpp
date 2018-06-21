@@ -21,6 +21,9 @@ void AnalogSensor::update() {
   state.update(analogRead(sensorPin));
 }
 
+void AnalogSensor::setZero() {
+}
+
 } }
 
 #endif

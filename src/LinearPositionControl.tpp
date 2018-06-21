@@ -1,22 +1,21 @@
-#ifndef AbsoluteLinearPositionControl_tpp
-#define AbsoluteLinearPositionControl_tpp
+#ifndef LinearPositionControl_tpp
+#define LinearPositionControl_tpp
 
 namespace LinearPositionControl {
 
-// AbsoluteLinearActuator
+// LinearActuator
 
-AbsoluteLinearActuator::AbsoluteLinearActuator(
+template <class PositionSensor>
+LinearActuator<PositionSensor>::LinearActuator(
     Components::Motors &motors, MotorPort motorPort,
-    uint8_t potentiometerPin, int minPosition, int maxPosition,
+    uint8_t sensorId, int minPosition, int maxPosition,
     double pidKp, double pidKd, double pidKi, int pidSampleTime,
     bool swapMotorPolarity, int feedforward,
     int brakeLowerThreshold, int brakeUpperThreshold,
     int minDuty, int maxDuty
 ) :
-  motors(motors),
-  motor(motors, motorPort),
-  potentiometer(potentiometerPin),
-  position(potentiometer.state),
+  motors(motors), motor(motors, motorPort),
+  positionSensor(sensorId), position(positionSensor.state),
   pid(
     position.current, pidKp, pidKd, pidKi,
     minDuty - feedforward, maxDuty - feedforward, pidSampleTime,
@@ -27,28 +26,33 @@ AbsoluteLinearActuator::AbsoluteLinearActuator(
 {
 }
 
-void AbsoluteLinearActuator::setup() {
+template <class PositionSensor>
+void LinearActuator<PositionSensor>::setup() {
   motors.setup();
   if (swapMotorPolarity) motor.swapDirections();
-  potentiometer.setup();
+  positionSensor.setup();
+  positionSensor.setZero();
   pid.setup();
 }
 
-void AbsoluteLinearActuator::update() {
-  potentiometer.update();
+template <class PositionSensor>
+void LinearActuator<PositionSensor>::update() {
+  positionSensor.update();
   pid.update();
   speedAdjuster.update();
   if (!frozen) motor.run(speedAdjuster.output.current);
 }
 
-void AbsoluteLinearActuator::freeze(bool brake) {
+template <class PositionSensor>
+void LinearActuator<PositionSensor>::freeze(bool brake) {
   pid.disable();
   speedAdjuster.freeze();
   if (brake) motor.brake();
   frozen = true;
 }
 
-void AbsoluteLinearActuator::unfreeze() {
+template <class PositionSensor>
+void LinearActuator<PositionSensor>::unfreeze() {
   pid.enable();
   speedAdjuster.unfreeze();
   frozen = false;

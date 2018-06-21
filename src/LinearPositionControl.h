@@ -1,0 +1,46 @@
+#ifndef LinearPositionControl_h
+#define LinearPositionControl_h
+
+#include "Components/Motors.h"
+#include "PIDControl.h"
+
+namespace LinearPositionControl {
+
+template <class PositionSensor>
+class LinearActuator {
+  public:
+    LinearActuator(
+        Components::Motors &motors, MotorPort motorPort,
+        uint8_t sensorId, int minPosition, int maxPosition,
+        double pidKp, double pidKd, double pidKi, int pidSampleTime,
+        bool swapMotorPolarity, int feedforward,
+        int brakeLowerThreshold, int brakeUpperThreshold,
+        int minDuty = -255, int maxDuty = 255
+    );
+
+    using Position = typename PositionSensor::Position;
+
+    Components::Motors &motors;
+    Components::Motor motor;
+    PositionSensor positionSensor;
+    SimpleStateVariable<Position> &position;
+    PIDController<Position, int> pid;
+    Components::MotorSpeedAdjuster speedAdjuster;
+    const bool swapMotorPolarity;
+
+    void setup();
+    void update();
+
+    void freeze(bool brake = true);
+    void unfreeze();
+
+  private:
+    bool frozen;
+};
+
+}
+
+#include "LinearPositionControl.tpp"
+
+#endif
+

@@ -13,22 +13,24 @@ class AngleSensor {
     // header file defines a singleton global named magnetic3dSensor.
     AngleSensor(uint8_t magnetic3dSensorPort, Tlv493d &sensor = magnetic3dSensor, bool accumulate = true);
 
+    using Position = float;
+
     void setup();
     void update();
 
     void setZero();
-    void setReference(float referencePosition);
+    void setReference(Position referencePosition);
 
-    SimpleStateVariable<float> state;
+    SimpleStateVariable<Position> state;
 
   private:
     bool setupCompleted = false;
     bool accumulate;
 
     Tlv493d &sensor;
-    StateVariable<float> rawAngle;
+    StateVariable<Position> rawAngle;
 
-    float overflowDeltaThreshold = 315; // degrees
+    Position overflowDeltaThreshold = 315; // degrees
 };
 
 } }

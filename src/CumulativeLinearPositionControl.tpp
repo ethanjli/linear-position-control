@@ -3,58 +3,6 @@
 
 namespace LinearPositionControl {
 
-// CumulativeLinearActuator
-
-CumulativeLinearActuator::CumulativeLinearActuator(
-    Components::Motors &motors, MotorPort motorPort,
-    uint8_t angleSensorPort, int minPosition, int maxPosition,
-    double pidKp, double pidKd, double pidKi, int pidSampleTime,
-    bool swapMotorPolarity, int feedforward,
-    int brakeLowerThreshold, int brakeUpperThreshold,
-    int minDuty, int maxDuty
-) :
-  motors(motors),
-  motor(motors, motorPort),
-  angleSensor(angleSensorPort),
-  position(angleSensor.state),
-  pid(
-    position.current, pidKp, pidKd, pidKi,
-    minDuty - feedforward, maxDuty - feedforward, pidSampleTime,
-    minPosition, maxPosition
-  ),
-  speedAdjuster(pid.output, feedforward, brakeLowerThreshold, brakeUpperThreshold),
-  swapMotorPolarity(swapMotorPolarity)
-{
-}
-
-void CumulativeLinearActuator::setup() {
-  motors.setup();
-  if (swapMotorPolarity) motor.swapDirections();
-  angleSensor.setup();
-  angleSensor.setZero();
-  pid.setup();
-}
-
-void CumulativeLinearActuator::update() {
-  angleSensor.update();
-  pid.update();
-  speedAdjuster.update();
-  if (!frozen) motor.run(speedAdjuster.output.current);
-}
-
-void CumulativeLinearActuator::freeze(bool brake) {
-  pid.disable();
-  speedAdjuster.freeze();
-  if (brake) motor.brake();
-  frozen = true;
-}
-
-void CumulativeLinearActuator::unfreeze() {
-  pid.enable();
-  speedAdjuster.unfreeze();
-  frozen = false;
-}
-
 // CumulativePositionCalibrator
 
 CumulativePositionCalibrator::CumulativePositionCalibrator(
@@ -70,7 +18,7 @@ void CumulativePositionCalibrator::setup() {
   actuator.setup();
 
   state.setup(State::uncalibrated);
-  discretePosition.setup((int) actuator.angleSensor.state.current);
+  discretePosition.setup(static_cast<int>(actuator.positionSensor.state.current));
 
   setupCompleted = true;
 }
@@ -94,30 +42,30 @@ bool CumulativePositionCalibrator::calibrated() const {
 }
 
 void CumulativePositionCalibrator::updateUncalibrated() {
-  actuator.angleSensor.update();
-  discretePosition.update((int) actuator.angleSensor.state.current, true);
+  actuator.positionSensor.update();
+  discretePosition.update(static_cast<int>(actuator.positionSensor.state.current), true);
   state.update(State::initializing);
   actuator.pid.disable();
   actuator.motor.backwards(calibrationSpeed);
 }
 
 void CumulativePositionCalibrator::updateInitializing() {
-  actuator.angleSensor.update();
-  discretePosition.update(static_cast<int>(actuator.angleSensor.state.current));
+  actuator.positionSensor.update();
+  discretePosition.update(static_cast<int>(actuator.positionSensor.state.current));
   if (discretePosition.currentDuration() < limitTimeout) return;
 
   actuator.pid.enable();
   actuator.motor.neutral();
-  discretePosition.update(static_cast<int>(actuator.angleSensor.state.current, true));
+  discretePosition.update(static_cast<int>(actuator.positionSensor.state.current, true));
   state.update(State::calibrating);
 }
 
 void CumulativePositionCalibrator::updateCalibrating() {
-  actuator.angleSensor.update();
-  discretePosition.update(static_cast<int>(actuator.angleSensor.state.current));
+  actuator.positionSensor.update();
+  discretePosition.update(static_cast<int>(actuator.positionSensor.state.current));
   if (discretePosition.currentDuration() < limitTimeout) return;
 
-  actuator.angleSensor.setZero();
+  actuator.positionSensor.setZero();
   state.update(State::calibrated);
 }
 
@@ -136,7 +84,7 @@ void SmoothedCumulativePositionCalibrator::setup() {
 
   actuator.setup();
   // Set current position to be at the top of smoother's output range
-  actuator.angleSensor.setReference(smoother.getMaxInput());
+  actuator.positionSensor.setReference(smoother.getMaxInput());
   smoother.setup();
 
   state.setup(State::uncalibrated);
@@ -163,7 +111,7 @@ bool SmoothedCumulativePositionCalibrator::calibrated() const {
 }
 
 void SmoothedCumulativePositionCalibrator::updateUncalibrated() {
-  actuator.angleSensor.update();
+  actuator.positionSensor.update();
   smoother.update();
   state.update(State::initializing);
   actuator.freeze(true);
@@ -171,7 +119,7 @@ void SmoothedCumulativePositionCalibrator::updateUncalibrated() {
 }
 
 void SmoothedCumulativePositionCalibrator::updateInitializing() {
-  actuator.angleSensor.update();
+  actuator.positionSensor.update();
   smoother.update();
   if (smoother.output.currentDuration() < limitTimeout || state.currentDuration() < limitTimeout) return;
 
@@ -180,11 +128,11 @@ void SmoothedCumulativePositionCalibrator::updateInitializing() {
 }
 
 void SmoothedCumulativePositionCalibrator::updateCalibrating() {
-  actuator.angleSensor.update();
+  actuator.positionSensor.update();
   smoother.update();
   if (smoother.output.currentDuration() < limitTimeout || state.currentDuration() < limitTimeout) return;
 
-  actuator.angleSensor.setZero();
+  actuator.positionSensor.setZero();
   state.update(State::calibrated);
 }
 

@@ -1,43 +1,14 @@
 #ifndef CumulativeLinearPositionControl_h
 #define CumulativeLinearPositionControl_h
 
-#include "Motors.h"
-#include "AngleSensor.h"
-#include "PIDControl.h"
+#include "Components/Motors.h"
+#include "Components/AngleSensor.h"
+#include "LinearPositionControl.h"
 #include "Smoothing.h"
 
 namespace LinearPositionControl {
 
-class CumulativeLinearActuator {
-  public:
-    CumulativeLinearActuator(
-        Components::Motors &motors, MotorPort motorPort,
-        uint8_t angleSensorPort, int minPosition, int maxPosition,
-        double pidKp, double pidKd, double pidKi, int pidSampleTime,
-        bool swapMotorPolarity, int feedforward,
-        int brakeLowerThreshold, int brakeUpperThreshold,
-        int minDuty = -255, int maxDuty = 255
-    );
-
-    using Position = float;
-
-    Components::Motors &motors;
-    Components::Motor motor;
-    Components::AngleSensor angleSensor;
-    SimpleStateVariable<Position> &position;
-    PIDController<Position, int> pid;
-    Components::MotorSpeedAdjuster speedAdjuster;
-    const bool swapMotorPolarity;
-
-    void setup();
-    void update();
-
-    void freeze(bool brake = true);
-    void unfreeze();
-
-  private:
-    bool frozen;
-};
+using CumulativeLinearActuator = LinearActuator<Components::AngleSensor>;
 
 namespace Calibration { namespace States {
   enum class Position : uint8_t {

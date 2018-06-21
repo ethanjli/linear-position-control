@@ -25,7 +25,7 @@ void AngleSensor::setZero() {
   state.update(0);
 }
 
-void AngleSensor::setReference(float referencePosition) {
+void AngleSensor::setReference(Position referencePosition) {
   state.update(referencePosition);
 }
 
@@ -42,7 +42,7 @@ void AngleSensor::update() {
     return;
   }
 
-  float delta = rawAngle.current - rawAngle.previous;
+  Position delta = rawAngle.current - rawAngle.previous;
   if (abs(delta) > overflowDeltaThreshold) {
     int deltaSign = (0.0f < delta) - (delta < 0.0f);
     delta -= deltaSign * 360.0f;
