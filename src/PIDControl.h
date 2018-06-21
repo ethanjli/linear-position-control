@@ -20,7 +20,7 @@ template <class InputType, class OutputType>
 class PIDController {
   public:
     PIDController(
-        SimpleStateVariable<InputType> &inputStateVariable, double kp, double kd, double ki,
+        const InputType &inputValue, double kp, double kd, double ki,
         OutputType minOutput = 0, OutputType maxOutput = 255, int sampleTime = 100,
         InputType minInput = 0, InputType maxInput = 0,
         int outputMode = PIDModes::directOutput,
@@ -30,7 +30,7 @@ class PIDController {
     void setup();
     void update();
 
-    SimpleStateVariable<OutputType> output;
+    OutputType output = 0;
     StateVariable<InputType> setpoint;
 
     void setKp(double newKp);
@@ -40,7 +40,7 @@ class PIDController {
     void setMaxInput(InputType maxLimit);
     void setMinOutput(OutputType minLimit);
     void setMaxOutput(OutputType maxLimit);
-    void setSampleTime(int time);
+    void setSampleTime(int time); // this is int because the Arduino PID library uses int
 
     void enable();
     void disable();
@@ -52,6 +52,7 @@ class PIDController {
     InputType getMaxInput() const;
     double getMinOutput() const;
     double getMaxOutput() const;
+    int getSampleTime() const;
     // These methods aren't const because the Arduino PID library isn't const-correct either :(
     double getKp();
     double getKd();
@@ -62,12 +63,13 @@ class PIDController {
 
     double minOutput;
     double maxOutput;
+    int sampleTime;
 
     double pidInput = 0;
     double pidOutput = 0;
     double pidSetpoint = 0;
 
-    SimpleStateVariable<InputType> &input;
+    const InputType &input;
     PID pid;
 
     InputType rawInput = 0;

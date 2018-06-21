@@ -67,12 +67,12 @@ class Motor {
 class MotorSpeedAdjuster {
   public:
     MotorSpeedAdjuster(
-        SimpleStateVariable<int> &inputStateVariable, int speedBias, int brakeThreshold
+        const int &inputValue, int speedBias, int brakeThreshold
     ) : MotorSpeedAdjuster(
-      inputStateVariable, speedBias, -1 * brakeThreshold, brakeThreshold
+      inputValue, speedBias, -1 * brakeThreshold, brakeThreshold
     ) {}
     MotorSpeedAdjuster(
-        SimpleStateVariable<int> &inputStateVariable, int speedBias,
+        const int &inputValue, int speedBias,
         int brakeLowerThreshold, int brakeUpperThreshold
     );
 
@@ -89,7 +89,7 @@ class MotorSpeedAdjuster {
     void unfreeze();
 
   private:
-    SimpleStateVariable<int> &input;
+    const int &input;
 
     bool frozen = false;
 };

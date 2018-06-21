@@ -71,18 +71,18 @@ void LinearActuator<
   PositionTracker,
   MotionController
 >::update() {
-  if (directionCalibrator.state.current() != DirectionCalibrator::State::calibrated) {
+  if (!directionCalibrator.state.at(DirectionCalibrator::State::calibrated)) {
     state.update(State::calibratingDirection);
     directionCalibrator.update();
     return;
   }
   limitsTracker.update();
-  if (positionCalibrator.state.current() != PositionCalibrator::State::calibrated) {
+  if (!(positionCalibrator.state.at(PositionCalibrator::State::calibrated)) {
     state.update(State::calibratingPosition);
     positionCalibrator.update();
     return;
   }
-  if (positionTracker.state.current() != PositionTracker::State::tracking) {
+  if (!positionTracker.state.at(PositionTracker::State::tracking)) {
     state.update(State::localizingPosition);
     positionTracker.update();
     return;

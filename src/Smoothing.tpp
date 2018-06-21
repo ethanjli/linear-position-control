@@ -21,7 +21,7 @@ void Smoother<InputType, OutputType>::setup() {
   if (setupCompleted) return;
 
   smoother.setActivityThreshold(activityThreshold);
-  smoother.update(input.current());
+  smoother.update(input.current);
   output.setup(smoother.getValue());
 
   setupCompleted = true;
@@ -29,7 +29,7 @@ void Smoother<InputType, OutputType>::setup() {
 
 template <class InputType, class OutputType>
 void Smoother<InputType, OutputType>::update() {
-  rawInput = input.current();
+  rawInput = input.current;
   smoother.update(rawInput);
   output.update(smoother.getValue());
 }

@@ -19,12 +19,12 @@ void LED::setup() {
 }
 
 void LED::update() {
-  if (state.current() == State::off || state.current() == State::on) return; // nothing to update!
+  if (state.at(State::off) || state.at(State::on)) return; // nothing to update!
   if (periods == 0) {
     onPeriodsFinished();
     return;
   }
-  if (state.current() == State::fadingHigh || state.current() == State::fadingLow) {
+  if (state.at(State::fadingHigh) || state.at(State::fadingLow)) {
     updateFading();
   } else {
     updateBlinking();
@@ -70,19 +70,19 @@ void LED::onPeriodsFinished() {
 void LED::updateFading() {
   led.update();
   if (led.is_fading()) return;
-  if (state.current() == State::fadingLow) {
+  if (state.at(State::fadingLow)) {
     if (periods > 0) --periods;
     if (periods == 0) off();
     else led.fade(highBrightness, highInterval);
-  } else { // state.current() == State::fadingHigh
+  } else { // state.at(State::fadingHigh)
     led.fade(lowBrightness, lowInterval);
   }
 }
 
 void LED::updateBlinking() {
-  if (state.current() == State::blinkingHigh && state.currentDuration() < highInterval) return;
-  if (state.current() == State::blinkingLow && state.currentDuration() < lowInterval) return;
-  if (state.current() == State::blinkingLow) {
+  if (state.at(State::blinkingHigh) && state.currentDuration() < highInterval) return;
+  if (state.at(State::blinkingLow) && state.currentDuration() < lowInterval) return;
+  if (state.at(State::blinkingLow)) {
     if (periods > 0) --periods;
     if (periods == 0) {
       off();
@@ -90,7 +90,7 @@ void LED::updateBlinking() {
     }
     led.set_value(highBrightness);
     state.update(State::blinkingHigh);
-  } else { // state.current() == State::blinkingHigh
+  } else { // state.at(State::blinkingHigh)
     led.set_value(lowBrightness);
     state.update(State::blinkingLow);
   }
@@ -113,7 +113,7 @@ void SimpleLED::setup() {
 }
 
 void SimpleLED::update() {
-  if (state.current() == State::off || state.current() == State::on) return; // nothing to update!
+  if (state.at(State::off) || state.at(State::on)) return; // nothing to update!
   if (periods == 0) {
     off();
     return;
@@ -141,9 +141,9 @@ void SimpleLED::blink() {
 }
 
 void SimpleLED::updateBlinking() {
-  if (state.current() == State::blinkingHigh && state.currentDuration() < highInterval) return;
-  if (state.current() == State::blinkingLow && state.currentDuration() < lowInterval) return;
-  if (state.current() == State::blinkingLow) {
+  if (state.at(State::blinkingHigh) && state.currentDuration() < highInterval) return;
+  if (state.at(State::blinkingLow) && state.currentDuration() < lowInterval) return;
+  if (state.at(State::blinkingLow)) {
     if (periods > 0) --periods;
     if (periods == 0) {
       off();
@@ -151,7 +151,7 @@ void SimpleLED::updateBlinking() {
     }
     digitalWrite(ledPin, HIGH);
     state.update(State::blinkingHigh);
-  } else { // state.current() == State::blinkingHigh
+  } else { // state.at(State::blinkingHigh)
     digitalWrite(ledPin, LOW);
     state.update(State::blinkingLow);
   }

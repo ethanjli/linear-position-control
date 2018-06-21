@@ -24,7 +24,7 @@ void IntParser::setup() {
 }
 
 void IntParser::update() {
-  result.update(result.current());
+  result.update(result.current);
   while (Serial.available() > 0) {
     char current = Serial.read();
     received.update(current);
@@ -36,7 +36,7 @@ void IntParser::update() {
       }
       receivedNumber = 0;
       negative = false;
-    } else if (current == '-' && received.previous() == startDelimiter) {
+    } else if (current == '-' && received.previouslyAt(startDelimiter)) {
       negative = true;
     } else if (current >= '0' && current <= '9') {
       receivedNumber *= 10;

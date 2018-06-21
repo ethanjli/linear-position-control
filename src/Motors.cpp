@@ -91,10 +91,10 @@ bool Motor::directionsSwapped() const {
 // MotorSpeedAdjuster
 
 MotorSpeedAdjuster::MotorSpeedAdjuster(
-    SimpleStateVariable<int> &inputStateVariable, int speedBias,
+    const int &inputValue, int speedBias,
     int brakeLowerThreshold, int brakeUpperThreshold
 ) :
-  input(inputStateVariable), speedBias(speedBias),
+  input(inputValue), speedBias(speedBias),
   brakeLowerThreshold(brakeLowerThreshold),
   brakeUpperThreshold(brakeUpperThreshold) {}
 
@@ -104,11 +104,10 @@ void MotorSpeedAdjuster::setup() {
 
 void MotorSpeedAdjuster::update() {
   if (frozen) {
-    output.update(output.current());
+    output.update(output.current);
     return;
   }
-  int adjusted = input.current();
-  adjusted += speedBias;
+  int adjusted = input + speedBias;
   if (adjusted > brakeLowerThreshold && adjusted < brakeUpperThreshold) adjusted = 0;
   output.update(adjusted);
 }

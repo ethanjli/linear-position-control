@@ -7,14 +7,14 @@ namespace LinearPositionControl {
 
 template <class InputType, class OutputType>
 PIDController<InputType, OutputType>::PIDController(
-    SimpleStateVariable<InputType> &inputStateVariable, double kp, double kd, double ki,
+    const InputType &inputValue, double kp, double kd, double ki,
     OutputType minOutput, OutputType maxOutput, int sampleTime,
     InputType minInput, InputType maxInput, int outputMode, int proportionalityMode
 ) :
   minOutput(minOutput), maxOutput(maxOutput),
-  input(inputStateVariable),
+  input(inputValue),
   pid(&pidInput, &pidOutput, &pidSetpoint, kp, ki, kd, proportionalityMode, outputMode),
-  minInput(minInput), maxInput(maxInput) {
+  minInput(minInput), maxInput(maxInput), sampleTime(sampleTime) {
   pid.SetSampleTime(sampleTime);
 }
 
@@ -23,19 +23,16 @@ void PIDController<InputType, OutputType>::setup() {
   if (setupCompleted) return;
 
   pid.SetOutputLimits(minOutput, maxOutput);
-  rawInput = input.current();
-  pidInput = rawInput;
-  output.setup(0);
+  pidInput = input;
 
   setupCompleted = true;
 }
 
 template <class InputType, class OutputType>
 void PIDController<InputType, OutputType>::update() {
-  rawInput = input.current();
-  pidInput = rawInput;
+  pidInput = input;
   pid.Compute();
-  output.update((OutputType) pidOutput);
+  output = static_cast<OutputType>(pidOutput);
 }
 
 template <class InputType, class OutputType>

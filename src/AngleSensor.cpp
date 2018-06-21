@@ -15,7 +15,7 @@ void AngleSensor::setup() {
   sensor.disableTemp();
   sensor.updateData();
   rawAngle.setup(sensor.getAzimuth() * 180 / PI);
-  state.setup(rawAngle.current());
+  state.setup(rawAngle.current);
 
   setupCompleted = true;
 }
@@ -37,16 +37,16 @@ void AngleSensor::update() {
   rawAngle.update(sensor.getAzimuth() * 180 / PI);
 
   if (!accumulate) {
-    state.update(rawAngle.current());
+    state.update(rawAngle.current);
     return;
   }
 
-  float delta = rawAngle.current() - rawAngle.previous();
+  float delta = rawAngle.current - rawAngle.previous;
   if (abs(delta) > overflowDeltaThreshold) {
     int deltaSign = (0.0f < delta) - (delta < 0.0f);
     delta -= deltaSign * 360.0f;
   }
-  state.update(state.current() + delta);
+  state.update(state.current + delta);
 }
 
 

@@ -25,18 +25,18 @@ void StateVariable<State>::update(State nextState, bool force) {
 }
 
 template <class State>
-inline State StateVariable<State>::current() const {
-  return currentState;
-}
-
-template <class State>
-inline State StateVariable<State>::previous() const {
-  return previousState;
-}
-
-template <class State>
 inline unsigned long StateVariable<State>::currentDuration() const {
   return currentTimer;
+}
+
+template <class State>
+inline bool StateVariable<State>::at(State state) const {
+  return currentState == state;
+}
+
+template <class State>
+inline bool StateVariable<State>::previouslyAt(State state) const {
+  return previousState == state;
 }
 
 template <class State>
@@ -78,13 +78,13 @@ void SimpleStateVariable<State>::update(State nextState, bool force) {
 }
 
 template <class State>
-inline State SimpleStateVariable<State>::current() const {
-  return currentState;
+inline bool SimpleStateVariable<State>::at(State state) const {
+  return currentState == state;
 }
 
 template <class State>
-inline State SimpleStateVariable<State>::previous() const {
-  return previousState;
+inline bool SimpleStateVariable<State>::previouslyAt(State state) const {
+  return previousState == state;
 }
 
 template <class State>
@@ -96,6 +96,7 @@ template <class State>
 inline bool SimpleStateVariable<State>::justChanged() const {
   return currentState != previousState;
 }
+
 }
 
 #endif

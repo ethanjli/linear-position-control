@@ -17,7 +17,7 @@ AbsoluteLinearActuator::AbsoluteLinearActuator(
   potentiometer(potentiometerPin),
   position(potentiometer.state),
   pid(
-    position, pidKp, pidKd, pidKi,
+    position.current, pidKp, pidKd, pidKi,
     minDuty - feedforward, maxDuty - feedforward, pidSampleTime,
     minPosition, maxPosition
   ),
@@ -37,7 +37,7 @@ void AbsoluteLinearActuator::update() {
   potentiometer.update();
   pid.update();
   speedAdjuster.update();
-  if (!frozen) motor.run(speedAdjuster.output.current());
+  if (!frozen) motor.run(speedAdjuster.output.current);
 }
 
 void AbsoluteLinearActuator::freeze(bool brake) {

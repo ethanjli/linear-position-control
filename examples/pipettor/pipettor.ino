@@ -18,8 +18,8 @@ Components::Motors motors;
 
 AbsoluteLinearActuator actuator(
   motors, M1, A0, 11, 999,
-  8, 0.1, 0.1, 20,
-  false, 7, 80
+  30, 1, 0.1, 10,
+  false, 0, -180, 180, -255, 255
 );
 
 IntParser setpointParser;
@@ -38,7 +38,7 @@ void setup() {
 void loop() {
   actuator.update();
   setpointParser.update();
-  actuator.pid.setSetpoint(setpointParser.result.current());
+  actuator.pid.setSetpoint(setpointParser.result.current);
   if (setpointParser.justUpdated) {
     reportedCompletion = false;
     setpointParser.justUpdated = false;
