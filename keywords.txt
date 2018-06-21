@@ -6,20 +6,56 @@
 # Datatypes (KEYWORD1)
 #######################################
 
-LinearPositionControl	KEYWORD1
+# Namespaces
+LinearPositionControl	KEYWORD1		DATA_TYPE
+Components	KEYWORD1		DATA_TYPE
+Control	KEYWORD1		DATA_TYPE
+
+# Types defined in Components
+AnalogSensor	KEYWORD1		DATA_TYPE
+AngleSensor	KEYWORD1		DATA_TYPE
+DebouncedButton	KEYWORD1		DATA_TYPE
+LED	KEYWORD1		DATA_TYPE
+SimpleLED	KEYWORD1		DATA_TYPE
+Motors	KEYWORD1		DATA_TYPE
+MotorSpeed	KEYWORD1		DATA_TYPE
+MotorDirection	KEYWORD1		DATA_TYPE
+Motor	KEYWORD1		DATA_TYPE
+MotorSpeedAdjuster	KEYWORD1		DATA_TYPE
+
+# Types defined in Control
+PIDController	KEYWORD1
+DiscretePID	KEYWORD1
+ContinuousPID	KEYWORD1
+LinearActuator	KEYWORD1
+AbsoluteLinearActuator	KEYWORD1
+CumulativeLinearActuator	KEYWORD1
 CumulativePositionCalibrator	KEYWORD1
 SmoothedCumulativePositionCalibrator	KEYWORD1
-Components	KEYWORD1
-Motors	KEYWORD1
 
 #######################################
-# Methods and Functions (KEYWORD2)
+# Methods and Functions
 #######################################
 
-#######################################
-# Instances (KEYWORD2)
-#######################################
+# Shared interface methods
+setup	KEYWORD2		RESERVED_WORD
+update	KEYWORD2		RESERVED_WORD
 
 #######################################
-# Constants (LITERAL1)
+# Preprocessor Constants
+#######################################
+
+# Preprocessor defines used in LinearPositionControl.h
+LPC_Components_AnalogSensor	LITERAL1		RESERVED_WORD2
+LPC_Components_AngleSensor	LITERAL1		RESERVED_WORD2
+LPC_Components_DebouncedButton	LITERAL1		RESERVED_WORD2
+LPC_Components_LED	LITERAL1		RESERVED_WORD2
+LPC_Components_Motors	LITERAL1		RESERVED_WORD2
+LPC_Control_PID	LITERAL1		RESERVED_WORD2
+LPC_Control_LinearPosition	LITERAL1		RESERVED_WORD2
+LPC_Control_AbsoluteLinearPosition	LITERAL1		RESERVED_WORD2
+LPC_Control_CumulativeLinearPosition	LITERAL1		RESERVED_WORD2
+
+#######################################
+# Constants
 ####################################### 

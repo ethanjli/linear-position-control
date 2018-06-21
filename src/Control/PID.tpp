@@ -96,11 +96,6 @@ void PIDController<InputType, OutputType>::setSetpoint(InputType newSetpoint) {
 }
 
 template <class InputType, class OutputType>
-InputType PIDController<InputType, OutputType>::getInput() const {
-  return rawInput;
-}
-
-template <class InputType, class OutputType>
 InputType PIDController<InputType, OutputType>::getMinInput() const {
   return minInput;
 }

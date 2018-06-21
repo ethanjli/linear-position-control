@@ -72,7 +72,6 @@ class PIDController {
     const InputType &input;
     PID pid;
 
-    InputType rawInput = 0;
     InputType minInput;
     InputType maxInput;
 };
