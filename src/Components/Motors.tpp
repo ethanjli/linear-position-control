@@ -1,5 +1,5 @@
-#ifndef Motors_tpp
-#define Motors_tpp
+#ifndef LPC_Components_Motors_tpp
+#define LPC_Components_Motors_tpp
 
 namespace LinearPositionControl { namespace Components {
 

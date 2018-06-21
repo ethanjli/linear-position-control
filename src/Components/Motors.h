@@ -1,5 +1,5 @@
-#ifndef Motors_h
-#define Motors_h
+#ifndef LPC_Components_Motors_h
+#define LPC_Components_Motors_h
 
 #include <Wire.h>
 #include <Adafruit_MotorShield.h>

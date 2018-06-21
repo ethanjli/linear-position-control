@@ -1,5 +1,5 @@
-#ifndef LED_tpp
-#define LED_tpp
+#ifndef LPC_Components_LED_tpp
+#define LPC_Components_LED_tpp
 
 namespace LinearPositionControl { namespace Components {
 

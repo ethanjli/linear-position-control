@@ -1,7 +1,7 @@
-#ifndef CumulativeLinearPositionControl_tpp
-#define CumulativeLinearPositionControl_tpp
+#ifndef LPC_Control_CumulativeLinearPosition_tpp
+#define LPC_Control_CumulativeLinearPosition_tpp
 
-namespace LinearPositionControl {
+namespace LinearPositionControl { namespace Control {
 
 // CumulativePositionCalibrator
 
@@ -136,7 +136,7 @@ void SmoothedCumulativePositionCalibrator::updateCalibrating() {
   state.update(State::calibrated);
 }
 
-}
+} }
 
 #endif
 

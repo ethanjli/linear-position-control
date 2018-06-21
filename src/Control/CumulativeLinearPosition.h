@@ -1,12 +1,12 @@
-#ifndef CumulativeLinearPositionControl_h
-#define CumulativeLinearPositionControl_h
+#ifndef LPC_Control_CumulativeLinearPosition_h
+#define LPC_Control_CumulativeLinearPosition_h
 
 #include "Components/Motors.h"
 #include "Components/AngleSensor.h"
-#include "LinearPositionControl.h"
+#include "LinearPosition.h"
 #include "Smoothing.h"
 
-namespace LinearPositionControl {
+namespace LinearPositionControl { namespace Control {
 
 using CumulativeLinearActuator = LinearActuator<Components::AngleSensor>;
 
@@ -82,9 +82,9 @@ class SmoothedCumulativePositionCalibrator {
     void onPositionCalibrated();
 };
 
-}
+} }
 
-#include "CumulativeLinearPositionControl.tpp"
+#include "CumulativeLinearPosition.tpp"
 
 #endif
 

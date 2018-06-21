@@ -1,5 +1,5 @@
-#ifndef AnalogSensor_h
-#define AnalogSensor_h
+#ifndef LPC_Components_AnalogSensor_h
+#define LPC_Components_AnalogSensor_h
 
 #include "StateVariable.h"
 

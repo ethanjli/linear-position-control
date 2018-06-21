@@ -1,5 +1,5 @@
-#ifndef AnalogSensor_tpp
-#define AnalogSensor_tpp
+#ifndef LPC_Components_AnalogSensor_tpp
+#define LPC_Components_AnalogSensor_tpp
 
 namespace LinearPositionControl { namespace Components {
 

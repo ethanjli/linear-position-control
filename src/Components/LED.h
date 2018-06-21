@@ -1,5 +1,5 @@
-#ifndef LED_h
-#define LED_h
+#ifndef LPC_Components_LED_h
+#define LPC_Components_LED_h
 
 #include <LEDFader.h>
 

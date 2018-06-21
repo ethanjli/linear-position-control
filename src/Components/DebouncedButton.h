@@ -1,5 +1,5 @@
-#ifndef DebouncedButton_h
-#define DebouncedButton_h
+#ifndef LPC_Components_DebouncedButton_h
+#define LPC_Components_DebouncedButton_h
 
 #include <elapsedMillis.h>
 

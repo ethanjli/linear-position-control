@@ -1,5 +1,5 @@
-#ifndef AngleSensor_tpp
-#define AngleSensor_tpp
+#ifndef LPC_Components_AngleSensor_tpp
+#define LPC_Components_AngleSensor_tpp
 
 namespace LinearPositionControl { namespace Components {
 

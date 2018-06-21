@@ -1,7 +1,7 @@
-#ifndef PIDControl_tpp
-#define PIDControl_tpp
+#ifndef LPC_Control_PID_tpp
+#define LPC_Control_PID_tpp
 
-namespace LinearPositionControl {
+namespace LinearPositionControl { namespace Control {
 
 // PID
 
@@ -140,7 +140,7 @@ double PIDController<InputType, OutputType>::getKi() {
   return pid.GetKi();
 }
 
-}
+} }
 
 #endif
 

@@ -1,11 +1,11 @@
-#ifndef PID_h
-#define PID_h
+#ifndef LPC_Control_PID_h
+#define LPC_Control_PID_h
 
 #include <PID_v1.h>
 
 #include "StateVariable.h"
 
-namespace LinearPositionControl {
+namespace LinearPositionControl { namespace Control {
 
 namespace PIDModes {
   const int inputProportionality = P_ON_M;
@@ -80,9 +80,9 @@ class PIDController {
 using DiscretePID = PIDController<int, int>;
 using ContinuousPID = PIDController<float, int>;
 
-}
+} }
 
-#include "PIDControl.tpp"
+#include "PID.tpp"
 
 #endif
 

@@ -1,7 +1,7 @@
-#ifndef LinearPositionControl_tpp
-#define LinearPositionControl_tpp
+#ifndef LPC_Control_LinearPosition_tpp
+#define LPC_Control_LinearPosition_tpp
 
-namespace LinearPositionControl {
+namespace LinearPositionControl { namespace Control {
 
 // LinearActuator
 
@@ -58,7 +58,7 @@ void LinearActuator<PositionSensor>::unfreeze() {
   frozen = false;
 }
 
-}
+} }
 
 #endif
 

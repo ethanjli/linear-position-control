@@ -1,5 +1,5 @@
-#ifndef AngleSensor_h
-#define AngleSensor_h
+#ifndef LPC_Components_AngleSensor_h
+#define LPC_Components_AngleSensor_h
 
 #include <MagneticSensor3D.h>
 

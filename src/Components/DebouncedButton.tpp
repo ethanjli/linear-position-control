@@ -1,5 +1,5 @@
-#ifndef DebouncedButton_tpp
-#define DebouncedButton_tpp
+#ifndef LPC_Components_DebouncedButton_tpp
+#define LPC_Components_DebouncedButton_tpp
 
 #define NEEDFORSPEED
 #define LIBCALL_ENABLEINTERRUPT

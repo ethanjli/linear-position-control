@@ -1,46 +1,40 @@
-#ifndef LinearPositionControl_h
-#define LinearPositionControl_h
+// Components
 
-#include "Components/Motors.h"
-#include "PIDControl.h"
+#ifdef LPC_Components_AnalogSensor
+  #include "Components/AnalogSensor.h"
+#endif
 
-namespace LinearPositionControl {
+#ifdef LPC_Components_AngleSensor
+  #include "Components/AngleSensor.h"
+#endif
 
-template <class PositionSensor>
-class LinearActuator {
-  public:
-    LinearActuator(
-        Components::Motors &motors, MotorPort motorPort,
-        uint8_t sensorId, int minPosition, int maxPosition,
-        double pidKp, double pidKd, double pidKi, int pidSampleTime,
-        bool swapMotorPolarity, int feedforward,
-        int brakeLowerThreshold, int brakeUpperThreshold,
-        int minDuty = -255, int maxDuty = 255
-    );
+#ifdef LPC_Components_DebouncedButton
+  #include "Components/DebouncedButton.h"
+#endif
 
-    using Position = typename PositionSensor::Position;
+#ifdef LPC_Components_LED
+  #include "Components/LED.h"
+#endif
 
-    Components::Motors &motors;
-    Components::Motor motor;
-    PositionSensor positionSensor;
-    SimpleStateVariable<Position> &position;
-    PIDController<Position, int> pid;
-    Components::MotorSpeedAdjuster speedAdjuster;
-    const bool swapMotorPolarity;
+#ifdef LPC_Components_Motors
+  #include "Components/Motors.h"
+#endif
 
-    void setup();
-    void update();
+// Control
 
-    void freeze(bool brake = true);
-    void unfreeze();
+#ifdef LPC_Control_PID
+  #include "Control/PID.h"
+#endif
 
-  private:
-    bool frozen;
-};
+#ifdef LPC_Control_LinearPosition
+  #include "Control/LinearPosition.h"
+#endif
 
-}
+#ifdef LPC_Control_AbsoluteLinearPosition
+  #include "Control/AbsoluteLinearPosition.h"
+#endif
 
-#include "LinearPositionControl.tpp"
-
+#ifdef LPC_Control_CumulativeLinearPosition
+  #include "Control/CumulativeLinearPosition.h"
 #endif
 
