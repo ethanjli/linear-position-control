@@ -1,4 +1,5 @@
-#include "Motors.h"
+#ifndef Motors_tpp
+#define Motors_tpp
 
 namespace LinearPositionControl { namespace Components {
 
@@ -121,4 +122,6 @@ void MotorSpeedAdjuster::unfreeze() {
 }
 
 } }
+
+#endif
 

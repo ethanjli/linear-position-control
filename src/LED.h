@@ -82,5 +82,7 @@ class SimpleLED {
 
 } }
 
+#include "LED.tpp"
+
 #endif
 

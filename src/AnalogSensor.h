@@ -23,5 +23,7 @@ class AnalogSensor {
 
 } }
 
+#include "AnalogSensor.tpp"
+
 #endif
 

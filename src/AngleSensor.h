@@ -33,5 +33,7 @@ class AngleSensor {
 
 } }
 
+#include "AngleSensor.tpp"
+
 #endif
 

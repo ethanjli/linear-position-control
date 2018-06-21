@@ -1,4 +1,5 @@
-#include "AnalogSensor.h"
+#ifndef AnalogSensor_tpp
+#define AnalogSensor_tpp
 
 namespace LinearPositionControl { namespace Components {
 
@@ -20,6 +21,7 @@ void AnalogSensor::update() {
   state.update(analogRead(sensorPin));
 }
 
-
 } }
+
+#endif
 

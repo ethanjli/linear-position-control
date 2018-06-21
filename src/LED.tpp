@@ -1,4 +1,5 @@
-#include "LED.h"
+#ifndef LED_tpp
+#define LED_tpp
 
 namespace LinearPositionControl { namespace Components {
 
@@ -158,4 +159,6 @@ void SimpleLED::updateBlinking() {
 }
 
 } }
+
+#endif
 

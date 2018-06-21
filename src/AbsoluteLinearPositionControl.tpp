@@ -1,4 +1,5 @@
-#include "AbsoluteLinearPositionControl.h"
+#ifndef AbsoluteLinearPositionControl_tpp
+#define AbsoluteLinearPositionControl_tpp
 
 namespace LinearPositionControl {
 
@@ -54,4 +55,6 @@ void AbsoluteLinearActuator::unfreeze() {
 }
 
 }
+
+#endif
 

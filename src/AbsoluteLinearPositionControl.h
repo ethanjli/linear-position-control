@@ -40,5 +40,7 @@ class AbsoluteLinearActuator {
 
 }
 
+#include "AbsoluteLinearPositionControl.tpp"
+
 #endif
 

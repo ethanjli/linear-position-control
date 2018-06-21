@@ -29,5 +29,7 @@ class IntParser {
 
 }
 
+#include "SerialIO.tpp"
+
 #endif
 

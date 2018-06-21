@@ -1,4 +1,5 @@
-#include "SerialIO.h"
+#ifndef SerialIO_tpp
+#define SerialIO_tpp
 
 namespace LinearPositionControl {
 
@@ -46,4 +47,6 @@ void IntParser::update() {
 }
 
 }
+
+#endif
 

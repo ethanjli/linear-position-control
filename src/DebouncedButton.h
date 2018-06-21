@@ -40,5 +40,7 @@ class DebouncedButton {
 
 } }
 
+#include "DebouncedButton.tpp"
+
 #endif
 

@@ -1,4 +1,5 @@
-#include "AngleSensor.h"
+#ifndef AngleSensor_tpp
+#define AngleSensor_tpp
 
 namespace LinearPositionControl { namespace Components {
 
@@ -49,6 +50,7 @@ void AngleSensor::update() {
   state.update(state.current + delta);
 }
 
-
 } }
+
+#endif
 

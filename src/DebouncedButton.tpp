@@ -1,4 +1,5 @@
-#include "DebouncedButton.h"
+#ifndef DebouncedButton_tpp
+#define DebouncedButton_tpp
 
 #define NEEDFORSPEED
 #define LIBCALL_ENABLEINTERRUPT
@@ -46,4 +47,6 @@ void DebouncedButton::update() {
 }
 
 } }
+
+#endif
 

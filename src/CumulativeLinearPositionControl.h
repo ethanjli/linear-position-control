@@ -113,5 +113,7 @@ class SmoothedCumulativePositionCalibrator {
 
 }
 
+#include "CumulativeLinearPositionControl.tpp"
+
 #endif
 

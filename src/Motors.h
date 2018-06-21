@@ -96,5 +96,7 @@ class MotorSpeedAdjuster {
 
 } }
 
+#include "Motors.tpp"
+
 #endif
 

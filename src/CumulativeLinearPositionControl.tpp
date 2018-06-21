@@ -1,4 +1,5 @@
-#include "CumulativeLinearPositionControl.h"
+#ifndef CumulativeLinearPositionControl_tpp
+#define CumulativeLinearPositionControl_tpp
 
 namespace LinearPositionControl {
 
@@ -188,4 +189,6 @@ void SmoothedCumulativePositionCalibrator::updateCalibrating() {
 }
 
 }
+
+#endif
 
