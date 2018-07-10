@@ -64,6 +64,12 @@ class Motor {
     MotorDirection backwardDirection = BACKWARD;
 };
 
+namespace States {
+  enum class MotorSpeedAdjuster : uint8_t {
+    braking, moving
+  };
+}
+
 class MotorSpeedAdjuster {
   public:
     MotorSpeedAdjuster(
@@ -76,10 +82,13 @@ class MotorSpeedAdjuster {
         int brakeLowerThreshold, int brakeUpperThreshold
     );
 
+    using State = States::MotorSpeedAdjuster;
+
     void setup();
     void update();
 
-    StateVariable<int> output;
+    SimpleStateVariable<int> output;
+    StateVariable<State> state;
 
     int speedBias;
     int brakeLowerThreshold;

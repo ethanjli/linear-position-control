@@ -101,6 +101,7 @@ MotorSpeedAdjuster::MotorSpeedAdjuster(
 
 void MotorSpeedAdjuster::setup() {
   output.setup(0);
+  state.setup(State::braking);
 }
 
 void MotorSpeedAdjuster::update() {
@@ -110,6 +111,8 @@ void MotorSpeedAdjuster::update() {
   }
   int adjusted = input + speedBias;
   if (adjusted > brakeLowerThreshold && adjusted < brakeUpperThreshold) adjusted = 0;
+  if (adjusted != 0) state.update(State::moving);
+  else state.update(State::braking);
   output.update(adjusted);
 }
 
