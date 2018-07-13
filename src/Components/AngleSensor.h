@@ -11,7 +11,10 @@ class AngleSensor {
   public:
     // Note: currently magnetic3dSensorPort does nothing, because the MagneticSensor3D.h
     // header file defines a singleton global named magnetic3dSensor.
-    AngleSensor(uint8_t magnetic3dSensorPort, Tlv493d &sensor = magnetic3dSensor, bool accumulate = true);
+    AngleSensor(
+        uint8_t magnetic3dSensorPort, bool swapDirection = false,
+        Tlv493d &sensor = magnetic3dSensor, bool accumulate = true
+    );
 
     using Position = float;
 
@@ -25,6 +28,7 @@ class AngleSensor {
 
   private:
     bool setupCompleted = false;
+    bool swapDirection;
     bool accumulate;
 
     Tlv493d &sensor;

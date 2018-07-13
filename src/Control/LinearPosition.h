@@ -11,7 +11,7 @@ class LinearActuator {
   public:
     LinearActuator(
         Components::Motors &motors, MotorPort motorPort,
-        uint8_t sensorId, int minPosition, int maxPosition,
+        uint8_t sensorId, int minPosition, int maxPosition, bool swapSensorDirection,
         double pidKp, double pidKd, double pidKi, int pidSampleTime,
         bool swapMotorPolarity, int feedforward,
         int brakeLowerThreshold, int brakeUpperThreshold,

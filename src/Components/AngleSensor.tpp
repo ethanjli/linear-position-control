@@ -3,10 +3,11 @@
 
 namespace LinearPositionControl { namespace Components {
 
-AngleSensor::AngleSensor(uint8_t magnetic3dSensorPort, Tlv493d &sensor, bool accumulate) :
-  sensor(sensor), accumulate(accumulate)
-{
-}
+AngleSensor::AngleSensor(
+    uint8_t magnetic3dSensorPort, bool swapDirection,
+    Tlv493d &sensor, bool accumulate
+) :
+  sensor(sensor), swapDirection(swapDirection), accumulate(accumulate) {}
 
 void AngleSensor::setup() {
   if (setupCompleted) return;
@@ -15,7 +16,9 @@ void AngleSensor::setup() {
   sensor.setAccessMode(sensor.MASTERCONTROLLEDMODE);
   sensor.disableTemp();
   sensor.updateData();
-  rawAngle.setup(sensor.getAzimuth() * 180 / PI);
+  Position reading = sensor.getAzimuth() * 180 / PI;
+  if (swapDirection) reading *= -1;
+  rawAngle.setup(reading);
   state.setup(rawAngle.current);
 
   setupCompleted = true;
@@ -35,7 +38,9 @@ void AngleSensor::update() {
   } else {
     return;
   }
-  rawAngle.update(sensor.getAzimuth() * 180 / PI);
+  Position reading = sensor.getAzimuth() * 180 / PI;
+  if (swapDirection) reading *= -1;
+  rawAngle.update(reading);
 
   if (!accumulate) {
     state.update(rawAngle.current);

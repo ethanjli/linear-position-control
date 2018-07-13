@@ -8,14 +8,14 @@ namespace LinearPositionControl { namespace Control {
 template <class PositionSensor>
 LinearActuator<PositionSensor>::LinearActuator(
     Components::Motors &motors, MotorPort motorPort,
-    uint8_t sensorId, int minPosition, int maxPosition,
+    uint8_t sensorId, int minPosition, int maxPosition, bool swapSensorDirection,
     double pidKp, double pidKd, double pidKi, int pidSampleTime,
     bool swapMotorPolarity, int feedforward,
     int brakeLowerThreshold, int brakeUpperThreshold,
     int minDuty, int maxDuty
 ) :
-  positionSensor(sensorId), position(positionSensor.state),
   motors(motors), motor(motors, motorPort, swapMotorPolarity),
+  positionSensor(sensorId, swapSensorDirection), position(positionSensor.state),
   pid(
     position.current, pidKp, pidKd, pidKi,
     minDuty - feedforward, maxDuty - feedforward, pidSampleTime,

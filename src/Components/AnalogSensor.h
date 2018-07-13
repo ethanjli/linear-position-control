@@ -7,7 +7,7 @@ namespace LinearPositionControl { namespace Components {
 
 class AnalogSensor {
   public:
-    AnalogSensor(uint8_t sensorPort);
+    AnalogSensor(uint8_t sensorPort, bool swapDirection = true);
 
     using Position = int;
 
@@ -23,6 +23,7 @@ class AnalogSensor {
 
     // Hardware interfaces
     uint8_t sensorPin;
+    bool swapDirection;
 };
 
 } }
