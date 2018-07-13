@@ -35,8 +35,12 @@ void Motors::neutral(MotorPort motor_port) {
 
 // Motor
 
-Motor::Motor(Motors &motors, MotorPort motorPort) :
+Motor::Motor(Motors &motors, MotorPort motorPort, bool swapDirections) :
   motors(motors), motorPort(motorPort) {
+    if (swapDirections) {
+      forwardDirection = BACKWARD;
+      backwardDirection = FORWARD;
+    }
 }
 
 void Motor::setup() {

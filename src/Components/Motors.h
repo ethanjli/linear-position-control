@@ -36,7 +36,7 @@ class Motors {
 
 class Motor {
   public:
-    Motor(Motors &motors, MotorPort motorPort);
+    Motor(Motors &motors, MotorPort motorPort, bool swapDirections = false);
 
     void setup();
 
@@ -60,6 +60,7 @@ class Motor {
     Motors &motors;
     const MotorPort motorPort;
 
+    const bool initSwappedDirections;
     MotorDirection forwardDirection = FORWARD;
     MotorDirection backwardDirection = BACKWARD;
 };

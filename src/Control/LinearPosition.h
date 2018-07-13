@@ -26,7 +26,6 @@ class LinearActuator {
     SimpleStateVariable<Position> &position;
     PIDController<Position, int> pid;
     Components::MotorSpeedAdjuster speedAdjuster;
-    const bool swapMotorPolarity;
 
     void setup();
     void update();

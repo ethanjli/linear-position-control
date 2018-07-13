@@ -14,22 +14,20 @@ LinearActuator<PositionSensor>::LinearActuator(
     int brakeLowerThreshold, int brakeUpperThreshold,
     int minDuty, int maxDuty
 ) :
-  motors(motors), motor(motors, motorPort),
   positionSensor(sensorId), position(positionSensor.state),
+  motors(motors), motor(motors, motorPort, swapMotorPolarity),
   pid(
     position.current, pidKp, pidKd, pidKi,
     minDuty - feedforward, maxDuty - feedforward, pidSampleTime,
     minPosition, maxPosition
   ),
-  speedAdjuster(pid.output, feedforward, brakeLowerThreshold, brakeUpperThreshold),
-  swapMotorPolarity(swapMotorPolarity)
+  speedAdjuster(pid.output, feedforward, brakeLowerThreshold, brakeUpperThreshold)
 {
 }
 
 template <class PositionSensor>
 void LinearActuator<PositionSensor>::setup() {
   motors.setup();
-  if (swapMotorPolarity) motor.swapDirections();
   positionSensor.setup();
   positionSensor.setZero();
   pid.setup();
