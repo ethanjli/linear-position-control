@@ -43,9 +43,7 @@ class Motor {
     int speed = 0;
 
     void run(int speed);
-    void forwards();
     void forwards(MotorSpeed speed);
-    void backwards();
     void backwards(MotorSpeed speed);
 
     void brake();

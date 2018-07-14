@@ -1,11 +1,13 @@
-#include <Motors.h>
-#include <AngleSensor.h>
+#define LPC_Components_Motors
+#define LPC_Components_AngleSensor
+#include <LinearPositionControl.h>
 
 using namespace LinearPositionControl::Components;
 
 Motors motors;
 Motor motor(motors, M3);
-AngleSensor angleSensor;
+AngleSensor angleSensor(1);
+elapsedMillis timer;
 
 void setup() {
   Serial.begin(115200);
@@ -13,20 +15,23 @@ void setup() {
   motor.setup();
   angleSensor.setup();
   motor.run(200);
+  timer = 0;
 }
 
 void loop() {
   angleSensor.update();
 
   if (angleSensor.state.justChanged()) {
-    Serial.println(angleSensor.state.current());
+    Serial.println(angleSensor.state.current);
   }
 
-  if (motor.state.currentDuration() > 1075) {
-    if (motor.state.current() != Motor::State::neutral) {
+  if (timer > 1000) {
+    timer = 0;
+    if (motor.speed != 0) {
       motor.neutral();
     } else {
-      motor.opposite();
+      motor.swapDirections();
+      motor.forwards(100);
     }
   }
 }
