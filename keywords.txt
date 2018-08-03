@@ -55,32 +55,32 @@ update	KEYWORD2		RESERVED_WORD
 #######################################
 
 # Preprocessor defines used in LinearPositionControl.h
-LPC_Components_AnalogSensor	LITERAL1		RESERVED_WORD2
-LPC_Components_AngleSensor	LITERAL1		RESERVED_WORD2
-LPC_Components_DebouncedButton	LITERAL1		RESERVED_WORD2
-LPC_Components_LED	LITERAL1		RESERVED_WORD2
-LPC_Components_Motors	LITERAL1		RESERVED_WORD2
-LPC_Signal_Smoothing	LITERAL1		RESERVED_WORD2
-LPC_Control_PID	LITERAL1		RESERVED_WORD2
-LPC_Control_LinearPosition	LITERAL1		RESERVED_WORD2
-LPC_Control_AbsoluteLinearPosition	LITERAL1		RESERVED_WORD2
-LPC_Control_CumulativeLinearPosition	LITERAL1		RESERVED_WORD2
+LPC_Components_AnalogSensor	LITERAL1		RESERVED_WORD_2
+LPC_Components_AngleSensor	LITERAL1		RESERVED_WORD_2
+LPC_Components_DebouncedButton	LITERAL1		RESERVED_WORD_2
+LPC_Components_LED	LITERAL1		RESERVED_WORD_2
+LPC_Components_Motors	LITERAL1		RESERVED_WORD_2
+LPC_Signal_Smoothing	LITERAL1		RESERVED_WORD_2
+LPC_Control_PID	LITERAL1		RESERVED_WORD_2
+LPC_Control_LinearPosition	LITERAL1		RESERVED_WORD_2
+LPC_Control_AbsoluteLinearPosition	LITERAL1		RESERVED_WORD_2
+LPC_Control_CumulativeLinearPosition	LITERAL1		RESERVED_WORD_2
 
 # Preprocessor defines used in Components/FastInterrupts.h
-LPC_Components_FastInterrupts_All	LITERAL1		RESERVED_WORD2
-LPC_Components_FastInterrupts_Pin0	LITERAL1		RESERVED_WORD2
-LPC_Components_FastInterrupts_Pin1	LITERAL1		RESERVED_WORD2
-LPC_Components_FastInterrupts_Pin2	LITERAL1		RESERVED_WORD2
-LPC_Components_FastInterrupts_Pin3	LITERAL1		RESERVED_WORD2
-LPC_Components_FastInterrupts_Pin4	LITERAL1		RESERVED_WORD2
-LPC_Components_FastInterrupts_Pin5	LITERAL1		RESERVED_WORD2
-LPC_Components_FastInterrupts_Pin6	LITERAL1		RESERVED_WORD2
-LPC_Components_FastInterrupts_Pin7	LITERAL1		RESERVED_WORD2
-LPC_Components_FastInterrupts_Pin8	LITERAL1		RESERVED_WORD2
-LPC_Components_FastInterrupts_Pin9	LITERAL1		RESERVED_WORD2
-LPC_Components_FastInterrupts_Pin10	LITERAL1		RESERVED_WORD2
-LPC_Components_FastInterrupts_Pin11	LITERAL1		RESERVED_WORD2
-LPC_Components_FastInterrupts_Pin12	LITERAL1		RESERVED_WORD2
+LPC_Components_FastInterrupts_All	LITERAL1		RESERVED_WORD_2
+LPC_Components_FastInterrupts_Pin0	LITERAL1		RESERVED_WORD_2
+LPC_Components_FastInterrupts_Pin1	LITERAL1		RESERVED_WORD_2
+LPC_Components_FastInterrupts_Pin2	LITERAL1		RESERVED_WORD_2
+LPC_Components_FastInterrupts_Pin3	LITERAL1		RESERVED_WORD_2
+LPC_Components_FastInterrupts_Pin4	LITERAL1		RESERVED_WORD_2
+LPC_Components_FastInterrupts_Pin5	LITERAL1		RESERVED_WORD_2
+LPC_Components_FastInterrupts_Pin6	LITERAL1		RESERVED_WORD_2
+LPC_Components_FastInterrupts_Pin7	LITERAL1		RESERVED_WORD_2
+LPC_Components_FastInterrupts_Pin8	LITERAL1		RESERVED_WORD_2
+LPC_Components_FastInterrupts_Pin9	LITERAL1		RESERVED_WORD_2
+LPC_Components_FastInterrupts_Pin10	LITERAL1		RESERVED_WORD_2
+LPC_Components_FastInterrupts_Pin11	LITERAL1		RESERVED_WORD_2
+LPC_Components_FastInterrupts_Pin12	LITERAL1		RESERVED_WORD_2
 
 #######################################
 # Constants
