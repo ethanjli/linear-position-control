@@ -58,7 +58,6 @@ class Motor {
     Motors &motors;
     const MotorPort motorPort;
 
-    const bool initSwappedDirections;
     MotorDirection forwardDirection = FORWARD;
     MotorDirection backwardDirection = BACKWARD;
 };

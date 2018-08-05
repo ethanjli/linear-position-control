@@ -4,10 +4,9 @@
 namespace LinearPositionControl { namespace Components {
 
 AngleSensor::AngleSensor(
-    uint8_t magnetic3dSensorPort, bool swapDirection,
-    Tlv493d &sensor, bool accumulate
+    uint8_t magnetic3dSensorPort, bool swapDirection, bool accumulate
 ) :
-  sensor(sensor), swapDirection(swapDirection), accumulate(accumulate) {}
+  swapDirection(swapDirection), accumulate(accumulate) {}
 
 void AngleSensor::setup() {
   if (setupCompleted) return;
