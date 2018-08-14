@@ -12,6 +12,8 @@ void AngleSensor::setup() {
   if (setupCompleted) return;
 
   sensor.begin();
+  delay(sensor.getMeasurementDelay());
+  sensor.updateData();
   sensor.setAccessMode(sensor.MASTERCONTROLLEDMODE);
   sensor.disableTemp();
   sensor.updateData();
