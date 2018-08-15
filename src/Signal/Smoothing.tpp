@@ -11,7 +11,7 @@ Smoother<InputType, OutputType>::Smoother(
     float snapMultiplier, int analogResolution,
     bool enableSleep, float activityThreshold
 ) :
-  analogResolution(analogResolution), activityThreshold(activityThreshold),
+  activityThreshold(activityThreshold),
   input(inputStateVariable), smoother(0, enableSleep, snapMultiplier),
   maxInput(analogResolution)
 {}
@@ -21,6 +21,7 @@ void Smoother<InputType, OutputType>::setup() {
   if (setupCompleted) return;
 
   smoother.setActivityThreshold(activityThreshold);
+  smoother.setAnalogResolution(static_cast<int>(maxInput));
   smoother.update(input.current);
   output.setup(smoother.getValue());
 

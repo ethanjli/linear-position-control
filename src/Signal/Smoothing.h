@@ -30,7 +30,6 @@ class Smoother {
   private:
     bool setupCompleted = false;
 
-    int analogResolution;
     float activityThreshold;
 
     SimpleStateVariable<InputType> &input;
