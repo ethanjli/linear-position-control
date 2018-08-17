@@ -6,7 +6,7 @@ using namespace LinearPositionControl::Components;
 
 Motors motors;
 Motor motor(motors, M3);
-AngleSensor angleSensor(1);
+AngleSensor angleSensor(0);
 elapsedMillis timer;
 
 void setup() {

@@ -7,6 +7,8 @@
 
 namespace LinearPositionControl { namespace Components {
 
+const uint8_t kMagnetic3dSensorSwitchPin = 8;
+
 class AngleSensor {
   public:
     // Note: currently magnetic3dSensorPort does nothing
@@ -23,6 +25,8 @@ class AngleSensor {
     void setZero();
     void setReference(Position referencePosition);
 
+    void selectPort();
+
     SimpleStateVariable<Position> state;
 
   private:
@@ -30,6 +34,7 @@ class AngleSensor {
     bool swapDirection;
     bool accumulate;
 
+    uint8_t port;
     Tlv493d sensor;
     StateVariable<Position> rawAngle;
 

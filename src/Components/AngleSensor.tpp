@@ -6,11 +6,13 @@ namespace LinearPositionControl { namespace Components {
 AngleSensor::AngleSensor(
     uint8_t magnetic3dSensorPort, bool swapDirection, bool accumulate
 ) :
-  swapDirection(swapDirection), accumulate(accumulate) {}
+  swapDirection(swapDirection), accumulate(accumulate), port(magnetic3dSensorPort) {}
 
 void AngleSensor::setup() {
   if (setupCompleted) return;
 
+  pinMode(kMagnetic3dSensorSwitchPin, OUTPUT);
+  selectPort();
   sensor.begin();
   delay(sensor.getMeasurementDelay());
   sensor.updateData();
@@ -33,8 +35,14 @@ void AngleSensor::setReference(Position referencePosition) {
   state.update(referencePosition);
 }
 
+void AngleSensor::selectPort() {
+  if (port) digitalWrite(kMagnetic3dSensorSwitchPin, HIGH);
+  else digitalWrite(kMagnetic3dSensorSwitchPin, LOW);
+}
+
 void AngleSensor::update() {
   if (rawAngle.currentDuration() > sensor.getMeasurementDelay()) {
+    selectPort();
     sensor.updateData();
   } else {
     return;
