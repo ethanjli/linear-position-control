@@ -82,7 +82,7 @@ class AngleSensor {
 
     uint8_t port;
     AS5601 sensor;
-    StateVariable<Position> rawAngle;
+    SimpleStateVariable<Position> rawAngle;
 
     Position overflowDeltaThreshold = 315; // degrees
 };

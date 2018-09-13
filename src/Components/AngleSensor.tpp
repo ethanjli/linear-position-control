@@ -81,10 +81,14 @@ void AngleSensor::setup() {
 }
 
 void AngleSensor::setZero() {
-  state.update(0);
+  setReference(0);
 }
 
 void AngleSensor::setReference(Position referencePosition) {
+  // Reset position delta to 0
+  update();
+  update();
+  // Reset current position
   state.update(referencePosition);
 }
 
