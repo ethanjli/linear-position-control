@@ -15,6 +15,7 @@ class StateVariable {
     const State &previous = previousState;
 
     unsigned long currentDuration() const;
+    void resetCurrentDuration();
 
     bool at(State state) const;
     bool previouslyAt(State state) const;

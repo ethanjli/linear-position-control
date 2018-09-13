@@ -112,6 +112,7 @@ bool SmoothedCumulativePositionCalibrator::calibrated() const {
 
 void SmoothedCumulativePositionCalibrator::updateUncalibrated() {
   actuator.positionSensor.update();
+  smoother.output.resetCurrentDuration();
   smoother.update();
   state.update(State::initializing);
   actuator.freeze(true);
@@ -124,6 +125,7 @@ void SmoothedCumulativePositionCalibrator::updateInitializing() {
   if (smoother.output.currentDuration() < limitTimeout || state.currentDuration() < limitTimeout) return;
 
   actuator.motor.neutral();
+  smoother.output.resetCurrentDuration();
   state.update(State::calibrating);
 }
 

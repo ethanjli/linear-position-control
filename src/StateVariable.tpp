@@ -30,6 +30,11 @@ inline unsigned long StateVariable<State>::currentDuration() const {
 }
 
 template <class State>
+inline void StateVariable<State>::resetCurrentDuration() {
+  currentTimer = 0;
+}
+
+template <class State>
 inline bool StateVariable<State>::at(State state) const {
   return currentState == state;
 }
