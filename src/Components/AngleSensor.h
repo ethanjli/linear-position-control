@@ -5,8 +5,6 @@
 
 namespace LinearPositionControl { namespace Components {
 
-const uint8_t kAngleSensorSwitchPin = 8;
-
 class AS5601 {
   public:
     using Position = float;
@@ -71,8 +69,6 @@ class AngleSensor {
     void setZero();
     void setReference(Position referencePosition);
 
-    void selectPort();
-
     SimpleStateVariable<Position> state;
 
   private:
@@ -85,6 +81,9 @@ class AngleSensor {
     SimpleStateVariable<Position> rawAngle;
 
     Position overflowDeltaThreshold = 315; // degrees
+
+    void selectPort();
+    void deselectPort();
 };
 
 } }

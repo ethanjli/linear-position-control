@@ -69,9 +69,10 @@ AngleSensor::AngleSensor(
 void AngleSensor::setup() {
   if (setupCompleted) return;
 
-  pinMode(kAngleSensorSwitchPin, OUTPUT);
+  pinMode(port, OUTPUT);
   selectPort();
   sensor.setup();
+  deselectPort();
   Position angle = sensor.getAngle();
   if (swapDirection) angle *= -1;
   rawAngle.setup(angle);
@@ -93,13 +94,17 @@ void AngleSensor::setReference(Position referencePosition) {
 }
 
 void AngleSensor::selectPort() {
-  if (port) digitalWrite(kAngleSensorSwitchPin, HIGH);
-  else digitalWrite(kAngleSensorSwitchPin, LOW);
+  digitalWrite(port, HIGH);
+}
+
+void AngleSensor::deselectPort() {
+  digitalWrite(port, LOW);
 }
 
 void AngleSensor::update() {
   selectPort();
   sensor.update();
+  deselectPort();
   Position angle = sensor.getAngle();
   if (swapDirection) angle *= -1;
   rawAngle.update(angle);
